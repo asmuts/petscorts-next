@@ -1,5 +1,5 @@
 import Header from "../components/shared/Header";
-import { withRouter } from "next/Router";
+import { withRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
 import { Container } from "react-bootstrap";

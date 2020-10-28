@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Layout from "../../components/shared/Layout.js";
 
-import { withRouter } from "next/Router";
+import { withRouter } from "next/router";
 import PetMap from "../../components/pet/pet-detail/PetMap";
 import PetImageCarousel from "../../components/pet/pet-detail/PetImageCarousel";
 import { Col, Container, Row, Button } from "react-bootstrap";
