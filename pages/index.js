@@ -28,7 +28,7 @@ export default function Home() {
     };
     setLocation(newLocation);
     setLocationLoaded(true);
-    console.log("Location = " + newLocation);
+    console.log(`Location: ${newLocation.lat},${newLocation.lng}`);
   };
 
   const errorDeniedLocation = (error) => {
@@ -43,10 +43,10 @@ export default function Home() {
   }, []);
 
   const handleNearbyClick = () => {
-    router.push({
-      pathname: "/pet-search-results",
-      query: { type: "nearby", lat: location.lat, lng: location.lng },
-    });
+    const query = { type: "nearby", lat: location.lat, lng: location.lng };
+    const url = { pathname: "/pet-search-results", query };
+    const asUrl = { pathname: "/pet-search-results", query };
+    router.push(url, asUrl);
   };
 
   const bgimage = "/images/background-dogs1.png";
@@ -80,7 +80,7 @@ export default function Home() {
     return (
       <Button
         onClick={isLocationLoaded ? handleNearbyClick : null}
-        variant="outline-primary"
+        variant="primary"
         className="button_1 rounded-pill"
         dsabled={isLocationLoaded ? "false" : "true"}
       >
@@ -116,13 +116,10 @@ export default function Home() {
             With supporting text below as a natural lead-in to additional
             content.
           </Card.Text>
-          <Button variant="primary rounded-pill">Go somewhere</Button>
+          <Button variant="outline-primary rounded-pill">Go somewhere</Button>
         </Card.Body>
         <Card.Footer className="text-muted"></Card.Footer>
       </Card>{" "}
     </React.Fragment>
   );
-}
-
-{
 }

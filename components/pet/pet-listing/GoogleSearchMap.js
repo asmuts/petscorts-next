@@ -68,6 +68,7 @@ function renderEmptyMap(cityData) {
 }
 
 function renderCirclesForPets(pets) {
+  let count = 0;
   return pets.map((pet, index) => {
     if (pet.location && pet.location.coordinates) {
       const coordinates = {
@@ -75,7 +76,9 @@ function renderCirclesForPets(pets) {
         lng: pet.location.coordinates[0],
       };
 
-      return <Circle key={pet._id} center={coordinates} radius={200} />;
+      return (
+        <Circle key={count++} id={pet._id} center={coordinates} radius={200} />
+      );
     }
   });
 }

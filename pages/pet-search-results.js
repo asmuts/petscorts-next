@@ -52,7 +52,7 @@ class PetSearchResults extends React.Component {
         content={
           <React.Fragment>
             <Row>
-              <Col col-md-6>
+              <Col className="col-md-6">
                 <h1>Pet Search Results</h1>
               </Col>{" "}
             </Row>
@@ -94,6 +94,7 @@ class PetSearchResults extends React.Component {
   static async getCityData(query) {
     let cities = {};
     const { city, state } = PetSearchResults.getCityAndStateFromQuery(query);
+    if (city === null || city === "") return cities;
 
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
     let cityDataApiRoute = `/api/v1/cities/name/${city}/state/${state}`;
@@ -103,7 +104,7 @@ class PetSearchResults extends React.Component {
       console.log("City data: " + resCityData.data);
       cities = resCityData.data;
     } catch (e) {
-      console.log(e);
+      console.log(e, `Error calling ${cityDataUrl}`);
       //TODO handle error
     }
     return cities;
@@ -128,7 +129,7 @@ class PetSearchResults extends React.Component {
   static getSearchUrlFromRequest(query) {
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
 
-    console.log("query");
+    console.log(`query = ${query}`);
     let apiRoute = `/api/v1/pets-search/`;
     if (query.type && query.type === "nearby") {
       // I should have the lat and lng for the usr

@@ -15,10 +15,10 @@ const Search = (props) => {
 
   const handleSubmit = preventDefault(() => {
     console.log(query);
-    router.push({
-      pathname: "/pet-search-results",
-      query: { q: query },
-    });
+    const query = { type: "city_state", q: `${query}` };
+    const url = { pathname: "/pet-search-results", query };
+    const asUrl = { pathname: "/pet-search-results", query };
+    router.push(url, asUrl);
   });
 
   return (

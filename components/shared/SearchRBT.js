@@ -45,10 +45,12 @@ const SearchRBT = () => {
       const city_state = option[0].city_state;
       setOptions([{ delay: "100" }]);
       setIsLoading(false);
-      router.push({
-        pathname: "/pet-search-results",
-        query: { type: "city_state", q: city_state },
-      });
+      //?q=${city_state}`
+
+      const query = { type: "city_state", q: `${city_state}` };
+      const url = { pathname: "/pet-search-results", query };
+      const asUrl = { pathname: "/pet-search-results", query };
+      router.push(url, asUrl);
     }
   };
 
