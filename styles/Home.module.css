@@ -120,3 +120,7 @@
     flex-direction: column;
   }
 }
+
+.removecaret.dropdown-toggle::after {
+  display: none;
+}

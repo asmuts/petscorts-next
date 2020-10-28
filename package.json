@@ -5,11 +5,26 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "analyze": "cross-env ANALYZE=true next build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^9.5.5",
+    "axios": "^0.20.0",
+    "bootstrap": "^4.5.3",
+    "camel-case": "^4.1.1",
+    "cross-env": "^7.0.2",
+    "font-awesome": "^4.7.0",
+    "lodash": "^4.17.20",
     "next": "9.5.5",
     "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react-bootstrap": "^1.4.0",
+    "react-bootstrap-typeahead": "^5.1.2",
+    "react-dom": "16.14.0",
+    "react-google-maps": "^9.4.5",
+    "reactstrap": "^8.6.0",
+    "sass": "^1.27.0"
   }
 }

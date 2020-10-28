@@ -1,0 +1,17 @@
+######## Links to COMPLETED application ANGULAR ########
+https://github.com/Jerga99/bwm-ng
+
+
+######## Links to COMPLETED application REACT ########
+https://github.com/Jerga99/bwm-react
+
+######## Links to STARTER application ANGULAR ########
+https://github.com/Jerga99/angular-starter-bwm
+
+
+######## Links to STARTER application REACT ########
+https://github.com/Jerga99/react-starter-bwm
+
+######## Wireframes ########
+https://balsamiq.cloud/snc4lx3/p74pkbl
+

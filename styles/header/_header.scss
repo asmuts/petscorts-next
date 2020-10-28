@@ -1,0 +1,53 @@
+.navbar {
+  padding: 2px;
+  margin-bottom: 10px;
+  background-color: $main-black-color;
+
+  .nav-item {
+    color: $main-white-color;
+  }
+
+  .navbar-brand {
+    margin-right: 30px;
+    font-size: 27px;
+    letter-spacing: 1px;
+    color: $main-color !important;
+    font-weight: 500;
+  }
+
+  .nav-item {
+    font-size: 14px;
+  }
+
+  .btn-pet-search {
+    border-color: $main-color;
+    color: $main-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: transparent !important;
+      border-color: $main-color !important;
+      color: $main-color !important;
+      box-shadow: none;
+    }
+  }
+
+  .btn-account {
+    border-color: $main-color;
+    color: $main-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: transparent !important;
+      border-color: $main-color !important;
+      color: $main-color !important;
+      box-shadow: none;
+    }
+  }
+
+  .nav-item {
+    color: $main-white-color;
+  }
+}
