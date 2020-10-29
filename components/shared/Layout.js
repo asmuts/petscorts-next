@@ -1,11 +1,19 @@
 import Header from "../../components/shared/Header";
 
-function Layout(props) {
+import { UserProvider, useFetchUser } from "../../util/user";
+
+function Layout({ children }) {
+  const { user, loading } = useFetchUser();
+
   return (
-    <div>
-      <Header> </Header>
-      <main>{props.content}</main>
-    </div>
+    <UserProvider value={{ user, loading }}>
+      <div>
+        <Header> </Header>
+        <main>
+          <div className="container">{children}</div>
+        </main>
+      </div>
+    </UserProvider>
   );
 }
 

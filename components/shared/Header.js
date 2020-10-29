@@ -2,15 +2,35 @@ import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Navbar, Nav, Dropdown } from "react-bootstrap";
-import Search from "./Search";
 import SearchRBT from "./SearchRBT";
-
-const handleAccountClick = () => {
-  alert("Account features are not yet implemented.");
-};
+import { useFetchUser } from "../../util/user";
 
 const Header = (props) => {
   const router = useRouter();
+  const { user, loading } = useFetchUser();
+
+  // refactor, not sure if these will need different treatment
+  const handleLogin = () => {
+    const query = {};
+    const url = { pathname: "/api/login", query };
+    const asUrl = { pathname: "/api/login", query };
+    router.push(url, asUrl);
+  };
+  const handleLogout = () => {
+    const query = {};
+    const url = { pathname: "/api/logout", query };
+    const asUrl = { pathname: "/api/logout", query };
+    router.push(url, asUrl);
+  };
+  const handleProfile = () => {
+    const query = {};
+    const url = { pathname: "/profile", query };
+    const asUrl = { pathname: "/profile", query };
+    router.push(url, asUrl);
+  };
+  const handleAccountClick = () => {
+    alert("Listing features are not yet implemented.");
+  };
 
   return (
     <div>
@@ -45,13 +65,28 @@ const Header = (props) => {
             Account
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item onClick={handleAccountClick} href="#/action-1">
-              Login
-            </Dropdown.Item>
-            <Dropdown.Item onClick={handleAccountClick} href="#/action-2">
-              Sign Up
-            </Dropdown.Item>
-            <Dropdown.Item onClick={handleAccountClick} href="#/action-3">
+            {user && !loading && (
+              <>
+                <Dropdown.Item onClick={handleLogout} href="#">
+                  Logout
+                </Dropdown.Item>
+                <Dropdown.Item onClick={handleProfile} href="#">
+                  Profile
+                </Dropdown.Item>
+              </>
+            )}
+
+            {!user && !loading && (
+              <>
+                <Dropdown.Item onClick={handleLogin} href="#">
+                  Login
+                </Dropdown.Item>
+                <Dropdown.Item onClick={handleLogin} href="#">
+                  Sign Up
+                </Dropdown.Item>
+              </>
+            )}
+            <Dropdown.Item onClick={handleAccountClick} href="#">
               List your pet
             </Dropdown.Item>
           </Dropdown.Menu>
