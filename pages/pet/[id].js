@@ -32,7 +32,11 @@ class Pet extends React.Component {
 
   render() {
     const { pet } = this.props;
-    return <Layout content={<PetDetailMapBottom pet={pet} />} />;
+    return (
+      <Layout>
+        <PetDetailMapBottom pet={pet} />
+      </Layout>
+    );
   }
 }
 

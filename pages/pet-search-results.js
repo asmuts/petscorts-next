@@ -48,18 +48,16 @@ class PetSearchResults extends React.Component {
   render() {
     const { pets, message } = this.props;
     return (
-      <Layout
-        content={
-          <React.Fragment>
-            <Row>
-              <Col className="col-md-6">
-                <h1>Pet Search Results</h1>
-              </Col>{" "}
-            </Row>
-            <div>{this.renderPets(pets, message)}</div>
-          </React.Fragment>
-        }
-      />
+      <Layout>
+        <React.Fragment>
+          <Row>
+            <Col className="col-md-6">
+              <h1>Pet Search Results</h1>
+            </Col>{" "}
+          </Row>
+          <div>{this.renderPets(pets, message)}</div>
+        </React.Fragment>
+      </Layout>
     );
   }
 
