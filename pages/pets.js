@@ -3,7 +3,7 @@ import axios from "axios";
 import Layout from "../components/shared/Layout.js";
 import { Col, Container, Row } from "react-bootstrap";
 import PetListing from "../components/pet/pet-listing/PetListing";
-import PetSearchMap from "./../components/pet/pet-listing/PetSearchMap";
+import PetSearchMap from "../components/pet/pet-listing/PetSearchMap";
 
 class PetSearchResults extends React.Component {
   constructor(props) {
@@ -46,17 +46,19 @@ class PetSearchResults extends React.Component {
   };
 
   render() {
-    const { pets, message } = this.props;
+    const { pets, message, title } = this.props;
     return (
       <Layout>
-        <React.Fragment>
-          <Row>
-            <Col className="col-md-6">
-              <h1>Pet Search Results</h1>
-            </Col>{" "}
-          </Row>
-          <div>{this.renderPets(pets, message)}</div>
-        </React.Fragment>
+        <section id="petSearchResults">
+          <Container fluid className="main-container">
+            <Row>
+              <Col className="col-md-12">
+                <h1>{title}</h1>
+              </Col>{" "}
+            </Row>
+            <div>{this.renderPets(pets, message)}</div>
+          </Container>
+        </section>
       </Layout>
     );
   }
@@ -67,26 +69,45 @@ class PetSearchResults extends React.Component {
   static async getInitialProps({ query }) {
     console.log("getInitialProps " + query.q);
 
-    // TODO fix messaging
-    let message = "";
-
-    // if (query.q === null || query.q === "") {
-    //   message =
-    //     "Try searching for a city. Until then . . .<p/> Here are some of our pets.";
-    // }
-
     let pets = await PetSearchResults.searchForPets(query);
 
-    const { city } = PetSearchResults.getCityAndStateFromQuery(query);
-    if (pets.length === 0) {
-      message = `Sorry. There are no pets for rent in ${city} or nearby.`;
-    }
+    // TODO fix messaging
+    const message = PetSearchResults.createMessage(query, pets);
+
+    const title = PetSearchResults.createTitle(query, pets);
 
     // Later, when searching by geoLocation, I'll need to reverse lookup the city.
-    // data for centering map if needed
+    // data for centering map if needed.
     let cities = await PetSearchResults.getCityData(query);
 
-    return { pets, cityData: cities, message };
+    return { pets, cityData: cities, message, title };
+  }
+
+  static createTitle(query, pets) {
+    let title = "";
+    if (pets.length === 0) return title;
+
+    // determine type of serch
+    if (query.type === "nearby") {
+      title = "Pets near you";
+    } else {
+      const { city } = PetSearchResults.getCityAndStateFromQuery(query);
+      title = `Pets in ${city} and nearby`;
+    }
+    return title;
+  }
+
+  static createMessage(query, pets) {
+    let message = "";
+    const { city } = PetSearchResults.getCityAndStateFromQuery(query);
+    if (pets.length === 0) {
+      let cityMessage = "";
+      if (city) {
+        cityMessage = `in ${city} or`;
+      }
+      message = `Sorry. There are no pets for rent ${cityMessage} nearby.`;
+    }
+    return message;
   }
 
   static async getCityData(query) {
@@ -98,9 +119,10 @@ class PetSearchResults extends React.Component {
     let cityDataApiRoute = `/api/v1/cities/name/${city}/state/${state}`;
     const cityDataUrl = baseURL + cityDataApiRoute;
     try {
-      const resCityData = await axios.get(cityDataUrl);
-      console.log("City data: " + resCityData.data);
-      cities = resCityData.data;
+      const res = await axios.get(cityDataUrl);
+      if (res.status === 200) {
+        cities = res.data;
+      }
     } catch (e) {
       console.log(e, `Error calling ${cityDataUrl}`);
       //TODO handle error
@@ -114,8 +136,9 @@ class PetSearchResults extends React.Component {
     let pets = {};
     try {
       const res = await axios.get(searchUrl);
-      console.log("res.data = " + res.data);
-      pets = res.data;
+      if (res.status === 200) {
+        pets = res.data;
+      }
     } catch (e) {
       console.log(e);
       //TODO handle error
@@ -154,6 +177,9 @@ class PetSearchResults extends React.Component {
         city = query.q.split(",")[0];
         state = query.q.split(",")[1].trim();
       }
+    }
+    if (city) {
+      city = city.charAt(0).toUpperCase() + city.slice(1);
     }
     return { city, state };
   }

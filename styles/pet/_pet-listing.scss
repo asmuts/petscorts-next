@@ -1,47 +1,65 @@
 /* SINGLE CARD STYLES*/
-#petListing {
-  .title {
-    font-size: 30px;
-    font-weight: 700;
-    margin-bottom: 20px;
+#petSearchResults {
+  .main-container {
+    position: relative;
+    margin-top: 60px;
+    margin-left: 0px;
+    width: 100%;
+    background-color: white;
   }
 
-  .pet-detail-link {
-    &:hover {
-      text-decoration: none;
+  #petListing {
+    .title {
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 20px;
     }
-  }
 
-  .pet-card {
-    border: none;
+    // .petSearchResults {
+    //   position: relative;
+    //   margin-top: 60px;
+    //   margin-left: 30px;
+    //   width: 100%;
+    //   background-color: white;
+    // }
 
-    .card-block {
-      padding-top: 8px;
-
-      .card-subtitle {
-        margin: 0;
-        font-weight: 500;
-        font-size: 12px;
-        text-transform: uppercase;
-        //color: #16861a;
+    .pet-detail-link {
+      &:hover {
+        text-decoration: none;
       }
+    }
 
-      .card-title {
-        font-size: 19px;
-        margin: 3px 0;
-        color: $main-text-gray-color;
-      }
+    .pet-card {
+      border: none;
 
-      .card-text {
-        font-size: 14px;
-        font-weight: 300;
-        color: #7e7e7e;
-        margin-bottom: 0;
-      }
+      .card-block {
+        padding-top: 8px;
 
-      .card-img-top {
-        height: 300px;
-        background: black;
+        .card-subtitle {
+          margin: 0;
+          font-weight: 500;
+          font-size: 12px;
+          text-transform: uppercase;
+          //color: #16861a;
+        }
+
+        .card-title {
+          font-size: 19px;
+          margin: 3px 0;
+          color: $main-text-gray-color;
+        }
+
+        .card-text {
+          font-size: 14px;
+          font-weight: 300;
+          color: #7e7e7e;
+          margin-bottom: 0;
+        }
+
+        .card-img-top {
+          height: 300px;
+          background: black;
+        }
       }
     }
   }
