@@ -40,8 +40,8 @@ const NearbyButton = () => {
 
   const handleNearbyClick = () => {
     const query = { type: "nearby", lat: location.lat, lng: location.lng };
-    const url = { pathname: "/pet-search-results", query };
-    const asUrl = { pathname: "/pet-search-results", query };
+    const url = { pathname: "/pets", query };
+    const asUrl = { pathname: "/pets", query };
     router.push(url, asUrl);
   };
 

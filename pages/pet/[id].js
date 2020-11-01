@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
 import Layout from "../../components/shared/Layout.js";
+import { Container } from "react-bootstrap";
 
 import { withRouter } from "next/router";
-import PetDetailMapRight from "../../components/pet/pet-detail/PetDetailMapRight";
+//import PetDetailMapRight from "../../components/pet/pet-detail/PetDetailMapRight";
 import PetDetailMapBottom from "../../components/pet/pet-detail/PetDetailMapBottom";
 
 class Pet extends React.Component {
@@ -12,6 +13,7 @@ class Pet extends React.Component {
     this.state = {};
   }
 
+  // TODO switch this over to use react-query
   static async getInitialProps({ query }) {
     let pet = {};
     if (query.id) {
@@ -34,7 +36,11 @@ class Pet extends React.Component {
     const { pet } = this.props;
     return (
       <Layout>
-        <PetDetailMapBottom pet={pet} />
+        <section id="petDetail">
+          <Container fluid className="main-container">
+            <PetDetailMapBottom pet={pet} />
+          </Container>
+        </section>
       </Layout>
     );
   }

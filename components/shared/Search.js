@@ -16,8 +16,8 @@ const Search = (props) => {
   const handleSubmit = preventDefault(() => {
     console.log(query);
     const query = { type: "city_state", q: `${query}` };
-    const url = { pathname: "/pet-search-results", query };
-    const asUrl = { pathname: "/pet-search-results", query };
+    const url = { pathname: "/pets", query };
+    const asUrl = { pathname: "/pets", query };
     router.push(url, asUrl);
   });
 

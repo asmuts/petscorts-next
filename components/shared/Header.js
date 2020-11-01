@@ -9,27 +9,16 @@ const Header = (props) => {
   const router = useRouter();
   const { user, loading } = useFetchUser();
 
-  // refactor, not sure if these will need different treatment
-  const handleLogin = () => {
-    const query = {};
-    const url = { pathname: "/api/login", query };
-    const asUrl = { pathname: "/api/login", query };
-    router.push(url, asUrl);
-  };
-  const handleLogout = () => {
-    const query = {};
-    const url = { pathname: "/api/logout", query };
-    const asUrl = { pathname: "/api/logout", query };
-    router.push(url, asUrl);
-  };
   const handleProfile = () => {
-    const query = {};
-    const url = { pathname: "/profile", query };
-    const asUrl = { pathname: "/profile", query };
-    router.push(url, asUrl);
+    push({}, "/profile");
   };
-  const handleAccountClick = () => {
-    alert("Listing features are not yet implemented.");
+  const handleListPet = () => {
+    push({}, "/manage/owner");
+  };
+  const push = (query, path) => {
+    const url = { pathname: path, query };
+    const asUrl = { pathname: path, query };
+    router.push(url, asUrl);
   };
 
   return (
@@ -38,7 +27,7 @@ const Header = (props) => {
         <title>Petscorts - Rent-a-pet</title>
       </Head>
 
-      <Navbar bg="light">
+      <Navbar bg="light fixed-top">
         <div className="d-block d-sm-block">
           <Navbar.Brand onClick={() => router.push("/")}>
             Petscorts
@@ -67,28 +56,27 @@ const Header = (props) => {
           <Dropdown.Menu>
             {user && !loading && (
               <>
-                <Dropdown.Item onClick={handleLogout} href="#">
-                  Logout
-                </Dropdown.Item>
+                <Dropdown.Item href="/api/auth/logout">Logout</Dropdown.Item>
                 <Dropdown.Item onClick={handleProfile} href="#">
                   Profile
+                </Dropdown.Item>
+                <hr />
+                <Dropdown.Item onClick={handleListPet} href="#">
+                  List your pet
                 </Dropdown.Item>
               </>
             )}
 
             {!user && !loading && (
               <>
-                <Dropdown.Item onClick={handleLogin} href="#">
-                  Login
-                </Dropdown.Item>
-                <Dropdown.Item onClick={handleLogin} href="#">
-                  Sign Up
+                <Dropdown.Item href="/api/auth/login">Login</Dropdown.Item>
+                <Dropdown.Item href="/api/auth/signup">Sign Up</Dropdown.Item>
+                <hr />
+                <Dropdown.Item href="/api/auth/login-owner">
+                  List your pet
                 </Dropdown.Item>
               </>
             )}
-            <Dropdown.Item onClick={handleAccountClick} href="#">
-              List your pet
-            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Navbar>

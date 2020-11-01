@@ -43,13 +43,15 @@ const SearchRBT = () => {
     // ignore empty onChange calls
     if (option[0] && option[0].city_state) {
       const city_state = option[0].city_state;
-      setOptions([{ delay: "100" }]);
+      //setOptions([{ delay: "100" }]);
       setIsLoading(false);
       //?q=${city_state}`
 
+      setOptions([]);
+
       const query = { type: "city_state", q: `${city_state}` };
-      const url = { pathname: "/pet-search-results", query };
-      const asUrl = { pathname: "/pet-search-results", query };
+      const url = { pathname: "/pets", query };
+      const asUrl = { pathname: "/pets", query };
       router.push(url, asUrl);
     }
   };

@@ -8,8 +8,8 @@ const PetDetailMapRight = ({ pet }) => {
 
   const handleSearchByCity = () => {
     const query = { type: "city_state", q: `${pet.city},${pet.state}` };
-    const url = { pathname: "/pet-search-results", query };
-    const asUrl = { pathname: "/pet-search-results", query };
+    const url = { pathname: "/pets", query };
+    const asUrl = { pathname: "/pets", query };
     router.push(url, asUrl);
   };
 
@@ -53,7 +53,10 @@ const PetDetailMapRight = ({ pet }) => {
               </div>
 
               <div className="d-none col-md-6 d-md-block">
-                <PetMap location={`${pet.street},${pet.city},${pet.state}`} />
+                <PetMap
+                  location={`${pet.street},${pet.city},${pet.state}`}
+                  height="300"
+                />
               </div>
             </div>
           </div>
