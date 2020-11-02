@@ -15,13 +15,21 @@ const Footer = () => {
         <Nav.Link href="#home">Home</Nav.Link>
         <Nav.Link href="#about">About</Nav.Link>
         <Nav.Link href="#contact">Contact Us</Nav.Link>
-        <Nav.Link href="https://www.twitter.com/petscorts/" target="_blank">
+        <Nav.Link
+          href="https://www.twitter.com/petscorts/"
+          target="_blank"
+          rel="noopener"
+        >
           {" "}
-          <i class="fa fa-twitter" aria-hidden="true"></i>
+          <i className="fa fa-twitter" aria-hidden="true"></i>
         </Nav.Link>
-        <Nav.Link href="https://www.instagram.com/petscorts/" target="_blank">
+        <Nav.Link
+          href="https://www.instagram.com/petscorts/"
+          target="_blank"
+          rel="noopener"
+        >
           {" "}
-          <i class="fa fa-instagram" aria-hidden="true"></i>
+          <i className="fa fa-instagram" aria-hidden="true"></i>
         </Nav.Link>
       </Nav>
     </Navbar>

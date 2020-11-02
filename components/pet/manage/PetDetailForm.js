@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { Form, Button, Col, InputGroup } from "react-bootstrap";
 
-const PetDetailForm = ({ doSubmit, initialValues }) => {
+const PetDetailForm = ({ doSubmit, doCancel, initialValues }) => {
   const schema = yup.object({
     name: yup.string().required(),
     dailyRentalRate: yup.number().required().min(1),
@@ -117,7 +117,7 @@ const PetDetailForm = ({ doSubmit, initialValues }) => {
                 rows={3}
                 placeholder="Enter a description"
                 name="description"
-                value={values.descrition}
+                value={values.description}
                 onChange={handleChange}
                 isInvalid={!!errors.city}
               />
@@ -133,6 +133,7 @@ const PetDetailForm = ({ doSubmit, initialValues }) => {
                 name="species"
                 onChange={handleChange}
                 default={values.species}
+                seelected={values.species}
               >
                 <option value="Dog">Dog</option>
                 <option value="Cat">Cat</option>
@@ -158,7 +159,17 @@ const PetDetailForm = ({ doSubmit, initialValues }) => {
             </Form.Group>
           </Form.Row>
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="rounded" size="sm">
+            Submit
+          </Button>
+          <Button
+            variant="secondary"
+            className="ml-2 rounded"
+            size="sm"
+            onClick={doCancel}
+          >
+            Cancel
+          </Button>
         </Form>
       )}
     </Formik>

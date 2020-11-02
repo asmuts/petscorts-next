@@ -12,7 +12,7 @@ import NearbyButton from "./../components/home/NearbyButton";
 import Footer from "./../components/shared/Footer";
 
 export default function Home() {
-  const bgimage = "/images/background-dogs1.png";
+  const bgimage = "/images/background-dogs2-compressed.jpg";
 
   return (
     <Layout>
@@ -35,18 +35,6 @@ export default function Home() {
             </Container>
           </Jumbotron>
         </div>{" "}
-        <Card className="text-center" hidden>
-          <Card.Header>Featured Pets</Card.Header>
-          <Card.Body>
-            <Card.Title>Special title treatment</Card.Title>
-            <Card.Text>
-              With supporting text below as a natural lead-in to additional
-              content.
-            </Card.Text>
-            <Button variant="outline-primary rounded-pill">Go somewhere</Button>
-          </Card.Body>
-          <Card.Footer className="text-muted"></Card.Footer>
-        </Card>{" "}
         <Footer></Footer>
       </React.Fragment>
     </Layout>

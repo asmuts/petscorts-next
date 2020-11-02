@@ -1,7 +1,8 @@
 import { withRouter } from "next/router";
 import axios from "axios";
-import Layout from "../components/shared/Layout.js";
 import { Col, Container, Row } from "react-bootstrap";
+
+import Layout from "../components/shared/Layout.js";
 import PetListing from "../components/pet/pet-listing/PetListing";
 import PetSearchMap from "../components/pet/pet-listing/PetSearchMap";
 

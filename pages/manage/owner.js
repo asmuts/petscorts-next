@@ -1,11 +1,11 @@
+import { useRouter } from "next/router";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+
 import Layout from "../../components/shared/Layout.js";
 import OwnerPetDeck from "../../components/pet/manage/OwnerPetDeck.js";
 import { useFetchUser } from "../../util/user";
 import { Card, Col, Image, Container, Row, Button } from "react-bootstrap";
-
-import { useRouter } from "next/router";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
 
 export default function Owner() {
   const { user, loading } = useFetchUser();

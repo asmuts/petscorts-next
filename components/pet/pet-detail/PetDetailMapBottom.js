@@ -1,11 +1,10 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { Card, CardDeck, Col, Form, Button } from "react-bootstrap";
 
 import PetMap from "./PetMap";
 import PetImageCarousel from "./PetImageCarousel";
 import PetRentalDatePicker from "./PetRentalDatePicker";
-import { Container } from "react-bootstrap";
-import { useRouter } from "next/router";
-import { Card, CardDeck, Col, Form, Button } from "react-bootstrap";
 
 const PetDetailMapBottom = ({ pet }) => {
   const router = useRouter();
@@ -37,6 +36,7 @@ const PetDetailMapBottom = ({ pet }) => {
           <div className="row">
             <div className="col-md-6">
               <a href="#" onClick={handleSearchByCity}>
+                <i className="fa fa-search mr-1" aria-hidden="true"></i>{" "}
                 {pet.city}, {pet.state}
               </a>
             </div>
@@ -95,7 +95,7 @@ const PetDetailMapBottom = ({ pet }) => {
       </section>
 
       <div className="col-md-12">
-        <hr class="mt-2 mb-3" />
+        <hr className="mt-2 mb-3" />
       </div>
 
       <section id="calendarDetails">
@@ -107,7 +107,7 @@ const PetDetailMapBottom = ({ pet }) => {
         </div>
       </section>
 
-      <hr class="mt-2 mb-3" />
+      <hr className="mt-2 mb-3" />
 
       <section id="mapDetails">
         <div className="map-section">

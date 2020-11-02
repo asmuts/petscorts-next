@@ -1,6 +1,7 @@
 import axios from "axios";
-import PetDetailForm from "./PetDetailForm";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import PetDetailForm from "./PetDetailForm";
 
 export default function CreatePetForm({ ownerId }) {
   console.log("CreatePetForm. ownerId " + ownerId);
@@ -8,6 +9,14 @@ export default function CreatePetForm({ ownerId }) {
   let [initialValues, setInitialValues] = useState({
     ownerId: ownerId,
   });
+
+  const router = useRouter();
+  const routeToPetManageForm = (petId) => {
+    const query = { petId: petId };
+    const url = { pathname: "/pet/editPet", query };
+    const asUrl = { pathname: "/pet/editPet", query };
+    router.push(url, asUrl);
+  };
 
   const doSubmit = async (values) => {
     console.log(values);
@@ -17,21 +26,11 @@ export default function CreatePetForm({ ownerId }) {
     let newPetId;
     try {
       const res = await axios.post(apiURL, values);
-      console.log("data: " + res.data);
-      newPetId = res.data;
+      if (res.status === 200) {
+        newPetId = res.data;
 
-      //populate (might want to go to the db or let the form do this if there is a petId)
-      initialValues = {
-        petId: newPetId,
-        ownerId: ownerId,
-        name: values.name,
-        dailyRentalRate: values.dailyRentalRate,
-        city: values.city,
-        state: values.state,
-        descriptions: values.description,
-        species: values.species,
-        breed: values.breed,
-      };
+        routeToPetManageForm(newPetId);
+      }
     } catch (e) {
       console.log(e, `Error calling ${apiURL}`);
       //TODO handle error

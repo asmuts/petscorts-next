@@ -1,5 +1,4 @@
 import React from "react";
-//import { MapWithGeocode } from "../map/GoogleMap";
 import { MapWithCircles } from "./GoogleSearchMap";
 
 class PetSearchMap extends React.Component {

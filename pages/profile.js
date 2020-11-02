@@ -1,6 +1,6 @@
+import Router from "next/router";
 import Layout from "../components/shared/Layout.js";
 import { useFetchUser } from "../util/user";
-import Router from "next/router";
 
 export default function Profile() {
   const { user, loading } = useFetchUser();
