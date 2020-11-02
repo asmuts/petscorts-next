@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import "react-daterange-picker/dist/css/react-calendar.css";
 
-import { Container, Card, CardDeck, Col, Form, Button } from "react-bootstrap";
+import { Col, Form, Button } from "react-bootstrap";
 import DateRangePicker from "react-daterange-picker";
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
@@ -75,6 +75,7 @@ const PetRentalDatePicker = ({ pet }) => {
           <Form.Row>
             <Col>
               <Form.Control
+                readOnly
                 className="rounded-pill"
                 placeholder="Start Date"
                 value={value != null && value.start.format("MM/DD/YY")}
@@ -82,6 +83,7 @@ const PetRentalDatePicker = ({ pet }) => {
             </Col>
             <Col>
               <Form.Control
+                readOnly
                 className="rounded-pill"
                 placeholder="End Date"
                 value={value != null && value.end.format("MM/DD/YY")}
