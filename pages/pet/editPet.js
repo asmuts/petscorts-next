@@ -14,7 +14,9 @@ class EditPet extends Component {
     const { ownerId } = this.props;
     return (
       <Layout>
-        <CreatePetForm ownerId={ownerId}></CreatePetForm>
+        <section id="petDetail">
+          <CreatePetForm ownerId={ownerId}></CreatePetForm>
+        </section>
       </Layout>
     );
   }

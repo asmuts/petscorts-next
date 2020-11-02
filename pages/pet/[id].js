@@ -37,9 +37,7 @@ class Pet extends React.Component {
     return (
       <Layout>
         <section id="petDetail">
-          <Container fluid className="main-container">
-            <PetDetailMapBottom pet={pet} />
-          </Container>
+          <PetDetailMapBottom pet={pet} />
         </section>
       </Layout>
     );

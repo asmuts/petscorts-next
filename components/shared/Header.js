@@ -28,20 +28,29 @@ const Header = (props) => {
       </Head>
 
       <Navbar bg="light fixed-top">
-        <div className="d-block d-sm-block">
+        <div className="d-none d-sm-block ml-2">
           <Navbar.Brand onClick={() => router.push("/")}>
             Petscorts
           </Navbar.Brand>
         </div>
 
+        <div className="d-xs-block d-sm-none ml-2">
+          <Navbar.Brand onClick={() => router.push("/")}>P</Navbar.Brand>
+        </div>
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="mr-2">
             <SearchRBT props={props} />
           </Nav>
         </Navbar.Collapse>
 
-        <Dropdown id="dropdown-basic-button" title="" align="left">
+        <Dropdown
+          id="dropdown-basic-button"
+          title=""
+          align="left"
+          className="mr-2"
+        >
           <Dropdown.Toggle
             variant="outline-primary"
             id="dropdown-basic"

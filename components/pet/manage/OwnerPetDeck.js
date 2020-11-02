@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Card, CardDeck, Col } from "react-bootstrap";
+import { Card, CardDeck, Button } from "react-bootstrap";
 
 const OwnerPetDeck = ({ owner }) => {
   let [pets, setPets] = useState([]);
@@ -53,8 +53,14 @@ const OwnerPetDeck = ({ owner }) => {
   const router = useRouter();
   const routeToPetManageForm = (petId) => {
     const query = { petId: petId };
-    const url = { pathname: "/pet/editPet", query };
-    const asUrl = { pathname: "/pet/editPet", query };
+    push(query, "/pet/editPet");
+  };
+  const routeToPetDetails = (petId) => {
+    push({}, `/pet/${petId}`);
+  };
+  const push = (query, path) => {
+    const url = { pathname: path, query };
+    const asUrl = { pathname: path, query };
     router.push(url, asUrl);
   };
 
@@ -67,7 +73,7 @@ const OwnerPetDeck = ({ owner }) => {
 
   if ((!isLoading && pets === null) || !pets.length > 0) {
     console.log("returning null");
-    return <h3>You don't have any pets listed.</h3>;
+    return <p className="page-title">You don't have any pets listed.</p>;
   }
 
   function renderImage(pet) {
@@ -87,21 +93,28 @@ const OwnerPetDeck = ({ owner }) => {
   const renderCard = (pet, index) => {
     console.log("renderCard " + pet);
     console.log("renderCard " + pet._id);
-    //return <div>{pet._id}</div>;
-    //onClick={() => routeToPetManageForm(pet._id)}
+
     return (
-      <Card
-        className="col-md-3 col-xs-6"
-        key={index}
-        onClick={() => routeToPetManageForm(pet._id)}
-      >
-        {renderImage(pet)}
-        <Card.Body>
-          <Card.Title>{pet.name}</Card.Title>
-          <Card.Text>{pet.description}</Card.Text>
-        </Card.Body>
+      <Card className="col-md-3 col-xs-6" key={index}>
+        <a
+          className="pet-detail-link"
+          onClick={() => routeToPetDetails(pet._id)}
+          href="#"
+        >
+          {renderImage(pet)}
+          <Card.Body>
+            <Card.Title className="card-title">{pet.name}</Card.Title>
+            <Card.Text className="card-text">{pet.description}</Card.Text>
+          </Card.Body>
+        </a>
         <Card.Footer>
-          <small className="text-muted"></small>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => routeToPetManageForm(pet._id)}
+          >
+            Edit
+          </Button>
         </Card.Footer>
       </Card>
     );
@@ -110,7 +123,7 @@ const OwnerPetDeck = ({ owner }) => {
   return (
     <>
       <>
-        <h2>Your pets.</h2>
+        <p className="page-title">Your pets.</p>
         <CardDeck>
           {pets.map((pet, index) => {
             return renderCard(pet, index);

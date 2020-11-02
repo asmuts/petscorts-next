@@ -21,10 +21,18 @@ export default function PetImageCarousel(props) {
 
   return (
     <Carousel activeIndex={index} onSelect={handleSelect}>
+      {/* {
+        <style>
+          {`.custom-tag {
+                    max-height: 500px;
+                    background: black;
+                    }`}
+        </style>
+      } */}
       {pet.images.map((image) => (
         <Carousel.Item key={image.url}>
           <img
-            className="bg-white d-block custom-tag"
+            className="bg-white w-100 d-block custom-tag"
             src={image.url}
             alt={pet.name}
           />

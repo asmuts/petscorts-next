@@ -1,5 +1,5 @@
 import Header from "../../components/shared/Header";
-
+import { Container } from "react-bootstrap";
 import { UserProvider, useFetchUser } from "../../util/user";
 
 function Layout({ children }) {
@@ -10,7 +10,7 @@ function Layout({ children }) {
       <div>
         <Header> </Header>
         <main>
-          <div className="container">{children}</div>
+          <Container className="main-container">{children}</Container>
         </main>
       </div>
     </UserProvider>
