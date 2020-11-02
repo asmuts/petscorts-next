@@ -1,18 +1,19 @@
 /* SINGLE CARD STYLES*/
 #petSearchResults {
-  .main-container {
-    position: relative;
-    margin-top: 60px;
-    margin-left: 0px;
-    width: 100%;
-    background-color: white;
-  }
+  // .main-container {
+  //   position: relative;
+  //   margin-top: 60px;
+  //   margin-left: 0px;
+  //   width: 100%;
+  //   background-color: white;
+  // }
 
   #petListing {
     .title {
       font-size: 30px;
       font-weight: 700;
       margin-bottom: 20px;
+      color: $main-text-gray-color;
     }
 
     // .petSearchResults {

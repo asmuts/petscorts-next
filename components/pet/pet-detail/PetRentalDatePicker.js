@@ -1,13 +1,14 @@
 import React, { Fragment, useState } from "react";
 import "react-daterange-picker/dist/css/react-calendar.css";
 
+import { Container, Card, CardDeck, Col, Form, Button } from "react-bootstrap";
 import DateRangePicker from "react-daterange-picker";
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
 
 const moment = extendMoment(originalMoment);
 
-const PetRentalDatePicker = () => {
+const PetRentalDatePicker = ({ pet }) => {
   const [value, setValue] = useState(null);
   const [states, setStates] = useState(null);
 
@@ -53,8 +54,8 @@ const PetRentalDatePicker = () => {
   ];
 
   return (
-    <div>
-      <div className="d-none col-md-12 d-md-block">
+    <div className="row">
+      <div className="col-lg-9 col-sm-7 d-md-block ">
         <DateRangePicker
           firstOfWeek={1}
           numberOfCalendars={2}
@@ -68,14 +69,36 @@ const PetRentalDatePicker = () => {
           onSelect={handleSelect}
         />
       </div>
+      <div className="col-lg-3 col-xs-3 booking-form rounded">
+        <p>{pet.dailyRate || "?"} per day.</p>
+        <Form>
+          <Form.Row>
+            <Col>
+              <Form.Control
+                className="rounded-pill"
+                placeholder="Start Date"
+                value={value != null && value.start.format("MM/DD/YY")}
+              />
+            </Col>
+            <Col>
+              <Form.Control
+                className="rounded-pill"
+                placeholder="End Date"
+                value={value != null && value.end.format("MM/DD/YY")}
+              />
+            </Col>
+          </Form.Row>
+          <Button
+            className="submit-button rounded-pill"
+            variant="primary"
+            type="submit"
+          >
+            Reserve
+          </Button>
+        </Form>
+      </div>
     </div>
   );
-
-  //});
 };
-
-// {value != null && value.start.format("YYYY-MM-DD")}
-// {" - "}
-// {value != null && value.end.format("YYYY-MM-DD")}
 
 export default PetRentalDatePicker;

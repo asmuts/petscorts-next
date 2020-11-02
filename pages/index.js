@@ -1,7 +1,15 @@
-import { Card, Container, Jumbotron, Button } from "react-bootstrap";
+import {
+  Card,
+  Container,
+  Jumbotron,
+  Button,
+  Navbar,
+  Nav,
+} from "react-bootstrap";
 
 import Layout from "../components/shared/Layout.js";
 import NearbyButton from "./../components/home/NearbyButton";
+import Footer from "./../components/shared/Footer";
 
 export default function Home() {
   const bgimage = "/images/background-dogs1.png";
@@ -27,7 +35,7 @@ export default function Home() {
             </Container>
           </Jumbotron>
         </div>{" "}
-        <Card className="text-center">
+        <Card className="text-center" hidden>
           <Card.Header>Featured Pets</Card.Header>
           <Card.Body>
             <Card.Title>Special title treatment</Card.Title>
@@ -39,6 +47,7 @@ export default function Home() {
           </Card.Body>
           <Card.Footer className="text-muted"></Card.Footer>
         </Card>{" "}
+        <Footer></Footer>
       </React.Fragment>
     </Layout>
   );

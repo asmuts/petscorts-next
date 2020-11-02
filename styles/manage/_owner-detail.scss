@@ -3,13 +3,33 @@
     font-size: 30px;
     font-weight: 700;
     margin-bottom: 20px;
+    color: $main-text-gray-color;
   }
 
-  .main-container {
-    position: relative;
-    margin-top: 60px;
-    margin-left: 30px;
-    width: 100%;
-    background-color: white;
+  // .main-container {
+  //   position: relative;
+  //   margin-top: 60px;
+  //   margin-left: 30px;
+  //   width: 100%;
+  //   background-color: white;
+  // }
+
+  .pet-detail-link {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .card-title {
+    font-size: 19px;
+    margin: 3px 0;
+    color: $main-text-gray-color;
+  }
+
+  .card-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: #7e7e7e;
+    margin-bottom: 0;
   }
 }

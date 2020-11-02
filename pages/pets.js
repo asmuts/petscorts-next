@@ -37,11 +37,11 @@ class PetSearchResults extends React.Component {
   renderEmptyResults = (message) => {
     console.log("renderEmptyResults called");
     return (
-      <Container id="petSearchResults">
+      <section id="petSearchResults">
         <div style={{ height: "400px", width: "400px" }}>
           <PetSearchMap {...this.props} />
         </div>
-      </Container>
+      </section>
     );
   };
 
@@ -50,14 +50,12 @@ class PetSearchResults extends React.Component {
     return (
       <Layout>
         <section id="petSearchResults">
-          <Container fluid className="main-container">
-            <Row>
-              <Col className="col-md-12">
-                <h1>{title}</h1>
-              </Col>{" "}
-            </Row>
-            <div>{this.renderPets(pets, message)}</div>
-          </Container>
+          <Row>
+            <Col className="col-md-12">
+              <p className="page-title">{title}</p>
+            </Col>{" "}
+          </Row>
+          <div>{this.renderPets(pets, message)}</div>
         </section>
       </Layout>
     );

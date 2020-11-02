@@ -101,7 +101,7 @@ export default function Owner() {
       <section id="ownerDetail">
         <Container fluid className="main-container">
           <Row>
-            <h2>Manage Your Pets</h2>
+            <p className="page-title">Manage Your Pets</p>
           </Row>
           <Row>{isNewOwner && <h2>Thanks for signing up!</h2>}</Row>
           <Row>

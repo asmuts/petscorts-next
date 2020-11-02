@@ -5,7 +5,7 @@ import PetImageCarousel from "./PetImageCarousel";
 import PetRentalDatePicker from "./PetRentalDatePicker";
 import { Container } from "react-bootstrap";
 import { useRouter } from "next/router";
-import { Col, Form, Button } from "react-bootstrap";
+import { Card, CardDeck, Col, Form, Button } from "react-bootstrap";
 
 const PetDetailMapBottom = ({ pet }) => {
   const router = useRouter();
@@ -28,7 +28,7 @@ const PetDetailMapBottom = ({ pet }) => {
         <div className="title-section">
           <div className="row">
             <div className="col-md-6">
-              <h1>{pet.name}</h1>
+              <p className="page-title">Hi! My name is {pet.name}</p>
             </div>
           </div>
           <div className="row">
@@ -50,59 +50,60 @@ const PetDetailMapBottom = ({ pet }) => {
       <section id="petDetails">
         <div className="upper-section pet-details">
           <div className="row">
-            <div className="col-md-12">
-              <style>
+            <div className="col-md-6 col-xs-6">
+              {/* <style>
                 {`.custom-tag {
                     height: 500px;
                     background: black;
                     }`}
-              </style>
+              </style> */}
               <PetImageCarousel pet={pet} className="custom-tag" />
             </div>
+            <div className="col-md-6 details-section">
+              <Card>
+                <Card.Header>{pet.name}</Card.Header>
+                <Card.Body>
+                  <Card.Text>{pet.description}</Card.Text>
+                  <Card.Text>Species: {pet.species}</Card.Text>
+                  <Card.Text>Breed: {pet.breed}</Card.Text>
+                  <Card.Text hidden>ID: {pet._id}</Card.Text>
+                  <Card.Text>Owner: {pet.owner.fullname}</Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
           </div>
         </div>
-
-        <hr class="mt-2 mb-3" />
-
-        <div className="details-section">
+        {/* <hr class="mt-2 mb-3" /><div className="details-section">
           <div className="row">
-            <div className="col-md-8">
-              <h2>ID: {pet._id}</h2>
-              <p>{pet.species}</p>
-              <p>{pet.description}</p>
-              <h1>Owner: {pet.owner.fullname}</h1>
+            <div className="col-md-8 details-section">
+              <Card>
+                <Card.Header>{pet.name}</Card.Header>
+                <Card.Body>
+                  <Card.Text>{pet.description}</Card.Text>
+                  <Card.Text>Species: {pet.species}</Card.Text>
+                  <Card.Text>Breed: {pet.breed}</Card.Text>
+                  <Card.Text hidden>ID: {pet._id}</Card.Text>
+                  <Card.Text>Owner: {pet.owner.fullname}</Card.Text>
+                </Card.Body>
+              </Card>
             </div>
-            <div className="col-md-4 booking-form rounded">
-              <p>{pet.dailyRate || "?"} per day.</p>
-              <Form>
-                <Form.Row>
-                  <Col>
-                    <Form.Control placeholder="Start Date" />
-                  </Col>
-                  <Col>
-                    <Form.Control placeholder="End Date" />
-                  </Col>
-                </Form.Row>
 
-                <Button variant="primary" type="submit">
-                  Reserve
-                </Button>
-              </Form>
-            </div>
+            <div className="col-md-3"></div>
           </div>
         </div>
+ */}{" "}
       </section>
 
-      <hr class="mt-2 mb-3" />
+      <div className="col-md-12">
+        <hr class="mt-2 mb-3" />
+      </div>
 
       <section id="calendarDetails">
-        <div className="map-section">
+        <div className="date-section">
           <div className="row">
-            <div className="col-md-12">
-              <h2>Availability</h2>
-              <PetRentalDatePicker pet={pet}></PetRentalDatePicker>
-            </div>
+            <p className="page-title">Availability</p>
           </div>
+          <PetRentalDatePicker pet={pet}></PetRentalDatePicker>
         </div>
       </section>
 
