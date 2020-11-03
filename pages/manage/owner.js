@@ -79,8 +79,8 @@ export default function Owner() {
   const router = useRouter();
   const routeToPetManageForm = (ownerId) => {
     const query = { ownerId: ownerId };
-    const url = { pathname: "/pet/editPet", query };
-    const asUrl = { pathname: "/pet/editPet", query };
+    const url = { pathname: "/pet/managePet", query };
+    const asUrl = { pathname: "/pet/managePet", query };
     router.push(url, asUrl);
   };
 
@@ -92,8 +92,10 @@ export default function Owner() {
       </Layout>
     );
   }
-  if (!user && !loading) {
-    Router.replace("/");
+
+  // Not authorized. TODO message user
+  if ((!user && !loading) || !user.email) {
+    return router.replace("/api/auth/login");
   }
 
   return (

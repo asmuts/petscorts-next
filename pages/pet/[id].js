@@ -43,7 +43,8 @@ export async function getStaticProps({ params }) {
   } catch (e) {
     console.log(e, `Error calling ${url}`);
   }
-  return { props: { pet }, revalidate: 10 };
+  const revalidateSetting = process.env.REVALIDATE_PET;
+  return { props: { pet }, revalidate: revalidateSetting };
 }
 
 export async function getStaticPaths() {

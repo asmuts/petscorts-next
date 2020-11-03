@@ -33,7 +33,7 @@ function PetImageSmallCards({ pet, markDataStale }) {
           src={image.url}
           alt={pet.name}
         ></Card.Img>
-
+        <Card.Body> </Card.Body>
         <Card.Footer>
           <Button
             variant="danger"

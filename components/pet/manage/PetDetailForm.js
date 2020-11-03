@@ -10,6 +10,7 @@ const PetDetailForm = ({ doSubmit, doCancel, initialValues }) => {
     state: yup.string().required().min(2).max(2),
     street: yup.string().required().min(6),
     description: yup.string().required().min(10),
+    //species: yup.string().required(),
     breed: yup.string(),
   });
 
@@ -53,7 +54,7 @@ const PetDetailForm = ({ doSubmit, doCancel, initialValues }) => {
                   name="dailyRentalRate"
                   value={values.dailyRentalRate}
                   onChange={handleChange}
-                  isValid={!!errors.dailyRentalRate}
+                  isValid={touched.name && !errors.dailyRentalRate}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.dailyRentalRate}
@@ -132,8 +133,7 @@ const PetDetailForm = ({ doSubmit, doCancel, initialValues }) => {
                 as="select"
                 name="species"
                 onChange={handleChange}
-                default={values.species}
-                seelected={values.species}
+                selected={values.species}
               >
                 <option value="Dog">Dog</option>
                 <option value="Cat">Cat</option>
@@ -141,6 +141,9 @@ const PetDetailForm = ({ doSubmit, doCancel, initialValues }) => {
                 <option value="Chimp">Chimp</option>
                 <option value="Duck">Duck</option>
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.species}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col} md="3" controlId="validationFormik08">

@@ -1,5 +1,5 @@
 import React from "react";
-//import fetch from "isomorphic-unfetch";
+import axios from "axios";
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
 let userState;
@@ -11,8 +11,20 @@ export const fetchUser = async () => {
     return userState;
   }
 
-  const res = await fetch("/api/auth/me");
-  userState = res.ok ? await res.json() : null;
+  // const res = await fetch('/api/me')
+  // userState = res.ok ? await res.json() : null
+  // return userState
+
+  try {
+    let res = await axios.get("/api/auth/me");
+    userState = res.status === 200 ? res.data : null;
+    //console.log("userState = " + userState);
+  } catch (error) {
+    if (error.response.status === 401) {
+      //console.log("eating 401");
+      userState = null;
+    }
+  }
   return userState;
 };
 

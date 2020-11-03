@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import PetDetailForm from "./PetDetailForm";
 
-export default function CreatePetForm({ ownerId }) {
+export default function CreatePet({ ownerId }) {
   console.log("CreatePetForm. ownerId " + ownerId);
 
   let [initialValues, setInitialValues] = useState({
@@ -13,9 +13,13 @@ export default function CreatePetForm({ ownerId }) {
   const router = useRouter();
   const routeToPetManageForm = (petId) => {
     const query = { petId: petId };
-    const url = { pathname: "/pet/editPet", query };
-    const asUrl = { pathname: "/pet/editPet", query };
+    const url = { pathname: "/pet/managePet", query };
+    const asUrl = { pathname: "/pet/managePet", query };
     router.push(url, asUrl);
+  };
+
+  const doCancel = async () => {
+    router.back();
   };
 
   const doSubmit = async (values) => {
@@ -40,6 +44,7 @@ export default function CreatePetForm({ ownerId }) {
   return (
     <PetDetailForm
       doSubmit={doSubmit}
+      doCancel={doCancel}
       initialValues={initialValues}
     ></PetDetailForm>
   );

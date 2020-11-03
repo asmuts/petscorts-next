@@ -1,7 +1,8 @@
 import React from "react";
 import { MapWithGeocode } from "../map/GoogleMap";
 
-class PetMap extends React.Component {
+// I'm switching over to open maps.
+class PetMapGoogle extends React.Component {
   //state = {  }
   render() {
     const { location, height } = this.props;
@@ -23,4 +24,4 @@ class PetMap extends React.Component {
   }
 }
 
-export default PetMap;
+export default PetMapGoogle;

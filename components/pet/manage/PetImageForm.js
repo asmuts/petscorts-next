@@ -10,7 +10,6 @@ import axios from "axios";
 // phase 1: just add and display.
 export default function PetImageForm({ pet, markDataStale }) {
   const [image, setImage] = React.useState("");
-  const imageRef = React.useRef(null);
 
   // Custom hook
   function useDisplayImage() {
@@ -108,9 +107,7 @@ export default function PetImageForm({ pet, markDataStale }) {
         </div>
         <div className="col-md-6 col-xs-6">
           <Container className="mx-auto">
-            {result && (
-              <img className="w-100" ref={imageRef} src={result} alt="" />
-            )}
+            {result && <img className="w-100" src={result} alt="" />}
           </Container>
         </div>
       </div>

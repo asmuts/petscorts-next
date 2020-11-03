@@ -2,9 +2,16 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Card, CardDeck, Col, Form, Button } from "react-bootstrap";
 
-import PetMap from "./PetMap";
+import PetMap from "./PetMapGoogle";
 import PetImageCarousel from "./PetImageCarousel";
 import PetRentalDatePicker from "./PetRentalDatePicker";
+//import LeafletSingleCircleMap from "../map/LeafletSingleCircleMap";
+
+// Leaflet can't be server side rendered
+import dynamic from "next/dynamic";
+const MapWithNoSSR = dynamic(() => import("../map/LeafletSingleCircleMap"), {
+  ssr: false,
+});
 
 const PetDetailMapBottom = ({ pet }) => {
   const router = useRouter();
@@ -20,6 +27,29 @@ const PetDetailMapBottom = ({ pet }) => {
   if (pet.city) {
     pet.city = pet.city.charAt(0).toUpperCase() + pet.city.slice(1);
   }
+
+  const renderMap = () => {
+    if (!pet.location || !pet.location.coordinates) {
+      console.log("Pet is lacking geolocation information");
+      // TODO revers geolocate, like I used to do
+      // though this shoudln't happen.
+      return "";
+    }
+
+    return (
+      <section id="mapDetails">
+        <div className="map-section">
+          <div className="row">
+            <div className="col-md-12" style={{ height: `500px` }}>
+              <MapWithNoSSR
+                coordinates={pet.location.coordinates}
+              ></MapWithNoSSR>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  };
 
   return (
     <section id="petDetailInner">
@@ -53,13 +83,16 @@ const PetDetailMapBottom = ({ pet }) => {
             <div className="col-md-6 col-xs-6">
               {/* <style>
                 {`.custom-tag {
-                    height: 500px;
+                    height: 3500px;
                     background: black;
                     }`}
               </style> */}
               <PetImageCarousel pet={pet} className="custom-tag" />
             </div>
-            <div className="col-md-6 details-section">
+            <div
+              className="col-md-6 details-section"
+              style={{ height: "375px" }}
+            >
               <Card>
                 <Card.Header>{pet.name}</Card.Header>
                 <Card.Body>
@@ -73,25 +106,6 @@ const PetDetailMapBottom = ({ pet }) => {
             </div>
           </div>
         </div>
-        {/* <hr class="mt-2 mb-3" /><div className="details-section">
-          <div className="row">
-            <div className="col-md-8 details-section">
-              <Card>
-                <Card.Header>{pet.name}</Card.Header>
-                <Card.Body>
-                  <Card.Text>{pet.description}</Card.Text>
-                  <Card.Text>Species: {pet.species}</Card.Text>
-                  <Card.Text>Breed: {pet.breed}</Card.Text>
-                  <Card.Text hidden>ID: {pet._id}</Card.Text>
-                  <Card.Text>Owner: {pet.owner.fullname}</Card.Text>
-                </Card.Body>
-              </Card>
-            </div>
-
-            <div className="col-md-3"></div>
-          </div>
-        </div>
- */}{" "}
       </section>
 
       <div className="col-md-12">
@@ -109,20 +123,16 @@ const PetDetailMapBottom = ({ pet }) => {
 
       <hr className="mt-2 mb-3" />
 
-      <section id="mapDetails">
-        <div className="map-section">
-          <div className="row">
-            <div className="col-md-12">
-              <PetMap
-                location={`${pet.street},${pet.city},${pet.state}`}
-                height="500"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      {renderMap()}
     </section>
   );
 };
+
+{
+  /* <PetMap
+location={`${pet.street},${pet.city},${pet.state}`}
+height="500"
+/> */
+}
 
 export default PetDetailMapBottom;

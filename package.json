@@ -21,6 +21,7 @@
     "formik": "^2.2.1",
     "isomorphic-unfetch": "^3.1.0",
     "jquery": "^3.5.1",
+    "leaflet": "^1.7.1",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "moment-range": "^4.0.2",
@@ -29,8 +30,9 @@
     "react-bootstrap": "^1.4.0",
     "react-bootstrap-typeahead": "^5.1.2",
     "react-daterange-picker": "^2.0.1",
-    "react-dom": "16.14.0",
+    "react-dom": "^16.14.0",
     "react-google-maps": "^9.4.5",
+    "react-leaflet": "^3.0.0-rc.0",
     "reactstrap": "^8.6.0",
     "sass": "^1.27.0",
     "yup": "^0.29.3"

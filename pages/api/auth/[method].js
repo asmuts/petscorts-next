@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     try {
       await auth0.handleProfile(req, res);
     } catch (error) {
-      console.error(error);
+      console.error("me: " + error);
       res.status(error.status || 500).end(error.message);
     }
   }
