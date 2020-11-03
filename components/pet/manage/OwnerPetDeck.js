@@ -53,7 +53,7 @@ const OwnerPetDeck = ({ owner }) => {
   const router = useRouter();
   const routeToPetManageForm = (petId) => {
     const query = { petId: petId };
-    push(query, "/pet/editPet");
+    push(query, "/pet/managePet");
   };
   const routeToPetDetails = (petId) => {
     push({}, `/pet/${petId}`);

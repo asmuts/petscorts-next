@@ -1,3 +1,4 @@
+import Head from "../../components/shared/Head";
 import Header from "../../components/shared/Header";
 import { Container } from "react-bootstrap";
 import { UserProvider, useFetchUser } from "../../util/user";
@@ -8,6 +9,7 @@ function Layout({ children }) {
   return (
     <UserProvider value={{ user, loading }}>
       <div>
+        <Head></Head>
         <Header> </Header>
         <main>
           <Container className="main-container">{children}</Container>

@@ -1,15 +1,27 @@
+import { useRouter } from "next/router";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Card, Spinner, Button } from "react-bootstrap";
+import { Spinner, Row, Col } from "react-bootstrap";
+
 import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
+import PetDetailCard from "./PetDetailCard";
 import PetImageForm from "./PetImageForm";
+
+// Leaflet can't be server side rendered
+import dynamic from "next/dynamic";
+const MapWithNoSSR = dynamic(() => import("../map/LeafletSingleCircleMap"), {
+  ssr: false,
+});
+
+// verify that the user is the owner
+// this would be easy if I put the owner email in the pet record
 
 // TODO load the pet data here and not on the page.
 // I'll need to update it regularly.
 // it's cumbersome to pass a method down more levels
-export default function EditPetForm({ petId }) {
-  console.log("EditPetForm. pet " + petId);
+export default function EditPet({ petId, user }) {
+  //console.log("EditPetForm. pet " + petId);
 
   let [pet, setPet] = useState();
   // display a details card and have an edit button
@@ -91,27 +103,17 @@ export default function EditPetForm({ petId }) {
     console.log("renderCard " + pet._id);
 
     return (
-      <Card>
-        <Card.Header className="page-title">{pet.name}</Card.Header>
-        <Card.Body>
-          <Card.Text>Description: {pet.description}</Card.Text>
-          <Card.Text>Species: {pet.species}</Card.Text>
-          <Card.Text>Breed: {pet.breed}</Card.Text>
-          <Card.Text>Daily Rate: {pet.dailyRentalRate}</Card.Text>
-          <Card.Text hidden>ID: {pet._id}</Card.Text>
-          <Card.Text>Owner: {pet.owner.fullname}</Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <Button
-            variant="primary"
-            size="sm"
-            className="rounded"
-            onClick={toggleEditing}
-          >
-            Edit
-          </Button>
-        </Card.Footer>
-      </Card>
+      <Row>
+        <Col md="6">
+          <PetDetailCard
+            pet={pet}
+            toggleEditing={toggleEditing}
+          ></PetDetailCard>
+        </Col>
+        <Col md="6">
+          <MapWithNoSSR coordinates={pet.location.coordinates}></MapWithNoSSR>
+        </Col>
+      </Row>
     );
   };
 
