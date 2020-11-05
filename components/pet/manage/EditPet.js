@@ -6,7 +6,7 @@ import { Spinner, Row, Col } from "react-bootstrap";
 import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
 import PetDetailCard from "./PetDetailCard";
-import PetImageForm from "./PetImageForm";
+import PetImageResizingForm from "./PetImageResizingForm";
 
 // Leaflet can't be server side rendered
 import dynamic from "next/dynamic";
@@ -14,10 +14,10 @@ const MapWithNoSSR = dynamic(() => import("../map/LeafletSingleCircleMap"), {
   ssr: false,
 });
 
-// verify that the user is the owner
+// TODO! verify that the user is the owner
 // this would be easy if I put the owner email in the pet record
 
-// TODO load the pet data here and not on the page.
+// Load the pet data here and not on the page.
 // I'll need to update it regularly.
 // it's cumbersome to pass a method down more levels
 export default function EditPet({ petId, user }) {
@@ -31,9 +31,9 @@ export default function EditPet({ petId, user }) {
     setIsEditing(!isEditing);
   };
 
+  // called by children to ask for a refresh
   const [isPetDataFresh, setIsPetDataFresh] = useState(false);
   const markStale = () => {
-    console.log("markStale");
     setIsPetDataFresh(false);
   };
 
@@ -47,7 +47,6 @@ export default function EditPet({ petId, user }) {
     try {
       const res = await axios.put(apiURL, values);
       const petId = res.data;
-      // lets get the data from the db
       markStale();
       toggleEditing();
     } catch (e) {
@@ -59,9 +58,8 @@ export default function EditPet({ petId, user }) {
   // load the pet
   useEffect(() => {
     async function fetchData() {
-      console.log("fetch Data");
       if (petId && !isPetDataFresh) {
-        console.log("Data is stale " + petId);
+        //console.log("Data is stale " + petId);
 
         const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
         const url = `${PET_SEARCH_URI}/api/v1/pets-search/${petId}`;
@@ -69,7 +67,6 @@ export default function EditPet({ petId, user }) {
           const res = await axios.get(url);
           if (res.status === 200) {
             pet = res.data;
-            console.log("Retrieved pet.");
           }
         } catch (e) {
           console.log(e, `Error calling ${url}`);
@@ -77,6 +74,7 @@ export default function EditPet({ petId, user }) {
         setPet(pet);
         setIsPetDataFresh(true);
 
+        // move to form component
         initialValues = {
           petId: pet._id,
           ownerId: pet.owner._id,
@@ -99,9 +97,6 @@ export default function EditPet({ petId, user }) {
 
   // TODO move to a component.  Should consolidate with deatil page
   const renderCard = (pet) => {
-    console.log("renderCard " + pet);
-    console.log("renderCard " + pet._id);
-
     return (
       <Row>
         <Col md="6">
@@ -138,19 +133,18 @@ export default function EditPet({ petId, user }) {
     );
   }
 
-  //console.log("isEditing " + isEditing);
   return (
     <>
       {isEditing && renderEditForm()}
       {!isEditing && renderCard(pet)}
-      <hr mb-2 />
+      <hr className="mb-2" />
       <PetImageSmallCards
         pet={pet}
         markDataStale={markStale}
       ></PetImageSmallCards>
-      <hr mb-2 />
-      <PetImageForm pet={pet} markDataStale={markStale} />
-      <hr mb-2 />
+      <hr className="mb-2" />
+      <PetImageResizingForm pet={pet} markDataStale={markStale} />
+      <hr className="mb-2" />
       Booking blackout edit coming soon.
     </>
   );

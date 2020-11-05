@@ -10,7 +10,7 @@ class PetSearchResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    console.log("constructor called");
+    //console.log("constructor called");
   }
 
   // TODO move all the display logic into a sfc
@@ -36,7 +36,7 @@ class PetSearchResults extends React.Component {
   };
 
   renderEmptyResults = (message) => {
-    console.log("renderEmptyResults called");
+    //console.log("renderEmptyResults called");
     return (
       <section id="petSearchResults">
         <div style={{ height: "400px", width: "400px" }}>
@@ -66,7 +66,7 @@ class PetSearchResults extends React.Component {
   // GET THE DATA
   // TODO clean this up.
   static async getInitialProps({ query }) {
-    console.log("getInitialProps " + query.q);
+    //console.log("getInitialProps " + query.q);
 
     let pets = await PetSearchResults.searchForPets(query);
 
@@ -149,7 +149,7 @@ class PetSearchResults extends React.Component {
   static getSearchUrlFromRequest(query) {
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
 
-    console.log(`query = ${query}`);
+    //console.log(`query = ${query}`);
     let apiRoute = `/api/v1/pets-search/`;
     if (query.type && query.type === "nearby") {
       // I should have the lat and lng for the usr
