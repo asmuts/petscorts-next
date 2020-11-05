@@ -69,10 +69,10 @@ const OwnerPetDeck = ({ owner }) => {
     return <p>Loading pets...</p>;
   }
 
-  console.log("pets.length = " + pets.length);
+  // console.log("pets.length = " + pets.length);
 
   if ((!isLoading && pets === null) || !pets.length > 0) {
-    console.log("returning null");
+    //console.log("returning null");
     return <p className="page-title">You don't have any pets listed.</p>;
   }
 
@@ -91,8 +91,8 @@ const OwnerPetDeck = ({ owner }) => {
   }
 
   const renderCard = (pet, index) => {
-    console.log("renderCard " + pet);
-    console.log("renderCard " + pet._id);
+    //console.log("renderCard " + pet);
+    //console.log("renderCard " + pet._id);
 
     return (
       <Card className="col-md-3 col-xs-6" key={index}>

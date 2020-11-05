@@ -2,12 +2,7 @@ import React from "react";
 import { Form, Button, Col, Container } from "react-bootstrap";
 import axios from "axios";
 
-// I want to be able to add multipe images
-// each should be displayed
-// the user should be able to delete them
-// later, add the ability to hide images
-// and to make one primary for the search results card
-// phase 1: just add and display.
+// TODO delete this.  I'm replacing it with the resizing version
 export default function PetImageForm({ pet, markDataStale }) {
   const [image, setImage] = React.useState("");
 
