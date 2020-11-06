@@ -2,6 +2,9 @@ import React from "react";
 import Link from "next/link";
 
 function PetCard({ pet }) {
+  if (!pet) {
+    return <p></p>;
+  }
   return (
     <div className="col-md-3 col-xs-6">
       <Link className="pet-detail-link" href={`/pet/${pet._id}`}>

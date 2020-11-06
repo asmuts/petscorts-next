@@ -1,10 +1,10 @@
 import React from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
-
-import PetDetailMapBottom from "../../components/pet/pet-detail/PetDetailMapBottom";
-import Layout from "../../components/shared/Layout.js";
 import { Spinner } from "react-bootstrap";
+import axios from "axios";
+
+import Layout from "../../components/shared/Layout.js";
+import PetDetailMapBottom from "../../components/pet/pet-detail/PetDetailMapBottom";
 
 function Pet({ pet }) {
   const router = useRouter();
@@ -43,8 +43,11 @@ export async function getStaticProps({ params }) {
   } catch (e) {
     console.log(e, `Error calling ${url}`);
   }
+  // for some reason it doesn't work with a config value
+  // TODO look into this further
   const revalidateSetting = process.env.REVALIDATE_PET;
-  return { props: { pet }, revalidate: revalidateSetting };
+  //return { props: { pet }, revalidate: revalidateSetting };
+  return { props: { pet }, revalidate: 30 };
 }
 
 export async function getStaticPaths() {

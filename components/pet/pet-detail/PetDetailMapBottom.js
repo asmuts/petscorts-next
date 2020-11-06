@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { Card, CardDeck, Col, Form, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 import PetMap from "./PetMapGoogle";
 import PetImageCarousel from "./PetImageCarousel";
@@ -94,7 +94,9 @@ const PetDetailMapBottom = ({ pet }) => {
               style={{ height: "375px" }}
             >
               <Card>
-                <Card.Header>{pet.name}</Card.Header>
+                <Card.Header>
+                  <Card.Title>{pet.name}</Card.Title>
+                </Card.Header>
                 <Card.Body>
                   <Card.Text>{pet.description}</Card.Text>
                   <Card.Text>Species: {pet.species}</Card.Text>
@@ -115,9 +117,13 @@ const PetDetailMapBottom = ({ pet }) => {
       <section id="calendarDetails">
         <div className="date-section">
           <div className="row">
-            <p className="page-title">Availability</p>
+            <div className="col-md-6">
+              <p className="page-title">Availability</p>
+            </div>
           </div>
-          <PetRentalDatePicker pet={pet}></PetRentalDatePicker>
+          <div className="row">
+            <PetRentalDatePicker pet={pet}></PetRentalDatePicker>
+          </div>
         </div>
       </section>
 
@@ -127,12 +133,5 @@ const PetDetailMapBottom = ({ pet }) => {
     </section>
   );
 };
-
-{
-  /* <PetMap
-location={`${pet.street},${pet.city},${pet.state}`}
-height="500"
-/> */
-}
 
 export default PetDetailMapBottom;

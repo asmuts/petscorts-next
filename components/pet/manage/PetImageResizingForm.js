@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from "react";
-import { Form, Button, Col, Container } from "react-bootstrap";
+import React, { useRef, useEffect, useState } from "react";
+// TODO convert everything to R-B
+import { Form, Button, Col, Row, Toast, Container } from "react-bootstrap";
 import axios from "axios";
 
 // I want to be able to add multipe images
@@ -9,9 +10,10 @@ import axios from "axios";
 // and to make one primary for the search results card
 // phase 1: just add and display.
 export default function PetImageResizingForm({ pet, markDataStale }) {
-  const [image, setImage] = React.useState("");
-  const [message, setMessage] = React.useState("");
-  const [result, setResult] = React.useState("");
+  const [image, setImage] = useState("");
+  const [message, setMessage] = useState("");
+  const [result, setResult] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   // TODO make configurable
   var MAX_WIDTH = 800;
@@ -147,6 +149,7 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
     clearImage();
     setImage("");
     setMessage(`Image (${image.name}) added.`);
+    setShowToast(true);
   };
 
   // Send the file to the API --> S3, then tell the parent to update
@@ -174,10 +177,8 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
       }
     } catch (e) {
       console.log(e, `Error calling ${apiURL}`);
-      setMessage("Trouble saving image.");
-      alert(
-        "There was a problem saving the image. Please try again. " + e.message
-      );
+      setMessage("Trouble saving image. Please try again.");
+      setShowToast(true);
     }
   };
 
@@ -187,7 +188,7 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
       <p className="page-title">Add an image</p>
 
       <div className="row">
-        <div className="col-md-6 col-xs-6">
+        <div className="col-md-12 col-xs-6">
           <Form onSubmit={(form) => submitForm(form)}>
             <Form.Row>
               <Form.Group as={Col} md="9">
@@ -226,12 +227,29 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
       </div>
 
       <div className="row">
-        <div className="col-md-12 col-xs-6">
-          <h2>{message}</h2>
-        </div>
+        <Col xs={6}>
+          <Toast
+            onClose={() => setShowToast(false)}
+            show={showToast}
+            delay={3000}
+            autohide
+          >
+            <Toast.Header>
+              <img
+                src="holder.js/20x20?text=%20"
+                className="rounded mr-2"
+                alt=""
+              />
+              <strong className="mr-auto"> </strong>
+            </Toast.Header>
+            <Toast.Body>{message}</Toast.Body>
+          </Toast>
+        </Col>
+      </div>
+      <div className="row">
         <div className="col-md-6 col-xs-6">
           <Container className="mx-auto">
-            <canvas ref={canvasRef} width="400" height="400"></canvas>
+            <canvas ref={canvasRef} height="400"></canvas>
           </Container>
         </div>
       </div>

@@ -6,9 +6,11 @@ const PetList = ({ pets }) => {
 };
 
 function renderPets(pets) {
-  let count = 0;
-  return pets.map((pet, index) => {
-    return <PetCard key={count++} colNum="col-md-3 col-xs-6" pet={pet} />;
+  if (!pets || pets.length === 0) {
+    return <p></p>;
+  }
+  return pets.map((pet) => {
+    return <PetCard key={pet._id} colNum="col-md-3 col-xs-6" pet={pet} />;
   });
 }
 

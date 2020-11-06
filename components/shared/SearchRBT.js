@@ -69,7 +69,7 @@ const SearchRBT = () => {
       minLength={2}
       onSearch={handleSearch}
       options={options}
-      selectHintOnEnter="true"
+      selectHintOnEnter={true}
       placeholder="Search by city..."
       renderMenuItemChildren={(option, props) => (
         <Fragment>

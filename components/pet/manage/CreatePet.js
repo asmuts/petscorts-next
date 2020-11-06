@@ -6,6 +6,8 @@ import PetDetailForm from "./PetDetailForm";
 export default function CreatePet({ ownerId }) {
   console.log("CreatePetForm. ownerId " + ownerId);
 
+  const [message, setMessage] = useState("");
+
   let [initialValues, setInitialValues] = useState({
     ownerId: ownerId,
   });
@@ -31,21 +33,25 @@ export default function CreatePet({ ownerId }) {
     try {
       const res = await axios.post(apiURL, values);
       if (res.status === 200) {
-        newPetId = res.data;
-
+        newPetId = res.data.petId;
+        console.log("Created pet " + newPetId);
         routeToPetManageForm(newPetId);
       }
     } catch (e) {
       console.log(e, `Error calling ${apiURL}`);
-      //TODO handle error
+      // TODO fix error messaging
+      setMessage("Error adding pet. " + e.message);
     }
   };
 
   return (
-    <PetDetailForm
-      doSubmit={doSubmit}
-      doCancel={doCancel}
-      initialValues={initialValues}
-    ></PetDetailForm>
+    <div>
+      <h2>{message}</h2>
+      <PetDetailForm
+        doSubmit={doSubmit}
+        doCancel={doCancel}
+        initialValues={initialValues}
+      ></PetDetailForm>
+    </div>
   );
 }

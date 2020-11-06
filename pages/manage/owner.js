@@ -32,11 +32,11 @@ export default function Owner() {
 
   async function getOwnerForEmail(email) {
     let foundOwner;
-    console.log("Looking for user with email [" + user.email + "]");
+    console.log("Looking for user with email [" + email + "]");
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
 
     // make sure scopes in the config includes email
-    let ownerApiRoute = `/api/v1/owners/email/${user.email}`;
+    let ownerApiRoute = `/api/v1/owners/email/${email}`;
     const ownerURL = baseURL + ownerApiRoute;
     try {
       const res = await axios.get(ownerURL);
@@ -108,11 +108,15 @@ export default function Owner() {
           <Row>{isNewOwner && <h2>Thanks for signing up!</h2>}</Row>
           <Row>
             <Col md="3">
-              <Image fluid src={user.picture} alt={user.name}></Image>
+              <Card className="user-image">
+                <Card.Body>
+                  <Image fluid src={user.picture} alt={user.name}></Image>
+                </Card.Body>
+              </Card>
             </Col>
             <Col md="6">
               <Card className="text-center">
-                <Card.Header>{user.name}</Card.Header>
+                <Card.Header as="h5">{user.name}</Card.Header>
                 <Card.Body>
                   <Card.Text>{user.email}</Card.Text>
                 </Card.Body>
@@ -130,12 +134,14 @@ export default function Owner() {
               </Row>
               <hr />
               <Row>
-                <Button
-                  variant="outline-primary rounded-pill"
-                  onClick={() => routeToPetManageForm(owner._id)}
-                >
-                  Add a pet
-                </Button>
+                <Col md="3">
+                  <Button
+                    variant="outline-primary rounded-pill"
+                    onClick={() => routeToPetManageForm(owner._id)}
+                  >
+                    Add a pet
+                  </Button>
+                </Col>
               </Row>
             </>
           )}
@@ -147,3 +153,5 @@ export default function Owner() {
     </Layout>
   );
 }
+
+////////////////////////////////////////////////////////////////////
