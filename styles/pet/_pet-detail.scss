@@ -18,11 +18,13 @@
 
     #calendarDetails {
       .booking-form {
-        background-color: lightgrey;
-        top: 10px;
         height: 150px;
-        .submit-button {
+        .inner-container {
+          background-color: lightgrey;
           margin: 10px auto;
+          .submit-button {
+            margin: 10px auto;
+          }
         }
       }
     }

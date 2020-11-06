@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
+import { Container } from "react-bootstrap";
+import ScrollToTop from "react-scroll-to-top";
 
 import Layout from "../../components/shared/Layout.js";
 import CreatePet from "../../components/pet/manage/CreatePet";
@@ -24,9 +26,12 @@ function ManagePet() {
   return (
     <Layout>
       <section id="petDetail">
-        {ownerId && <CreatePet ownerId={ownerId}></CreatePet>}
-        {petId && <EditPet petId={petId} user={user}></EditPet>}
+        <Container fluid className="main-container">
+          {ownerId && <CreatePet ownerId={ownerId}></CreatePet>}
+          {petId && <EditPet petId={petId} user={user}></EditPet>}
+        </Container>
       </section>
+      <ScrollToTop smooth />
     </Layout>
   );
 }

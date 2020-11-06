@@ -6,8 +6,13 @@ import {
   InfoWindow,
 } from "react-google-maps";
 
+// this is temporary.  I'll do center by geoLoc
+// consider passing a center to the map
+import useCityData from "./../../../hooks/useCityData";
+
 function GoogleSearchMap(props) {
-  const { pets, cityData } = props;
+  const { pets, city, state } = props;
+  const { cityData, isLoading, isError } = useCityData(city, state);
 
   if (pets.length === 0) {
     return renderEmptyMap(cityData);
@@ -21,7 +26,6 @@ function GoogleSearchMap(props) {
 }
 
 function renderPopulatedMap(pets, cityData) {
-  //console.log("renderPopulatedMap");
   // TODO - eventually the map will move and recenter
   let coordinates = { lat: 1, lng: 1 };
   if (pets[0].location && pets[0].location.coordinates) {

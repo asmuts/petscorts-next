@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import "react-daterange-picker/dist/css/react-calendar.css";
 
-import { Col, Form, Button } from "react-bootstrap";
+import { Col, Form, Button, Container } from "react-bootstrap";
 import DateRangePicker from "react-daterange-picker";
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
@@ -55,7 +55,7 @@ const PetRentalDatePicker = ({ pet }) => {
 
   return (
     <div className="row">
-      <div className="col-lg-9 col-sm-7 d-md-block ">
+      <div className="col-lg-9 col-sm-7 col-md-6 d-md-block ">
         <DateRangePicker
           firstOfWeek={1}
           numberOfCalendars={2}
@@ -69,35 +69,43 @@ const PetRentalDatePicker = ({ pet }) => {
           onSelect={handleSelect}
         />
       </div>
-      <div className="col-lg-3 col-xs-3 booking-form rounded">
-        <p>{pet.dailyRate || "?"} per day.</p>
-        <Form>
-          <Form.Row>
-            <Col>
+      <div className="d-md-block col-lg-3 col-md-6 col-xs-3">
+        <div className="booking-form">
+          <Container className="inner-container rounded">
+            <Form>
               <Form.Control
+                plaintext
                 readOnly
-                className="rounded-pill"
-                placeholder="Start Date"
-                value={value != null && value.start.format("MM/DD/YY")}
+                defaultValue={pet.dailyRate || ("?" && " per day")}
               />
-            </Col>
-            <Col>
-              <Form.Control
-                readOnly
-                className="rounded-pill"
-                placeholder="End Date"
-                value={value != null && value.end.format("MM/DD/YY")}
-              />
-            </Col>
-          </Form.Row>
-          <Button
-            className="submit-button rounded-pill"
-            variant="primary"
-            type="submit"
-          >
-            Reserve
-          </Button>
-        </Form>
+              <Form.Row>
+                <Col>
+                  <Form.Control
+                    readOnly
+                    className="rounded-pill"
+                    placeholder="Start Date"
+                    value={value != null && value.start.format("MM/DD/YY")}
+                  />
+                </Col>
+                <Col>
+                  <Form.Control
+                    readOnly
+                    className="rounded-pill"
+                    placeholder="End Date"
+                    value={value != null && value.end.format("MM/DD/YY")}
+                  />
+                </Col>
+              </Form.Row>
+              <Button
+                className="submit-button rounded-pill"
+                variant="primary"
+                type="submit"
+              >
+                Reserve
+              </Button>
+            </Form>
+          </Container>
+        </div>
       </div>
     </div>
   );
