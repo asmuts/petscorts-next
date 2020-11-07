@@ -10,7 +10,7 @@ function renderPets(pets) {
     return <p></p>;
   }
   return pets.map((pet) => {
-    return <PetCard key={pet._id} colNum="col-md-3 col-xs-6" pet={pet} />;
+    return <PetCard key={pet._id} colNum="col-md-4 col-xs-6" pet={pet} />;
   });
 }
 

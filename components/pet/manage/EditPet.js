@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Spinner, Row, Col } from "react-bootstrap";
 
@@ -7,6 +6,7 @@ import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
 import PetDetailCard from "./PetDetailCard";
 import PetImageResizingForm from "./PetImageResizingForm";
+import http from "../../../services/authHttpService";
 
 // Leaflet can't be server side rendered
 import dynamic from "next/dynamic";
@@ -45,7 +45,7 @@ export default function EditPet({ petId, user }) {
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
     const apiURL = `${baseURL}/api/v1/pets/${petId}`;
     try {
-      const res = await axios.put(apiURL, values);
+      const res = await http.put(apiURL, values);
       const petId = res.data;
       markStale();
       toggleEditing();
@@ -64,7 +64,7 @@ export default function EditPet({ petId, user }) {
         const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
         const url = `${PET_SEARCH_URI}/api/v1/pets-search/${petId}`;
         try {
-          const res = await axios.get(url);
+          const res = await http.get(url);
           if (res.status === 200) {
             pet = res.data;
           }

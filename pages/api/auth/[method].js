@@ -1,5 +1,6 @@
 import auth0 from "../../../lib/auth0";
 
+// TODO make a switch statement and call methods for each
 // consolidating login, logout, signup, me, and callback
 // to reduce the # of serveless funtions
 export default async function handler(req, res) {
@@ -15,6 +16,23 @@ export default async function handler(req, res) {
     } catch (error) {
       console.error("me: " + error);
       res.status(error.status || 500).end(error.message);
+    }
+  }
+
+  // Allows the client to get an access token to use for API calls.
+  // auth0 recommendation:
+  // https://auth0.com/docs/tokens/token-storage
+  if (method === "access-token") {
+    //console.log("access-token called");
+    try {
+      const tokenCache = auth0.tokenCache(req, res);
+      const { accessToken } = await tokenCache.getAccessToken({
+        scopes: ["edit:pets"],
+      });
+      return res.json({ access_token: accessToken });
+    } catch (error) {
+      console.error("access: " + error);
+      return res.status(error.status || 500).end(error.message);
     }
   }
 

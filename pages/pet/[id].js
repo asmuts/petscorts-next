@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Spinner } from "react-bootstrap";
-import axios from "axios";
+import http from "../../services/httpService";
 
 import Layout from "../../components/shared/Layout.js";
 import PetDetailMapBottom from "../../components/pet/pet-detail/PetDetailMapBottom";
@@ -34,7 +34,7 @@ export async function getStaticProps({ params }) {
   const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
   const url = `${PET_SEARCH_URI}/api/v1/pets-search/${params.id}`;
   try {
-    const res = await axios.get(url);
+    const res = await http.get(url);
     if (res.status === 200) {
       pet = res.data;
     } else {

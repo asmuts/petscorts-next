@@ -2,10 +2,8 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Card } from "react-bootstrap";
 
-import PetMap from "./PetMapGoogle";
 import PetImageCarousel from "./PetImageCarousel";
 import PetRentalDatePicker from "./PetRentalDatePicker";
-//import LeafletSingleCircleMap from "../map/LeafletSingleCircleMap";
 
 // Leaflet can't be server side rendered
 import dynamic from "next/dynamic";
@@ -31,7 +29,7 @@ const PetDetailMapBottom = ({ pet }) => {
   const renderMap = () => {
     if (!pet.location || !pet.location.coordinates) {
       console.log("Pet is lacking geolocation information");
-      // TODO revers geolocate, like I used to do
+      // TODO reverse geolocate, like I used to do
       // though this shoudln't happen.
       return "";
     }

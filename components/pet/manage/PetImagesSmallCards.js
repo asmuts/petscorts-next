@@ -1,19 +1,18 @@
-import axios from "axios";
+import http from "../../../services/authHttpService";
 import { Card, CardDeck, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function PetImageSmallCards({ pet, markDataStale }) {
-  // TODO pass doDelete method from above.
-  // or just call it here.
-
   const handleDelete = async (imageId) => {
     //ex. localhost:3001/api/v1/pets/5f8c8f59165a4c1fac20104e/image/5f97128a9741a9345cfdf8b5
     const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
     const url = `${PET_SEARCH_URI}/api/v1/pets/${pet._id}/image/${imageId}`;
     try {
-      const res = await axios.delete(url, { data: {} });
+      const res = await http.delete(url);
       if (res.status === 200) {
         pet = res.data;
         console.log("Deleted image for pet." + pet);
+        toast("Deleted image.");
         markDataStale();
       }
       // TODO handle error
@@ -23,8 +22,6 @@ function PetImageSmallCards({ pet, markDataStale }) {
   };
 
   const renderImageCard = (image) => {
-    //console.log("renderImageCard " + image.url);
-
     return (
       <Card className="col-md-3 col-xs-6 " key={image.url}>
         <Card.Img

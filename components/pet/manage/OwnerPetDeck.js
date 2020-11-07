@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import axios from "axios";
+import http from "../../../services/httpService";
 import React, { useState, useEffect } from "react";
 import { Card, CardDeck, Button } from "react-bootstrap";
 
@@ -37,7 +37,7 @@ const OwnerPetDeck = ({ owner }) => {
     let apiRoute = `/api/v1/pets-search/owner/${owner._id}`;
     const url = baseURL + apiRoute;
     try {
-      const res = await axios.get(url);
+      const res = await http.get(url);
       console.log("Pets data: " + res.data);
       if (res.status === 200) {
         foundPets = res.data;
@@ -95,7 +95,7 @@ const OwnerPetDeck = ({ owner }) => {
     //console.log("renderCard " + pet._id);
 
     return (
-      <Card className="col-md-3 col-xs-6" key={index}>
+      <Card colNum="col-md-4 col-xs-6" key={index}>
         <a
           className="pet-detail-link"
           onClick={() => routeToPetDetails(pet._id)}

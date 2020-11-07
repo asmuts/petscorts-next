@@ -2,6 +2,9 @@ import Head from "../../components/shared/Head";
 import Header from "../../components/shared/Header";
 import { Container } from "react-bootstrap";
 import { UserProvider, useFetchUser } from "../../util/user";
+import { ToastContainer } from "react-toastify";
+//import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.min.css";
 
 function Layout({ children }) {
   const { user, loading } = useFetchUser();
@@ -11,6 +14,7 @@ function Layout({ children }) {
       <div>
         <Head></Head>
         <Header> </Header>
+        <ToastContainer />
         <main>
           <Container className="main-container">{children}</Container>
         </main>

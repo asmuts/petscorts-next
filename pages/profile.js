@@ -51,6 +51,7 @@ export default function Profile() {
               </Card>
             </Col>
           </Row>
+          {/* {JSON.stringify(user)} */}
           (this page is a placeholder)
           <p />
           <a onClick={handleListPet} href="#">
