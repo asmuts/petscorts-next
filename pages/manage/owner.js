@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { Card, Col, Image, Container, Row, Button } from "react-bootstrap";
 
 import Layout from "../../components/shared/Layout.js";
 import OwnerPetDeck from "../../components/pet/manage/OwnerPetDeck.js";
 import { useFetchUser } from "../../util/user";
-import { Card, Col, Image, Container, Row, Button } from "react-bootstrap";
+import http from "../../services/authHttpService";
 
 export default function Owner() {
   const { user, loading } = useFetchUser();
@@ -39,7 +39,7 @@ export default function Owner() {
     let ownerApiRoute = `/api/v1/owners/email/${email}`;
     const ownerURL = baseURL + ownerApiRoute;
     try {
-      const res = await axios.get(ownerURL);
+      const res = await http.get(ownerURL);
       console.log(res.status);
       if (res.status === 200) {
         console.log("Found owner data: " + res.data);
@@ -63,7 +63,7 @@ export default function Owner() {
     let ownerApiRoute = `/api/v1/owners/`;
     const ownerURL = baseURL + ownerApiRoute;
     try {
-      const resOwner = await axios.post(ownerURL, ownerNew);
+      const resOwner = await http.post(ownerURL, ownerNew);
       console.log("Owner data: " + resOwner.data);
       // I might just get the id back
       if (resOwner.data) {
@@ -146,8 +146,12 @@ export default function Owner() {
             </>
           )}
           <hr />
-          <OwnerPetDeck owner={owner}></OwnerPetDeck>
-          <p hidden>{JSON.stringify(user)}</p>
+          <Row>
+            <Col>
+              <OwnerPetDeck owner={owner}></OwnerPetDeck>
+              <p hidden>{JSON.stringify(user)}</p>
+            </Col>
+          </Row>
         </Container>
       </section>
     </Layout>

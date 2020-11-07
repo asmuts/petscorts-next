@@ -1,7 +1,8 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import PetDetailForm from "./PetDetailForm";
+import http from "../../../services/authHttpService";
+import { toast } from "react-toastify";
 
 export default function CreatePet({ ownerId }) {
   console.log("CreatePetForm. ownerId " + ownerId);
@@ -31,14 +32,16 @@ export default function CreatePet({ ownerId }) {
 
     let newPetId;
     try {
-      const res = await axios.post(apiURL, values);
+      const res = await http.post(apiURL, values, config);
       if (res.status === 200) {
         newPetId = res.data.petId;
         console.log("Created pet " + newPetId);
+        toast("Created a new pet.");
         routeToPetManageForm(newPetId);
       }
     } catch (e) {
       console.log(e, `Error calling ${apiURL}`);
+      toast("There was a problem creating a new pet. " + e.message);
       // TODO fix error messaging
       setMessage("Error adding pet. " + e.message);
     }

@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 // TODO convert everything to R-B
 import { Form, Button, Col, Row, Toast, Container } from "react-bootstrap";
-import axios from "axios";
+import http from "../../../services/authHttpService";
 
 // I want to be able to add multipe images
 // each should be displayed
@@ -11,9 +13,9 @@ import axios from "axios";
 // phase 1: just add and display.
 export default function PetImageResizingForm({ pet, markDataStale }) {
   const [image, setImage] = useState("");
-  const [message, setMessage] = useState("");
+  //const [message, setMessage] = useState("");
   const [result, setResult] = useState("");
-  const [showToast, setShowToast] = useState(false);
+  //const [showToast, setShowToast] = useState(false);
 
   // TODO make configurable
   var MAX_WIDTH = 800;
@@ -38,15 +40,15 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
   // Setup the canvas to be used by doSubmit
   const preview = async (e) => {
     clearImage();
-    setMessage("");
+    //setMessage("");
 
     const file = e.target.files[0];
     if (!file) {
-      setMessage("");
+      //setMessage("");
       return;
     }
     if (!file.type.match(/image.*/)) {
-      setMessage("The selected file is not an image.");
+      toast("The selected file is not an image.");
       return;
     }
 
@@ -148,8 +150,8 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
     markDataStale();
     clearImage();
     setImage("");
-    setMessage(`Image (${image.name}) added.`);
-    setShowToast(true);
+    //setMessage(`Image (${image.name}) added.`);
+    toast(`Image (${image.name}) added.`);
   };
 
   // Send the file to the API --> S3, then tell the parent to update
@@ -169,7 +171,7 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
     const apiURL = `${baseURL}/api/v1/upload`;
     try {
-      const res = await axios.post(apiURL, formData, config);
+      const res = await http.post(apiURL, formData, config);
       if (res.status === 200) {
         let imageUrl = res.data;
         console.log(`Added image ${imageUrl} for pet. ${pet._id}`);
@@ -177,7 +179,7 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
       }
     } catch (e) {
       console.log(e, `Error calling ${apiURL}`);
-      setMessage("Trouble saving image. Please try again.");
+      toast("Trouble saving image. Please try again.");
       setShowToast(true);
     }
   };
@@ -226,26 +228,6 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
         </div>
       </div>
 
-      <div className="row">
-        <Col xs={6}>
-          <Toast
-            onClose={() => setShowToast(false)}
-            show={showToast}
-            delay={3000}
-            autohide
-          >
-            <Toast.Header>
-              <img
-                src="holder.js/20x20?text=%20"
-                className="rounded mr-2"
-                alt=""
-              />
-              <strong className="mr-auto"> </strong>
-            </Toast.Header>
-            <Toast.Body>{message}</Toast.Body>
-          </Toast>
-        </Col>
-      </div>
       <div className="row">
         <div className="col-md-6 col-xs-6">
           <Container className="mx-auto">

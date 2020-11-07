@@ -5,16 +5,18 @@ import { Container, Button, Spinner } from "react-bootstrap";
 const NearbyButton = () => {
   const router = useRouter();
 
-  let [location, setLocation] = useState({});
+  let location;
   let [isLocationLoaded, setLocationLoaded] = useState(false);
   let [isLocationDenied, setLocationDenied] = useState(false);
 
   const getCurrentPositionFromBrowser = async () => {
-    navigator.geolocation.getCurrentPosition(
+    console.log("getCurrentPos");
+    await navigator.geolocation.getCurrentPosition(
       updateLocationOnSuccess,
       errorDeniedLocation,
       {}
     );
+    return;
   };
 
   const updateLocationOnSuccess = (position) => {
@@ -22,9 +24,17 @@ const NearbyButton = () => {
       lat: position.coords.latitude,
       lng: position.coords.longitude,
     };
-    setLocation(newLocation);
+    location = newLocation;
     setLocationLoaded(true);
     console.log(`Location: ${newLocation.lat},${newLocation.lng}`);
+    doNearbySearch();
+  };
+
+  const doNearbySearch = () => {
+    const query = { type: "nearby", lat: location.lat, lng: location.lng };
+    const url = { pathname: "/pets", query };
+    const asUrl = { pathname: "/pets", query };
+    router.push(url, asUrl);
   };
 
   const errorDeniedLocation = (error) => {
@@ -34,15 +44,12 @@ const NearbyButton = () => {
     }
   };
 
-  useEffect(() => {
-    getCurrentPositionFromBrowser();
-  }, []);
-
-  const handleNearbyClick = () => {
-    const query = { type: "nearby", lat: location.lat, lng: location.lng };
-    const url = { pathname: "/pets", query };
-    const asUrl = { pathname: "/pets", query };
-    router.push(url, asUrl);
+  const handleNearbyClick = async () => {
+    if (!isLocationLoaded) {
+      await getCurrentPositionFromBrowser();
+    } else {
+      doNearbySearch();
+    }
   };
 
   function renderNearbyButton() {
@@ -50,33 +57,11 @@ const NearbyButton = () => {
       return <p></p>;
     }
 
-    // IE handles disabled differently.  disable=true doesn't work!
-    if (!isLocationLoaded) {
-      return (
-        <Button
-          onClick={isLocationLoaded ? handleNearbyClick : null}
-          variant="outline-primary"
-          className="button_1 rounded-pill"
-          disabled
-        >
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
-          Find nearby
-        </Button>
-      );
-    }
-
     return (
       <Button
-        onClick={isLocationLoaded ? handleNearbyClick : null}
+        onClick={handleNearbyClick}
         variant="primary"
         className="button_1 rounded-pill"
-        dsabled={isLocationLoaded ? "false" : "true"}
       >
         Find nearby
       </Button>

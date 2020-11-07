@@ -1,9 +1,9 @@
-import axios from "axios";
+import http from "../services/httpService";
 import useSWR from "swr";
 
 // Consider passing this something other than a query string.
 export default function usePetSearchData(query) {
-  const fetcher = (url) => axios.get(url).then((res) => res.data);
+  const fetcher = (url) => http.get(url).then((res) => res.data);
   let searchURL = getSearchUrlFromRequest(query);
   //console.log(searchURL);
   const { data, error } = useSWR(searchURL, fetcher);

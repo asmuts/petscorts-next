@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Button, Col, Container } from "react-bootstrap";
-import axios from "axios";
+import http from "../../../services/httpService";
 
 // TODO delete this.  I'm replacing it with the resizing version
 export default function PetImageForm({ pet, markDataStale }) {
@@ -46,7 +46,7 @@ export default function PetImageForm({ pet, markDataStale }) {
       },
     };
     try {
-      const res = await axios.post(apiURL, formData, config);
+      const res = await http.post(apiURL, formData, config);
       if (res.status === 200) {
         let imageUrl = res.data;
         console.log(`Added image ${imageUrl} for pet. ${pet._id}`);

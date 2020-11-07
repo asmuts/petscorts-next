@@ -1,17 +1,23 @@
-import axios from "axios";
+import http from "../services/httpService";
 import useSWR from "swr";
 
 // this is temporary for the search results
 export default function useCityData(city, state) {
-  const options = { revalidateOnFocus: false, revalidateOnReconnect: false };
-  const fetcher = (url) => axios.get(url).then((res) => res.data);
-  const searchUrl = getCityDataApiUrl(city, state);
-  const { data, error } = useSWR(searchUrl, fetcher, {}, options);
-
+  if (city && state) {
+    const options = { revalidateOnFocus: false, revalidateOnReconnect: false };
+    const fetcher = (url) => http.get(url).then((res) => res.data);
+    const searchUrl = getCityDataApiUrl(city, state);
+    const { data, error } = useSWR(searchUrl, fetcher, {}, options);
+    return {
+      cityData: data,
+      isLoading: !error && !data,
+      isError: error,
+    };
+  }
   return {
-    cityData: data,
-    isLoading: !error && !data,
-    isError: error,
+    cityData: null,
+    isLoading: false,
+    isError: true,
   };
 }
 
