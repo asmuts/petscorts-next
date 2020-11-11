@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import http from "../../../services/httpService";
+//import http from "../../../services/httpService";
 import React, { useState, useEffect } from "react";
 import { Card, CardDeck, Button } from "react-bootstrap";
 
@@ -15,40 +15,45 @@ const OwnerPetDeck = ({ owner }) => {
     // 3. Get pets for owner.
     async function fetchData() {
       if (isLoading) {
-        let foundPets = await getPetsForOwner(owner);
-        setPets(foundPets);
+        // I should now have this from the owner
+        // the api will populate the pets
+        //let foundPets = await getPetsForOwner(owner);
+        //setPets(foundPets);
+        setPets(owner.pets);
         setIsLoading(false);
       }
     }
     fetchData();
   }, [owner]);
 
+  // I should be able to remove this now.
+  /// I will need to make a separate query for bookings
   // TODO just populate the owner record from mongo
   // make a new service getPetPopulatedOwner
-  async function getPetsForOwner(owner) {
-    let foundPets = {};
-    if (owner && owner.pets.length === 0) {
-      return foundPets;
-    }
-    console.log("Looking for pets for owner with email [" + owner.email + "]");
+  // async function getPetsForOwner(owner) {
+  //   let foundPets = {};
+  //   if (owner && owner.pets.length === 0) {
+  //     return foundPets;
+  //   }
+  //   console.log("Looking for pets for owner with email [" + owner.email + "]");
 
-    const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-    // TODO, send the list of pet ids instead.
-    let apiRoute = `/api/v1/pets-search/owner/${owner._id}`;
-    const url = baseURL + apiRoute;
-    try {
-      const res = await http.get(url);
-      console.log("Pets data: " + res.data);
-      if (res.status === 200) {
-        foundPets = res.data;
-        setPets(foundPets);
-      }
-    } catch (e) {
-      console.log(e, `Error calling ${url}`);
-      //TODO handle error
-    }
-    return foundPets;
-  }
+  //   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
+  //   // TODO, send the list of pet ids instead.
+  //   let apiRoute = `/api/v1/pets-search/owner/${owner._id}`;
+  //   const url = baseURL + apiRoute;
+  //   try {
+  //     const res = await http.get(url);
+  //     console.log("Pets data: " + res.data);
+  //     if (res.status === 200) {
+  //       foundPets = res.data;
+  //       setPets(foundPets);
+  //     }
+  //   } catch (e) {
+  //     console.log(e, `Error calling ${url}`);
+  //     //TODO handle error
+  //   }
+  //   return foundPets;
+  // }
 
   const router = useRouter();
   const routeToPetManageForm = (petId) => {
@@ -95,7 +100,7 @@ const OwnerPetDeck = ({ owner }) => {
     //console.log("renderCard " + pet._id);
 
     return (
-      <Card colNum="col-md-4 col-xs-6" key={index}>
+      <Card className="col-md-3 col-xs-6" key={index}>
         <a
           className="pet-detail-link"
           onClick={() => routeToPetDetails(pet._id)}

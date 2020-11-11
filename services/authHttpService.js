@@ -3,7 +3,10 @@ import { getAccessToken } from "../util/user";
 
 // I'll likely need to make the scope configurable later
 async function addAccessTokenToConfig(config) {
-  const accessToken = await getAccessToken({ scope: ["edit:pets"] });
+  // NOTE: temp disabling the scoeps until I can get it to work properly
+  // using email as a placeholder.
+  //const accessToken = await getAccessToken({ scope: ["edit:pets"] });
+  const accessToken = await getAccessToken({ scope: ["email"] });
 
   if (!config) {
     config = {};

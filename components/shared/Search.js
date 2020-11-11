@@ -14,7 +14,7 @@ const Search = (props) => {
   const handleParam = (setValue) => (e) => setValue(e.target.value);
 
   const handleSubmit = preventDefault(() => {
-    console.log(query);
+    //console.log(query);
     const query = { type: "city_state", q: `${query}` };
     const url = { pathname: "/pets", query };
     const asUrl = { pathname: "/pets", query };

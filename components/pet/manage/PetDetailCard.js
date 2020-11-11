@@ -11,7 +11,7 @@ const PetDetailCard = ({ pet, toggleEditing }) => {
         <Card.Text>Breed: {pet.breed}</Card.Text>
         <Card.Text>Daily Rate: {pet.dailyRentalRate}</Card.Text>
         <Card.Text hidden>ID: {pet._id}</Card.Text>
-        <Card.Text>Owner: {pet.owner.fullname}</Card.Text>
+        {pet.owner && <Card.Text>Owner: {pet.owner.fullname}</Card.Text>}
       </Card.Body>
       <Card.Footer>
         <Button

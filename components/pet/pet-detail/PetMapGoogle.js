@@ -2,8 +2,8 @@ import React from "react";
 import { MapWithGeocode } from "../map/GoogleMap";
 
 // I'm switching over to open maps.
+// Google is stupidly expensive, so it's worth learning an alternative
 class PetMapGoogle extends React.Component {
-  //state = {  }
   render() {
     const { location, height } = this.props;
 

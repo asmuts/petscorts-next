@@ -32,9 +32,10 @@ export default function CreatePet({ ownerId }) {
 
     let newPetId;
     try {
-      const res = await http.post(apiURL, values, config);
+      const res = await http.post(apiURL, values);
       if (res.status === 200) {
-        newPetId = res.data.petId;
+        //console.log(res.data);
+        newPetId = res.data.data._id;
         console.log("Created pet " + newPetId);
         toast("Created a new pet.");
         routeToPetManageForm(newPetId);

@@ -26,6 +26,8 @@ const PetDetailMapBottom = ({ pet }) => {
     pet.city = pet.city.charAt(0).toUpperCase() + pet.city.slice(1);
   }
 
+  // TODO break up this JSX. It's too big.
+  // Some of this should be reusable functions.
   const renderMap = () => {
     if (!pet.location || !pet.location.coordinates) {
       console.log("Pet is lacking geolocation information");
@@ -100,7 +102,7 @@ const PetDetailMapBottom = ({ pet }) => {
                   <Card.Text>Species: {pet.species}</Card.Text>
                   <Card.Text>Breed: {pet.breed}</Card.Text>
                   <Card.Text hidden>ID: {pet._id}</Card.Text>
-                  <Card.Text>Owner: {pet.owner.fullname}</Card.Text>
+                  {pet.owner && <Card.Text>{pet.owner.fullname}</Card.Text>}
                 </Card.Body>
               </Card>
             </div>
