@@ -30,9 +30,9 @@ Vercel has hard limits on the number of serverless function that can be deployed
 
 Direct calls from the browser to the Node API server are also faster and less taxing on the front end. Ex. the search auto-complete generates tons of requests and they need to be fast!
 
-## Lambdas
+## Lambdas - Cold Start
 
-Since this is just a sample application, it suffers from AWS Lambda spin up lag. Once the lambdas are awake, all is well. 
+Since this is just a sample application, it suffers from AWS Lambda cold start lag. Once the lambdas are warm, all is well. 
 
 
 
