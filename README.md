@@ -1,30 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Petscorts-Next
 
-## Getting Started
+This is the Next.js front end of [Petscorts.com](httpe://www.petscorts.com).
 
-First, run the development server:
+It's deployed on Vercel. 
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+The backend API is a Node.js application -- [petscaorts-node](https://github.com/asmuts/petscorts-node). It's deployed on AWS Elastic Beanstalk.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Authentication is done via Auht0.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+The maps come from both Google and Open Maps. 
 
-## Learn More
+Many of the UI components are using react-boostrap.
 
-To learn more about Next.js, take a look at the following resources:
+## Rendering
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I'm using a few different rendering strategies as an experiment.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The pet detail page is statically rendered. It is rebuild on demand after 30 seconds.
 
-## Deploy on Vercel
+The search results page is using SWR (stale while refresh).  It will refresh in the bacground when returned to.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The owner admin page is using react hooks. It's generated on the server side on first load.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Direct API Calls
+
+The front end does not proxy API calls for two reasons: (1) performance and (2) pricing.  
+
+Vercel has hard limits on the number of serverless function that can be deployed.  Each API route is deployed as a serverless function (a separate AWS Lambda instance.)  The such $5k a month tier only allows for 12!  So direct calls are necessary.
+
+Direct calls from the browser to the Node API server are also faster and less taxing on the front end. Ex. the search auto-complete generates tons of requests and they need to be fast!
+
+## Lambdas
+
+Since this is just a sample application, it suffers from AWS Lambda spin up lag. Once the lambdas are awake, all is well. 
+
+
+
