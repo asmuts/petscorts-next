@@ -89,7 +89,7 @@ function withGeocode(WrappedComponent) {
 
       if (cache.has(location)) {
         const coordinates = cache.get(location);
-        console.log("got location from cache");
+        //console.log("got location from cache");
         this.updateCoordinates(coordinates);
       } else {
         this.geocodeLocation(location).then(

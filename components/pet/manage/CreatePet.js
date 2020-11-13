@@ -5,7 +5,7 @@ import http from "../../../services/authHttpService";
 import { toast } from "react-toastify";
 
 export default function CreatePet({ ownerId }) {
-  console.log("CreatePetForm. ownerId " + ownerId);
+  //console.log("CreatePetForm. ownerId " + ownerId);
 
   const [message, setMessage] = useState("");
 
@@ -26,15 +26,16 @@ export default function CreatePet({ ownerId }) {
   };
 
   const doSubmit = async (values) => {
-    console.log(values);
+    //console.log(values);
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
     const apiURL = `${baseURL}/api/v1/pets`;
 
     let newPetId;
     try {
-      const res = await http.post(apiURL, values, config);
+      const res = await http.post(apiURL, values);
       if (res.status === 200) {
-        newPetId = res.data.petId;
+        //console.log(res.data);
+        newPetId = res.data.data._id;
         console.log("Created pet " + newPetId);
         toast("Created a new pet.");
         routeToPetManageForm(newPetId);

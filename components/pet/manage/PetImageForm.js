@@ -49,7 +49,7 @@ export default function PetImageForm({ pet, markDataStale }) {
       const res = await http.post(apiURL, formData, config);
       if (res.status === 200) {
         let imageUrl = res.data;
-        console.log(`Added image ${imageUrl} for pet. ${pet._id}`);
+        //console.log(`Added image ${imageUrl} for pet. ${pet._id}`);
         markDataStale();
         clearImage();
       }

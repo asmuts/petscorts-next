@@ -14,14 +14,21 @@ export default function Owner() {
 
   useEffect(() => {
     // 1.See if we have an owner for the email address.
+    // NOTE: need to use Auth0Sub, not email
+    // -- unless verified, a user can be spoofed by email
+    // -- email is unique here, so it can be used subsequently
     // 2. If not, create one.  The API should probably do this.
     // I don't know a good way to determine if the user just signed up or not
     // from the auth0 response.
     // 3. Get pets for owner.
     async function fetchData() {
       if (user && !loading) {
-        let foundOwner = await getOwnerForEmail(user.email);
+        let foundOwner = await getOwnerForAuth0Sub(user.sub);
         if (!foundOwner || !foundOwner._id) {
+          // make sure they don't have an account under the same email
+          // using a different auth0 sub!!
+          //let foundOwnerForEmail = await getOwnerForEmail(user.email);
+          // TODO!! if we have them for email, warn! and stop
           await createOwner(user);
           setIsNewOwner(true);
         }
@@ -30,6 +37,38 @@ export default function Owner() {
     fetchData();
   }, [user]);
 
+  // move to SWR
+  async function getOwnerForAuth0Sub(auth0_sub) {
+    let foundOwner;
+    console.log("Looking for user with auth0_sub [" + auth0_sub + "]");
+    const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
+
+    // make sure scopes in the config includes email
+    let ownerApiRoute = `/api/v1/owners/auth0_sub/${auth0_sub}`;
+    const ownerURL = baseURL + ownerApiRoute;
+    try {
+      const res = await http.get(ownerURL);
+      //console.log(res.status);
+      if (res.status === 200) {
+        console.log("Found owner data: " + res.data.data);
+        //console.log(res.data.data);
+        // TODO handle error
+        foundOwner = res.data.data;
+        setOwner(foundOwner);
+      }
+    } catch (e) {
+      console.log(e, `Error calling ${ownerURL}`);
+      //TODO handle error
+    }
+    return foundOwner;
+  }
+
+  // There's a chance given auth0 that the owner could
+  // exist under another sub with the same email.
+  // That won't work. Email is unique here.
+  // The user has probably mistakenly used a different sub
+  // Notify the user that they've logged in differently before.
+  // And don't create a new Onwer.
   async function getOwnerForEmail(email) {
     let foundOwner;
     console.log("Looking for user with email [" + email + "]");
@@ -40,9 +79,9 @@ export default function Owner() {
     const ownerURL = baseURL + ownerApiRoute;
     try {
       const res = await http.get(ownerURL);
-      console.log(res.status);
+      //console.log(res.status);
       if (res.status === 200) {
-        console.log("Found owner data: " + res.data);
+        //console.log("Found owner data: " + res.data);
         foundOwner = res.data;
         setOwner(foundOwner);
       }
@@ -58,6 +97,7 @@ export default function Owner() {
       username: user.nickname,
       fullname: user.name,
       email: user.email,
+      auth0_sub: user.sub,
     };
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
     let ownerApiRoute = `/api/v1/owners/`;

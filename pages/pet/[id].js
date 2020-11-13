@@ -36,7 +36,8 @@ export async function getStaticProps({ params }) {
   try {
     const res = await http.get(url);
     if (res.status === 200) {
-      pet = res.data;
+      pet = res.data.data;
+      //console.log(pet);
     } else {
       // TODO handle error
     }

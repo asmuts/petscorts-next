@@ -19,6 +19,10 @@
       text-decoration: none;
     }
   }
+  .card {
+    border: none;
+    padding-top: 8px;
+  }
 
   .card-title {
     font-size: 19px;
@@ -31,5 +35,10 @@
     font-weight: 300;
     color: #7e7e7e;
     margin-bottom: 0;
+  }
+
+  .card-img-top {
+    //height: 300px;
+    //background: black;
   }
 }

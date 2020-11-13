@@ -3,6 +3,7 @@ import PetImageCarousel from "./PetImageCarousel";
 import { Container } from "react-bootstrap";
 import { useRouter } from "next/router";
 
+// This can be deleted soon.  I don't plan on using it.
 const PetDetailMapRight = ({ pet }) => {
   const router = useRouter();
 

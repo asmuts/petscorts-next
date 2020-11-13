@@ -6,11 +6,13 @@ const NearbyButton = () => {
   const router = useRouter();
 
   let location;
+  let [isLocationLoading, setLocationLoading] = useState(false);
   let [isLocationLoaded, setLocationLoaded] = useState(false);
   let [isLocationDenied, setLocationDenied] = useState(false);
 
   const getCurrentPositionFromBrowser = async () => {
-    console.log("getCurrentPos");
+    //console.log("getCurrentPos");
+    setLocationLoading(true);
     await navigator.geolocation.getCurrentPosition(
       updateLocationOnSuccess,
       errorDeniedLocation,
@@ -25,6 +27,7 @@ const NearbyButton = () => {
       lng: position.coords.longitude,
     };
     location = newLocation;
+    setLocationLoading(false);
     setLocationLoaded(true);
     console.log(`Location: ${newLocation.lat},${newLocation.lng}`);
     doNearbySearch();
@@ -41,6 +44,7 @@ const NearbyButton = () => {
     console.log("Location permission denied");
     if (error.PERMISSION_DENIED) {
       setLocationDenied(true);
+      setLocationLoading(false);
     }
   };
 
@@ -63,6 +67,15 @@ const NearbyButton = () => {
         variant="primary"
         className="button_1 rounded-pill"
       >
+        {isLocationLoading && (
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+        )}
         Find nearby
       </Button>
     );

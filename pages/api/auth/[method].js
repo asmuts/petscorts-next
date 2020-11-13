@@ -1,8 +1,10 @@
 import auth0 from "../../../lib/auth0";
 
 // TODO make a switch statement and call methods for each
-// consolidating login, logout, signup, me, and callback
-// to reduce the # of serveless funtions
+//
+// I consolidated login, logout, signup, me, and callback
+// to reduce the # of serveless funtions.
+// Made an access token retrieval
 export default async function handler(req, res) {
   const {
     query: { method },
@@ -26,8 +28,11 @@ export default async function handler(req, res) {
     //console.log("access-token called");
     try {
       const tokenCache = auth0.tokenCache(req, res);
+      // const { accessToken } = await tokenCache.getAccessToken({
+      //   scopes: ["edit:pets"],
+      // });
       const { accessToken } = await tokenCache.getAccessToken({
-        scopes: ["edit:pets"],
+        scopes: ["email"],
       });
       return res.json({ access_token: accessToken });
     } catch (error) {
@@ -36,6 +41,8 @@ export default async function handler(req, res) {
     }
   }
 
+  // Auth0 calls this after login.
+  // This has to be configured on Auth) as an allowed url
   if (method === "callback") {
     console.log("Callback called");
     try {
@@ -63,6 +70,7 @@ export default async function handler(req, res) {
     });
   }
 
+  // just setting a different redirect for owner logins
   if (method === "login-owner") {
     console.log("Login-owner called");
     await auth0.handleLogin(req, res, {

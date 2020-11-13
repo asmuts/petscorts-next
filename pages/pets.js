@@ -7,7 +7,6 @@ import usePetSearchData from "../hooks/usePetSearchData";
 function PetSearch() {
   const router = useRouter();
   const { query } = router;
-  //console.log(query);
 
   const { pets, isLoading, isError } = usePetSearchData(query);
 
@@ -38,6 +37,8 @@ function PetSearch() {
     ></PetSearchResults>
   );
 }
+
+//////////////////////////////////////////////////////////////
 
 function createTitle(query, pets) {
   let title = "";

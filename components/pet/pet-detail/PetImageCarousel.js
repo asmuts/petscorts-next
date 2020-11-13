@@ -11,7 +11,6 @@ export default function PetImageCarousel(props) {
 
   const { pet } = props;
   //console.log(pet);
-  //w-100
   if (pet.images.length === 0) {
     const src = `/images/${pet.species.toLowerCase()}-clipart.png`;
     pet.images[0] = {

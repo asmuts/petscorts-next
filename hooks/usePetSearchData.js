@@ -27,6 +27,7 @@ function getSearchUrlFromRequest(query) {
     // or I could just disable the button.
     const lat = query.lat; //"41.8668662"; //41.8668662
     const lng = query.lng; //"-71.38392180000001"; //-71.38392180000001
+    // TODO magic number for meters, just getting this working for now
     apiRoute = `/api/v1/pets-search/geo/lat/${lat}/lng/${lng}?meters=7000`;
   } else if (query.type && query.type === "city_state") {
     const { city, state } = getCityAndStateFromQuery(query);

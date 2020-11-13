@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Spinner, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
@@ -41,12 +42,13 @@ export default function EditPet({ petId, user }) {
   let [initialValues, setInitialValues] = useState({});
 
   const doSubmit = async (values) => {
-    console.log(values);
+    //console.log(values);
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
     const apiURL = `${baseURL}/api/v1/pets/${petId}`;
     try {
       const res = await http.put(apiURL, values);
-      const petId = res.data;
+      // TODO handle errors
+      const petId = res.data.data;
       markStale();
       toggleEditing();
     } catch (e) {
@@ -66,8 +68,9 @@ export default function EditPet({ petId, user }) {
         try {
           const res = await http.get(url);
           if (res.status === 200) {
-            pet = res.data;
+            pet = res.data.data;
           }
+          // TODO clean up error handling
         } catch (e) {
           console.log(e, `Error calling ${url}`);
         }
@@ -75,9 +78,10 @@ export default function EditPet({ petId, user }) {
         setIsPetDataFresh(true);
 
         // move to form component
+        // if the owner is not populated, the value is the id
         initialValues = {
           petId: pet._id,
-          ownerId: pet.owner._id,
+          ownerId: pet.owner,
           name: pet.name,
           dailyRentalRate: pet.dailyRentalRate,
           city: pet.city,
@@ -93,7 +97,8 @@ export default function EditPet({ petId, user }) {
     fetchData();
   });
 
-  /////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
+  ////////////////
 
   // TODO move to a component.  Should consolidate with deatil page
   const renderCard = (pet) => {
