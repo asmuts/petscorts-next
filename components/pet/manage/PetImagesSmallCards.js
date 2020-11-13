@@ -11,7 +11,7 @@ function PetImageSmallCards({ pet, markDataStale }) {
       const res = await http.delete(url);
       if (res.status === 200) {
         pet = res.data;
-        console.log("Deleted image for pet." + pet);
+        //console.log("Deleted image for pet." + pet);
         toast("Deleted image.");
         markDataStale();
       }

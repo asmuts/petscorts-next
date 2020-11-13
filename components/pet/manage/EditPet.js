@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Spinner, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
@@ -48,7 +49,6 @@ export default function EditPet({ petId, user }) {
       const res = await http.put(apiURL, values);
       // TODO handle errors
       const petId = res.data.data;
-      console.log();
       markStale();
       toggleEditing();
     } catch (e) {
@@ -98,7 +98,7 @@ export default function EditPet({ petId, user }) {
   });
 
   ////////////////////////////////////////////////////////////////////////////
-  ////////////////  JSX
+  ////////////////
 
   // TODO move to a component.  Should consolidate with deatil page
   const renderCard = (pet) => {

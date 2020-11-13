@@ -48,10 +48,10 @@ export default function Owner() {
     const ownerURL = baseURL + ownerApiRoute;
     try {
       const res = await http.get(ownerURL);
-      console.log(res.status);
+      //console.log(res.status);
       if (res.status === 200) {
         console.log("Found owner data: " + res.data.data);
-        console.log(res.data.data);
+        //console.log(res.data.data);
         // TODO handle error
         foundOwner = res.data.data;
         setOwner(foundOwner);
@@ -79,9 +79,9 @@ export default function Owner() {
     const ownerURL = baseURL + ownerApiRoute;
     try {
       const res = await http.get(ownerURL);
-      console.log(res.status);
+      //console.log(res.status);
       if (res.status === 200) {
-        console.log("Found owner data: " + res.data);
+        //console.log("Found owner data: " + res.data);
         foundOwner = res.data;
         setOwner(foundOwner);
       }

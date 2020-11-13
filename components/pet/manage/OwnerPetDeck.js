@@ -2,29 +2,41 @@ import { useRouter } from "next/router";
 //import http from "../../../services/httpService";
 import React, { useState, useEffect } from "react";
 import { Card, CardDeck, Button } from "react-bootstrap";
+import ArchivePetModal from "./ArchivePetModal";
 
 const OwnerPetDeck = ({ owner }) => {
   let [pets, setPets] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
+  const [isPetDataFresh, setIsPetDataFresh] = useState(false);
+
+  const markStale = () => {
+    setIsPetDataFresh(false);
+    // TODO use swr for the owner and pet data.
+    // tell it that it's out of date
+    // otherwise, I'll have to propogate this up yet another level
+  };
 
   useEffect(() => {
     if (!owner || !owner._id) {
       return;
     }
-    console.log("useEffect " + owner + " " + isLoading);
-    // 3. Get pets for owner.
-    async function fetchData() {
-      if (isLoading) {
-        // I should now have this from the owner
-        // the api will populate the pets
-        //let foundPets = await getPetsForOwner(owner);
-        //setPets(foundPets);
-        setPets(owner.pets);
-        setIsLoading(false);
+    if (owner && !isPetDataFresh) {
+      console.log("useEffect " + owner + " " + isPetDataFresh);
+      // 3. Get pets for owner.
+      async function fetchData() {
+        if (isLoading) {
+          // I should now have this from the owner
+          // the api will populate the pets
+          //let foundPets = await getPetsForOwner(owner);
+          //setPets(foundPets);
+          setPets(owner.pets);
+          setIsLoading(false);
+          setIsPetDataFresh(true);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, [owner]);
+  });
 
   // I should be able to remove this now.
   /// I will need to make a separate query for bookings
@@ -96,45 +108,49 @@ const OwnerPetDeck = ({ owner }) => {
   }
 
   const renderCard = (pet, index) => {
-    //console.log("renderCard " + pet);
-    //console.log("renderCard " + pet._id);
-
     return (
-      <Card className="col-md-3 col-xs-6" key={index}>
-        <a
-          className="pet-detail-link"
-          onClick={() => routeToPetDetails(pet._id)}
-          href="#"
-        >
-          {renderImage(pet)}
-          <Card.Body>
-            <Card.Title className="card-title">{pet.name}</Card.Title>
-            <Card.Text className="card-text">{pet.description}</Card.Text>
-          </Card.Body>
-        </a>
-        <Card.Footer>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => routeToPetManageForm(pet._id)}
+      <div className="col-md-4 col-xs-6">
+        <Card key={index}>
+          <a
+            className="pet-detail-link"
+            onClick={() => routeToPetDetails(pet._id)}
+            href="#"
           >
-            Edit
-          </Button>
-        </Card.Footer>
-      </Card>
+            {" "}
+            <Card.Header className="card-title">{pet.name}</Card.Header>
+            {renderImage(pet)}
+            <Card.Body>
+              <Card.Text className="card-text">{pet.description}</Card.Text>
+              <Card.Text>Species: {pet.species}</Card.Text>
+              <Card.Text>Breed: {pet.breed}</Card.Text>
+              <Card.Text>Daily Rate: {pet.dailyRentalRate}</Card.Text>
+            </Card.Body>
+          </a>
+          <Card.Footer>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => routeToPetManageForm(pet._id)}
+            >
+              Edit
+            </Button>
+            <ArchivePetModal pet={pet} markStale={markStale}></ArchivePetModal>
+          </Card.Footer>
+        </Card>
+      </div>
     );
   };
 
   return (
     <>
-      <>
-        <p className="page-title">Your pets.</p>
-        <CardDeck>
-          {pets.map((pet, index) => {
+      <p className="page-title">Your pets.</p>
+      <CardDeck>
+        {pets.map((pet, index) => {
+          if (pet.status !== "ARCHIVED") {
             return renderCard(pet, index);
-          })}
-        </CardDeck>
-      </>
+          }
+        })}
+      </CardDeck>
     </>
   );
 };
