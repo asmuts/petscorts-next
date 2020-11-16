@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
-import { Container, Button, Spinner } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
 
 const NearbyButton = () => {
   const router = useRouter();
@@ -11,7 +11,6 @@ const NearbyButton = () => {
   let [isLocationDenied, setLocationDenied] = useState(false);
 
   const getCurrentPositionFromBrowser = async () => {
-    //console.log("getCurrentPos");
     setLocationLoading(true);
     await navigator.geolocation.getCurrentPosition(
       updateLocationOnSuccess,
@@ -56,6 +55,7 @@ const NearbyButton = () => {
     }
   };
 
+  /////////////////////////////////////////////////////
   function renderNearbyButton() {
     if (isLocationDenied) {
       return <p></p>;

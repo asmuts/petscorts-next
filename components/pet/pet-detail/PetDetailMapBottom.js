@@ -11,6 +11,7 @@ const MapWithNoSSR = dynamic(() => import("../map/LeafletSingleCircleMap"), {
   ssr: false,
 });
 
+// TODO this is a rough draft. get the pet card out of here
 const PetDetailMapBottom = ({ pet }) => {
   const router = useRouter();
 
