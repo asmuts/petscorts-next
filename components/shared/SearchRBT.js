@@ -59,6 +59,7 @@ const SearchRBT = () => {
   // Bypass client-side filtering by returning `true`.
   const filterBy = () => true;
 
+  //////////////////////////////////////////////////////////////
   return (
     <AsyncTypeahead
       className="btn-pet-search mr-sm-2 mx-auto rounded-pill fa pet-search"

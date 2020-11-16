@@ -1,13 +1,13 @@
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Spinner, Row, Col } from "react-bootstrap";
-import { toast } from "react-toastify";
+//import { toast } from "react-toastify";
 
 import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
 import PetDetailCard from "./PetDetailCard";
 import PetImageResizingForm from "./PetImageResizingForm";
-import http from "../../../services/authHttpService";
+import { getPet, updatePet } from "../../../hooks/petService";
 
 // Leaflet can't be server side rendered
 import dynamic from "next/dynamic";
@@ -41,19 +41,14 @@ export default function EditPet({ petId, user }) {
   // probably just do this in the formik component
   let [initialValues, setInitialValues] = useState({});
 
+  // saves via the service
   const doSubmit = async (values) => {
-    //console.log(values);
-    const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-    const apiURL = `${baseURL}/api/v1/pets/${petId}`;
-    try {
-      const res = await http.put(apiURL, values);
-      // TODO handle errors
-      const petId = res.data.data;
+    const { petId, err } = updatePet(petId, values);
+    if (!err) {
       markStale();
       toggleEditing();
-    } catch (e) {
-      console.log(e, `Error calling ${apiURL}`);
-      //TODO handle error
+    } else {
+      // TODO error messaging
     }
   };
 
@@ -61,46 +56,37 @@ export default function EditPet({ petId, user }) {
   useEffect(() => {
     async function fetchData() {
       if (petId && !isPetDataFresh) {
-        //console.log("Data is stale " + petId);
+        let { pet: foundPet, err } = getPet(petId);
+        if (foundPet) {
+          setPet(foundPet);
+          setIsPetDataFresh(true);
 
-        const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
-        const url = `${PET_SEARCH_URI}/api/v1/pets-search/${petId}`;
-        try {
-          const res = await http.get(url);
-          if (res.status === 200) {
-            pet = res.data.data;
-          }
-          // TODO clean up error handling
-        } catch (e) {
-          console.log(e, `Error calling ${url}`);
+          // move to form component
+          // if the owner is not populated, the value is the id
+          initialValues = {
+            petId: pet._id,
+            ownerId: pet.owner,
+            name: pet.name,
+            dailyRentalRate: pet.dailyRentalRate,
+            city: pet.city,
+            street: pet.street,
+            state: pet.state,
+            description: pet.description,
+            species: pet.species,
+            breed: pet.breed,
+          };
+          setInitialValues(initialValues);
         }
-        setPet(pet);
-        setIsPetDataFresh(true);
-
-        // move to form component
-        // if the owner is not populated, the value is the id
-        initialValues = {
-          petId: pet._id,
-          ownerId: pet.owner,
-          name: pet.name,
-          dailyRentalRate: pet.dailyRentalRate,
-          city: pet.city,
-          street: pet.street,
-          state: pet.state,
-          description: pet.description,
-          species: pet.species,
-          breed: pet.breed,
-        };
-        setInitialValues(initialValues);
+        if (err) {
+          // TODO I need an error component
+        }
       }
     }
     fetchData();
   });
 
   ////////////////////////////////////////////////////////////////////////////
-  ////////////////
 
-  // TODO move to a component.  Should consolidate with deatil page
   const renderCard = (pet) => {
     return (
       <Row>

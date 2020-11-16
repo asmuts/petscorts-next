@@ -13,6 +13,8 @@
   "dependencies": {
     "@auth0/nextjs-auth0": "^0.16.0",
     "@next/bundle-analyzer": "^9.5.5",
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.11.0",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.3",
     "camel-case": "^4.1.1",
@@ -34,6 +36,8 @@
     "react-google-maps": "^9.4.5",
     "react-leaflet": "^3.0.0-rc.0",
     "react-scroll-to-top": "^1.0.5",
+    "react-stripe": "^0.1.0",
+    "react-stripe-elements": "^6.1.2",
     "react-toastify": "^6.1.0",
     "reactstrap": "^8.6.0",
     "sass": "^1.27.0",

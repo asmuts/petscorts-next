@@ -1,84 +1,25 @@
 import { useRouter } from "next/router";
-//import http from "../../../services/httpService";
 import React, { useState, useEffect } from "react";
-import { Card, CardDeck, Button } from "react-bootstrap";
-import ArchivePetModal from "./ArchivePetModal";
+import { Form, CardDeck, Button } from "react-bootstrap";
+import OwnerPetCard from "./OwnerPetCard";
+import useUserData from "../../../hooks/useUserData";
+import { useOwnerForAuth0Sub } from "../../../hooks/useOwnerData";
 
-const OwnerPetDeck = ({ owner }) => {
-  let [pets, setPets] = useState([]);
-  let [isLoading, setIsLoading] = useState(true);
-  const [isPetDataFresh, setIsPetDataFresh] = useState(false);
+// Shows the owners pets. By default, archived pets are hidden from view.
+const OwnerPetDeck = () => {
+  let [showArchived, setShowArchived] = useState(false);
+
+  // Don't even to get any props. SWR will dedupe the calls
+  const { user, isLoading: isUserLoading } = useUserData();
+  const {
+    owner,
+    mutate,
+    isLoading: isLoading,
+    isError: isError,
+  } = useOwnerForAuth0Sub(user);
 
   const markStale = () => {
-    setIsPetDataFresh(false);
-    // TODO use swr for the owner and pet data.
-    // tell it that it's out of date
-    // otherwise, I'll have to propogate this up yet another level
-  };
-
-  useEffect(() => {
-    if (!owner || !owner._id) {
-      return;
-    }
-    if (owner && !isPetDataFresh) {
-      console.log("useEffect " + owner + " " + isPetDataFresh);
-      // 3. Get pets for owner.
-      async function fetchData() {
-        if (isLoading) {
-          // I should now have this from the owner
-          // the api will populate the pets
-          //let foundPets = await getPetsForOwner(owner);
-          //setPets(foundPets);
-          setPets(owner.pets);
-          setIsLoading(false);
-          setIsPetDataFresh(true);
-        }
-      }
-      fetchData();
-    }
-  });
-
-  // I should be able to remove this now.
-  /// I will need to make a separate query for bookings
-  // TODO just populate the owner record from mongo
-  // make a new service getPetPopulatedOwner
-  // async function getPetsForOwner(owner) {
-  //   let foundPets = {};
-  //   if (owner && owner.pets.length === 0) {
-  //     return foundPets;
-  //   }
-  //   console.log("Looking for pets for owner with email [" + owner.email + "]");
-
-  //   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-  //   // TODO, send the list of pet ids instead.
-  //   let apiRoute = `/api/v1/pets-search/owner/${owner._id}`;
-  //   const url = baseURL + apiRoute;
-  //   try {
-  //     const res = await http.get(url);
-  //     console.log("Pets data: " + res.data);
-  //     if (res.status === 200) {
-  //       foundPets = res.data;
-  //       setPets(foundPets);
-  //     }
-  //   } catch (e) {
-  //     console.log(e, `Error calling ${url}`);
-  //     //TODO handle error
-  //   }
-  //   return foundPets;
-  // }
-
-  const router = useRouter();
-  const routeToPetManageForm = (petId) => {
-    const query = { petId: petId };
-    push(query, "/pet/managePet");
-  };
-  const routeToPetDetails = (petId) => {
-    push({}, `/pet/${petId}`);
-  };
-  const push = (query, path) => {
-    const url = { pathname: path, query };
-    const asUrl = { pathname: path, query };
-    router.push(url, asUrl);
+    mutate();
   };
 
   ///////////////////////////////////////////////////////
@@ -86,57 +27,23 @@ const OwnerPetDeck = ({ owner }) => {
     return <p>Loading pets...</p>;
   }
 
-  // console.log("pets.length = " + pets.length);
-
-  if ((!isLoading && pets === null) || !pets.length > 0) {
-    //console.log("returning null");
-    return <p className="page-title">You don't have any pets listed.</p>;
+  if (isError) {
+    // TODO make an error page
+    return <h1>Could load your pets at this time.</h1>;
   }
 
-  function renderImage(pet) {
-    if (!pet.images || !pet.images[0]) {
-      const src = `/images/${pet.species.toLowerCase()}-clipart.png`;
-      return <Card.Img className="card-img-top" src={src}></Card.Img>;
-    }
-    return (
-      <Card.Img
-        className="card-img-top"
-        src={pet.images[0].url}
-        alt={pet.name}
-      ></Card.Img>
-    );
+  if ((!isLoading && owner.pets === null) || !owner.pets.length > 0) {
+    return <p className="page-title">You don't have any pets listed.</p>;
   }
 
   const renderCard = (pet, index) => {
     return (
       <div className="col-md-4 col-xs-6">
-        <Card key={index}>
-          <a
-            className="pet-detail-link"
-            onClick={() => routeToPetDetails(pet._id)}
-            href="#"
-          >
-            {" "}
-            <Card.Header className="card-title">{pet.name}</Card.Header>
-            {renderImage(pet)}
-            <Card.Body>
-              <Card.Text className="card-text">{pet.description}</Card.Text>
-              <Card.Text>Species: {pet.species}</Card.Text>
-              <Card.Text>Breed: {pet.breed}</Card.Text>
-              <Card.Text>Daily Rate: {pet.dailyRentalRate}</Card.Text>
-            </Card.Body>
-          </a>
-          <Card.Footer>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => routeToPetManageForm(pet._id)}
-            >
-              Edit
-            </Button>
-            <ArchivePetModal pet={pet} markStale={markStale}></ArchivePetModal>
-          </Card.Footer>
-        </Card>
+        <OwnerPetCard
+          pet={pet}
+          markStale={markStale}
+          key={pet._id}
+        ></OwnerPetCard>
       </div>
     );
   };
@@ -144,9 +51,16 @@ const OwnerPetDeck = ({ owner }) => {
   return (
     <>
       <p className="page-title">Your pets.</p>
+      <Form.Check
+        label="Show Archived"
+        value={showArchived}
+        onClick={() => setShowArchived(!showArchived)}
+      />
       <CardDeck>
-        {pets.map((pet, index) => {
-          if (pet.status !== "ARCHIVED") {
+        {owner.pets.map((pet, index) => {
+          if (!showArchived && pet.status === "ARCHIVED") {
+            return;
+          } else {
             return renderCard(pet, index);
           }
         })}

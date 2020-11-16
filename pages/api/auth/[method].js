@@ -5,6 +5,8 @@ import auth0 from "../../../lib/auth0";
 // I consolidated login, logout, signup, me, and callback
 // to reduce the # of serveless funtions.
 // Made an access token retrieval
+//
+// https://github.com/auth0/nextjs-auth0
 export default async function handler(req, res) {
   const {
     query: { method },
@@ -46,12 +48,15 @@ export default async function handler(req, res) {
   if (method === "callback") {
     console.log("Callback called");
     try {
-      await auth0.handleCallback(req, res);
-      // await auth0.handleCallback(req, res, {
-      //   onUserLoaded: async (req, res, state) => {
-      //     console.log("onUserLoaded, state " + state, +" req " + req);
-      //   },
-      // });
+      //await auth0.handleCallback(req, res);
+      await auth0.handleCallback(req, res, {
+        onUserLoaded: async (req, res, session, state) => {
+          console.log(state);
+          return {
+            ...session,
+          };
+        },
+      });
     } catch (error) {
       console.error(error);
       res.status(error.status || 500).end(error.message);
@@ -63,9 +68,13 @@ export default async function handler(req, res) {
 
     await auth0.handleLogin(req, res, {
       getState: (req) => {
-        return {
-          someValue: "123", // testing
-        };
+        let redirectTo =
+          req.query && req.query.redirectTo ? req.query.redirectTo : "/";
+        if (req.query && req.query.redirectTo)
+          return {
+            someValue: "123", // testing
+            redirectTo: redirectTo,
+          };
       },
     });
   }
@@ -75,6 +84,32 @@ export default async function handler(req, res) {
     console.log("Login-owner called");
     await auth0.handleLogin(req, res, {
       redirectTo: "/manage/owner",
+    });
+  }
+
+  // different route for renter logins during booking
+  // Perhaps redirectTo as a query param works now?
+  // It didn't on the older version.
+  // I'd like to pass the pet id and the start and end dates
+  // across the auth path
+  if (method === "login-renter-book") {
+    console.log("Login-renter-book called");
+    console.log(req.query);
+    await auth0.handleLogin(req, res, {
+      getState: (req) => {
+        return {
+          petId: req.query.petId,
+          startAt: req.query.startAt,
+          endAt: req.query.endAt,
+          redirectTo:
+            "/book?petId=" +
+            req.query.petId +
+            "&startAt=" +
+            req.query.startAt +
+            "&endAt=" +
+            req.query.endAt,
+        };
+      },
     });
   }
 

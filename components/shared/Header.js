@@ -3,11 +3,14 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { Navbar, Nav, Dropdown } from "react-bootstrap";
 import SearchRBT from "./SearchRBT";
-import { useFetchUser } from "../../util/user";
+//import { useFetchUser } from "../../util/user";
+import useUserData from "../../hooks/useUserData";
 
 const Header = (props) => {
   const router = useRouter();
-  const { user, loading } = useFetchUser();
+  //const { user, loading } = useFetchUser();
+
+  const { user, isLoading: loading } = useUserData();
 
   const handleProfile = () => {
     push({}, "/profile");

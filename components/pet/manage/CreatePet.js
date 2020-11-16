@@ -5,8 +5,6 @@ import http from "../../../services/authHttpService";
 import { toast } from "react-toastify";
 
 export default function CreatePet({ ownerId }) {
-  //console.log("CreatePetForm. ownerId " + ownerId);
-
   const [message, setMessage] = useState("");
 
   let [initialValues, setInitialValues] = useState({
@@ -25,6 +23,7 @@ export default function CreatePet({ ownerId }) {
     router.back();
   };
 
+  // TODO move create call to ownerPetService
   const doSubmit = async (values) => {
     //console.log(values);
     const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;

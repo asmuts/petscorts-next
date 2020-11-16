@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Spinner } from "react-bootstrap";
-import http from "../../services/httpService";
+import { getPet } from "../../hooks/petService";
 
 import Layout from "../../components/shared/Layout.js";
 import PetDetailMapBottom from "../../components/pet/pet-detail/PetDetailMapBottom";
@@ -26,27 +26,16 @@ function Pet({ pet }) {
   );
 }
 
+// Static page generation with a refresh interval
 export async function getStaticProps({ params }) {
-  let pet = {};
   if (params.id) {
     console.log(params.id);
   }
-  const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
-  const url = `${PET_SEARCH_URI}/api/v1/pets-search/${params.id}`;
-  try {
-    const res = await http.get(url);
-    if (res.status === 200) {
-      pet = res.data.data;
-      //console.log(pet);
-    } else {
-      // TODO handle error
-    }
-  } catch (e) {
-    console.log(e, `Error calling ${url}`);
-  }
+  let { pet, err } = await getPet(params.id);
+
   // for some reason it doesn't work with a config value
   // TODO look into this further
-  const revalidateSetting = process.env.REVALIDATE_PET;
+  //const revalidateSetting = process.env.REVALIDATE_PET;
   //return { props: { pet }, revalidate: revalidateSetting };
   return { props: { pet }, revalidate: 30 };
 }
