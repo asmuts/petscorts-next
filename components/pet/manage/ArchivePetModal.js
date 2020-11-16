@@ -1,6 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 import React, { useState } from "react";
-import { toast } from "react-ify";
+import { toast } from "react-toastify";
 
 import { archivePet } from "../../../hooks/ownerPetService";
 

@@ -36,8 +36,6 @@
     "react-google-maps": "^9.4.5",
     "react-leaflet": "^3.0.0-rc.0",
     "react-scroll-to-top": "^1.0.5",
-    "react-stripe": "^0.1.0",
-    "react-stripe-elements": "^6.1.2",
     "react-toastify": "^6.1.0",
     "reactstrap": "^8.6.0",
     "sass": "^1.27.0",
