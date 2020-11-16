@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { reActivatePet } from "../../../hooks/ownerPetService";
 
-const ReactivatePetButton = ({ petId, informOfChange }) => {
+const ReActivatePetButton = ({ petId, informOfChange }) => {
   const handleReActivate = async (petId) => {
     const { pet, err } = await reActivatePet(petId);
     if (!err) {
@@ -23,4 +23,4 @@ const ReactivatePetButton = ({ petId, informOfChange }) => {
   );
 };
 
-export default ReactivatePetButton;
+export default ReActivatePetButton;

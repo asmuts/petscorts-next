@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Card, Button } from "react-bootstrap";
 import ArchivePetModal from "./ArchivePetModal";
-import ReactivatePetButton from "./ReactivatePetButton";
+import ReactivatePetButton from "./ReActivatePetButton";
 
 // Card to display a pet on the owner manage page
 // TODO refactor to a common pet card.
