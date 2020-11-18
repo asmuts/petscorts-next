@@ -1,5 +1,5 @@
-import Head from "../../components/shared/Head";
-import Header from "../../components/shared/Header";
+import Head from "./Head";
+import Header from "./Header";
 import { Container } from "react-bootstrap";
 import { UserProvider, useFetchUser } from "../../util/user";
 import { ToastContainer } from "react-toastify";
