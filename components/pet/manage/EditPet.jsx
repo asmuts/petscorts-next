@@ -7,7 +7,7 @@ import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
 import PetDetailCard from "./PetDetailCard";
 import PetImageResizingForm from "./PetImageResizingForm";
-import { getPet, updatePet } from "../../../hooks/petService";
+import { getPet, updatePet } from "../../../services/petService";
 import useUserData from "../../../hooks/useUserData";
 import { useOwnerForAuth0Sub } from "../../../hooks/useOwnerData";
 
