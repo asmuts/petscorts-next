@@ -5,7 +5,6 @@ import useSWR from "swr";
 export default function usePetSearchData(query) {
   const fetcher = (url) => http.get(url).then((res) => res.data);
   let searchURL = getSearchUrlFromRequest(query);
-  //console.log(searchURL);
   const { data, error } = useSWR(searchURL, fetcher);
 
   return {
@@ -18,8 +17,6 @@ export default function usePetSearchData(query) {
 // build a query based on the query type
 function getSearchUrlFromRequest(query) {
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-
-  console.log(`query = ${query}`);
   let apiRoute = `/api/v1/pets-search/`;
   if (query.type && query.type === "nearby") {
     // I should have the lat and lng for the usr

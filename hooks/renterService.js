@@ -1,4 +1,4 @@
-import http from "../services/authHttpService";
+import httpAuth from "../services/authHttpService";
 
 // This should handle the create renter process
 // Moving this out of the renter.js
@@ -28,14 +28,14 @@ async function callAPIGetRenterForEmail(email) {
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
 
   // make sure scopes in the config includes email
-  let ownerApiRoute = `/api/v1/owners/email/${email}`;
-  const ownerURL = baseURL + ownerApiRoute;
+  let renterApiRoute = `/api/v1/renters/email/${email}`;
+  const URL = baseURL + renterApiRoute;
   try {
-    const res = await http.get(ownerURL);
-    //console.log("Status: " + res.status);
+    const res = await httpAuth.get(URL);
+    console.log("Status: " + res.status);
     if (res.status === 200) {
-      //console.log("RenterService. Found renter data: " + res.data);
-      foundRenter = res.data;
+      console.log("RenterService. Found renter data: " + res.data);
+      foundRenter = res.data.data;
       //setRenter(foundRenter);
       return { renter: foundRenter };
     }
@@ -46,32 +46,32 @@ async function callAPIGetRenterForEmail(email) {
     }
     throw new Error("Error"); // TODO
   } catch (e) {
-    console.log(`RenterService. Error calling ${ownerURL}`);
+    console.log(`RenterService. Error calling ${URL}`);
     return { err: e.message };
   }
 }
 
 async function callAPIcreateRenter(user) {
-  let ownerNew = {
+  let renterNew = {
     username: user.nickname,
     fullname: user.name,
     email: user.email,
     auth0_sub: user.sub,
   };
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-  let ownerApiRoute = `/api/v1/owners/`;
-  const ownerURL = baseURL + ownerApiRoute;
+  let renterApiRoute = `/api/v1/renters/`;
+  const URL = baseURL + renterApiRoute;
   try {
-    const resRenter = await http.post(ownerURL, ownerNew);
+    const resRenter = await httpAuth.post(URL, renterNew);
     //console.log("Renter data: " + resRenter.data);
     // I might just get the id back
     if (resRenter.data) {
-      ownerNew._id = resRenter.data.ownerId;
+      renterNew._id = resRenter.data.renterId;
       //setRenter(ownerNew);
     }
-    return { renter: ownerNew };
+    return { renter: renterNew };
   } catch (e) {
-    //console.log(e, `Error creating renter ${ownerURL}`);
+    //console.log(e, `Error creating renter ${URL}`);
     return { err: e.message };
   }
 }

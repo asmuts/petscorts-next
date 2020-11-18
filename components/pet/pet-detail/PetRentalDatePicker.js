@@ -1,22 +1,32 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import "react-daterange-picker/dist/css/react-calendar.css";
-import { Col, Form, Button, Container } from "react-bootstrap";
+import { Col, Form, Button, Container, Spinner } from "react-bootstrap";
 import DateRangePicker from "react-daterange-picker";
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
+
 import { getDatesInRange } from "../../../util/date-util";
+import { usePetBookingDates } from "../../../hooks/usePetBookingData";
 
 const moment = extendMoment(originalMoment);
 
 // TODO get booking dates from pet and set them
+// TODO USE SWR on the booking data. The other pet data changes less
+// frequently'
 // Right now I'm just harcdcoding dates as an example
 const PetRentalDatePicker = ({ pet }) => {
   const router = useRouter();
 
+  const {
+    dates: bookedDates,
+    loading: isDatesLoading,
+    isError,
+  } = usePetBookingDates(pet._id);
+
   const [value, setValue] = useState(null);
-  //const [states, setStates] = useState(null);
   const [days, setDays] = useState(null);
+  const [dateRanges, setDateRanges] = useState([]);
   const [totalPrice, setTotalPrice] = useState(null);
 
   const stateDefinitions = {
@@ -47,22 +57,18 @@ const PetRentalDatePicker = ({ pet }) => {
     setTotalPrice(total);
   };
 
-  const dateRanges = [
-    // {
-    //   state: "enquire",
-    //   range: moment.range(
-    //     moment().add(2, "weeks").subtract(5, "days"),
-    //     moment().add(2, "weeks").add(6, "days")
-    //   ),
-    // },
-    {
-      state: "unavailable",
-      range: moment.range(
-        moment().add(3, "weeks"),
-        moment().add(3, "weeks").add(5, "days")
-      ),
-    },
-  ];
+  useEffect(() => {
+    if (bookedDates) {
+      let ranges = [];
+      bookedDates.map((bd) => {
+        ranges.push({
+          state: "unavailable",
+          range: moment.range(moment(bd.startAt), moment(bd.endAt)),
+        });
+      });
+      setDateRanges(ranges);
+    }
+  }, [bookedDates]);
 
   const preventDefault = (f) => (e) => {
     e.preventDefault();
@@ -83,6 +89,15 @@ const PetRentalDatePicker = ({ pet }) => {
     const asUrl = { pathname: "/book", query };
     router.push(url, asUrl);
   };
+
+  //////////////////////////////////////////////////
+  if (isDatesLoading) {
+    return (
+      <div>
+        <Spinner animation="border" /> Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="row">

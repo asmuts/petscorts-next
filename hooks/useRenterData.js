@@ -12,13 +12,8 @@ export const useRenterForAuth0Sub = (user) => {
     {},
     options
   );
-  //console.log(data);
-  // let Renter;
-  // if (data) {
-  //   Renter = data.data;
-  // }
   return {
-    Renter: data,
+    renter: data,
     mutate,
     isLoading: !error && !data,
     isError: error,
@@ -31,7 +26,7 @@ export const mutateRenterForAuth0Sub = (auth0_sub) => {
 };
 
 function getRenterDataAuth0SubAPIUrl(auth0_sub) {
-  console.log("Looking for user with auth0_sub [" + auth0_sub + "]");
+  //console.log("Looking for user with auth0_sub [" + auth0_sub + "]");
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
 
   // make sure scopes in the config includes email

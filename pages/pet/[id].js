@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Spinner } from "react-bootstrap";
-import { getPet } from "../../hooks/petService";
 
+import { getPet } from "../../hooks/petService";
 import Layout from "../../components/shared/Layout.js";
 import PetDetailMapBottom from "../../components/pet/pet-detail/PetDetailMapBottom";
 

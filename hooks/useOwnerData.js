@@ -12,11 +12,6 @@ export const useOwnerForAuth0Sub = (user) => {
     {},
     options
   );
-  //console.log(data);
-  // let owner;
-  // if (data) {
-  //   owner = data.data;
-  // }
   return {
     owner: data,
     mutate,

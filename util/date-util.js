@@ -2,8 +2,8 @@ import * as moment from "moment";
 
 export const getDatesInRange = (startAt, endAt, dateFormat = "MM/DD/YYYY") => {
   const tempDates = [];
-  const mEndAt = moment(endAt);
-  let mStartAt = moment(startAt);
+  const mEndAt = moment(endAt, dateFormat);
+  let mStartAt = moment(startAt, dateFormat);
 
   while (mStartAt < mEndAt) {
     tempDates.push(mStartAt.format(dateFormat));

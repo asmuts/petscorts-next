@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Col, Container, Row, Card, Button } from "react-bootstrap";
+import { Modal, Card, Button } from "react-bootstrap";
 
 import Payment from "./payment/Payment";
 
@@ -36,7 +36,8 @@ export default function BookingModal(props) {
     // not telling the parent
     // these are just for modal display.
     // I want the card form to show up if they re-open
-    setToken(token);
+    // NO. if it fails, they can't re-use the token
+    setToken(null);
     setTokenStored(false);
     closeModal();
   };
@@ -89,7 +90,7 @@ export default function BookingModal(props) {
 
       {tokenStored && renderConfirmMessage()}
 
-      <div className="modal-footer">
+      <Modal.Footer>
         {tokenStored && (
           <Button disabled={disabled} onClick={confirmModal} variant="success">
             Confirm
@@ -98,7 +99,7 @@ export default function BookingModal(props) {
         <Button type="button" onClick={doCloseModal} variant="danger">
           Cancel
         </Button>
-      </div>
+      </Modal.Footer>
     </Modal>
   );
 }

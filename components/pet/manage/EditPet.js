@@ -8,6 +8,8 @@ import PetDetailForm from "./PetDetailForm";
 import PetDetailCard from "./PetDetailCard";
 import PetImageResizingForm from "./PetImageResizingForm";
 import { getPet, updatePet } from "../../../hooks/petService";
+import useUserData from "../../../hooks/useUserData";
+import { useOwnerForAuth0Sub } from "../../../hooks/useOwnerData";
 
 // Leaflet can't be server side rendered
 import dynamic from "next/dynamic";
@@ -15,35 +17,40 @@ const MapWithNoSSR = dynamic(() => import("../map/LeafletSingleCircleMap"), {
   ssr: false,
 });
 
-// TODO! verify that the user is the owner
-// this would be easy if I put the owner email in the pet record
-
 // Load the pet data here and not on the page.
 // I'll need to update it regularly.
 // it's cumbersome to pass a method down more levels
-export default function EditPet({ petId, user }) {
-  //console.log("EditPetForm. pet " + petId);
+export default function EditPet({ petId }) {
+  console.log("EditPetForm. pet " + petId);
+
+  // TODO make an HOC or something that will handle this common logic
+  // Don't even to get any props. SWR will dedupe the calls
+  const { user, isLoading: isUserLoading } = useUserData();
+  const {
+    owner,
+    isLoading: isOwnerLoading,
+    isError: isOwnerError,
+  } = useOwnerForAuth0Sub(user);
 
   let [pet, setPet] = useState();
   // display a details card and have an edit button
   const [isEditing, setIsEditing] = useState(false);
+  const [isPetDataFresh, setIsPetDataFresh] = useState(false);
+  // probably just do this in the formik component
+  let [initialValues, setInitialValues] = useState({});
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
 
   // called by children to ask for a refresh
-  const [isPetDataFresh, setIsPetDataFresh] = useState(false);
   const markStale = () => {
     setIsPetDataFresh(false);
   };
 
-  // probably just do this in the formik component
-  let [initialValues, setInitialValues] = useState({});
-
   // saves via the service
   const doSubmit = async (values) => {
-    const { petId, err } = updatePet(petId, values);
+    const { petId: returnedPetId, err } = await updatePet(petId, values);
     if (!err) {
       markStale();
       toggleEditing();
@@ -54,9 +61,11 @@ export default function EditPet({ petId, user }) {
 
   // load the pet
   useEffect(() => {
+    //console.log("useEffect");
     async function fetchData() {
       if (petId && !isPetDataFresh) {
-        let { pet: foundPet, err } = getPet(petId);
+        let { pet: foundPet, err } = await getPet(petId);
+        //console.log(foundPet);
         if (foundPet) {
           setPet(foundPet);
           setIsPetDataFresh(true);
@@ -64,20 +73,21 @@ export default function EditPet({ petId, user }) {
           // move to form component
           // if the owner is not populated, the value is the id
           initialValues = {
-            petId: pet._id,
-            ownerId: pet.owner,
-            name: pet.name,
-            dailyRentalRate: pet.dailyRentalRate,
-            city: pet.city,
-            street: pet.street,
-            state: pet.state,
-            description: pet.description,
-            species: pet.species,
-            breed: pet.breed,
+            petId: foundPet._id,
+            ownerId: foundPet.owner,
+            name: foundPet.name,
+            dailyRentalRate: foundPet.dailyRentalRate,
+            city: foundPet.city,
+            street: foundPet.street,
+            state: foundPet.state,
+            description: foundPet.description,
+            species: foundPet.species,
+            breed: foundPet.breed,
           };
           setInitialValues(initialValues);
         }
         if (err) {
+          console.log(err.message);
           // TODO I need an error component
         }
       }
@@ -87,7 +97,7 @@ export default function EditPet({ petId, user }) {
 
   ////////////////////////////////////////////////////////////////////////////
 
-  const renderCard = (pet) => {
+  const renderCard = () => {
     return (
       <Row>
         <Col md="6">
@@ -116,7 +126,7 @@ export default function EditPet({ petId, user }) {
     );
   };
 
-  if (!pet) {
+  if (!pet || isOwnerLoading) {
     return (
       <div>
         <Spinner animation="border" /> Loading...
@@ -124,10 +134,17 @@ export default function EditPet({ petId, user }) {
     );
   }
 
+  if (pet && owner) {
+    if (pet.ownerId !== owner.ownerId) {
+      // TODO make an error component
+      return <h3>You are not authorized to edit this pet.</h3>;
+    }
+  }
+
   return (
     <>
       {isEditing && renderEditForm()}
-      {!isEditing && renderCard(pet)}
+      {!isEditing && renderCard()}
       <hr className="mb-2" />
       <PetImageSmallCards
         pet={pet}
