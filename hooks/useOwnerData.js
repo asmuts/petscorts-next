@@ -1,6 +1,9 @@
 import http from "../util/authHttpService";
 import useSWR, { mutate } from "swr";
 
+// TODO use the serives as fetchers
+// Make a serviceFetcher Util that throws on error and uses services
+
 export const useOwnerForAuth0Sub = (user) => {
   const options = { revalidateOnFocus: false, revalidateOnReconnect: false };
   const fetcher = (url) => http.get(url).then((res) => res.data.data);

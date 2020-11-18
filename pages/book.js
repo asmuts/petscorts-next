@@ -8,7 +8,7 @@ import Layout from "../components/shared/Layout";
 //import useUserData from "../hooks/useUserData";
 import { useFetchUser } from "../util/user";
 import { createBooking } from "../services/bookingService";
-import { getPet, updatePet } from "../services/petService";
+import { getPet } from "../services/petService";
 import { getDatesInRange } from "../util/date-util";
 import {
   routeToRenterLogin,
@@ -173,7 +173,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
               ))}
           </Row>
 
-          {error && <BookingError error={error} petId={petId}></BookingError>}
+          {error && <BookingError error={error} petId={pet._id}></BookingError>}
 
           {user && pet && proposedBooking && !error && (
             <>

@@ -1,6 +1,40 @@
 import Joi from "joi";
 import httpAuth from "../util/authHttpService";
 
+export const getBookingsForRenter = async (renterId) => {
+  console.log("getBookingsForRenter " + renterId);
+  const BOOKING_API_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
+  const url = `${BOOKING_API_URI}/api/v1/booking/renter/${renterId}`;
+  try {
+    const res = await httpAuth.get(url);
+    if (res.status === 200) {
+      let bookings = res.data.data;
+      //console.log(bookings);
+      return { bookings };
+    }
+    return { err: res.data.error };
+  } catch (e) {
+    console.log(e, `Error calling ${url}`);
+    return { err: e.message };
+  }
+};
+
+export const getBookingsForOwner = async (ownerId) => {
+  const BOOKING_API_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;
+  const url = `${BOOKING_API_URI}/api/v1/booking/owner/${ownerId}`;
+  try {
+    const res = await httpAuth.get(url);
+    if (res.status === 200) {
+      let bookings = res.data.data;
+      return { bookings };
+    }
+    return { err: res.data.error };
+  } catch (e) {
+    console.log(e, `Error calling ${url}`);
+    return { err: e.message };
+  }
+};
+
 // create booking --> booking api:
 // const { startAt, endAt, totalPrice, days, petId, paymentToken }
 export const createBooking = async (booking) => {

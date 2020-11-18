@@ -14,3 +14,7 @@ export const getDatesInRange = (startAt, endAt, dateFormat = "MM/DD/YYYY") => {
 
   return tempDates;
 };
+
+export const formatDate = (date, dateFormat = "MM/DD/YYYY") => {
+  return moment(date).format(dateFormat);
+};

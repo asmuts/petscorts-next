@@ -8,6 +8,11 @@ import useSWR from "swr";
 // I'm going to replace it all with next-oauth and scrap auth0
 // It's not nice to work with and it's very expensive
 
+// undocumented!
+//import { cache } from "swr"
+//cache.clear()
+//
+
 export default function useUserData() {
   const options = {
     revalidateOnFocus: false,
