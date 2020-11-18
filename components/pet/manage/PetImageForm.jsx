@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Button, Col, Container } from "react-bootstrap";
-import http from "../../../services/httpService";
+import http from "../../../util/httpService";
 
 // TODO delete this.  I'm replacing it with the resizing version
 export default function PetImageForm({ pet, markDataStale }) {

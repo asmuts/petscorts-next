@@ -7,7 +7,7 @@ import {
   Nav,
 } from "react-bootstrap";
 
-import Layout from "../components/shared/Layout.js";
+import Layout from "../components/shared/Layout";
 import NearbyButton from "./../components/home/NearbyButton";
 import Footer from "./../components/shared/Footer";
 

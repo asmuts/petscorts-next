@@ -1,4 +1,4 @@
-import http from "../services/httpService";
+import http from "../util/httpService";
 import useSWR from "swr";
 
 // I'm hoping to replace the current user util useFetchUser with an SWR version.

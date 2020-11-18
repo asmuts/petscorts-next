@@ -4,7 +4,7 @@ import { Spinner } from "react-bootstrap";
 import { Col, Container, Row, Card, Button, Image } from "react-bootstrap";
 import { toast } from "react-toastify";
 
-import Layout from "../components/shared/Layout.js";
+import Layout from "../components/shared/Layout";
 //import useUserData from "../hooks/useUserData";
 import { useFetchUser } from "../util/user";
 import { createBooking } from "../hooks/bookingService";

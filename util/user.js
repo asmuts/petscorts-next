@@ -1,5 +1,5 @@
 import React from "react";
-import http from "../services/httpService";
+import http from "../util/httpService";
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
 let userState;

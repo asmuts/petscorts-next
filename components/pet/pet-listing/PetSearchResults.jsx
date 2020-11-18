@@ -1,7 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import ScrollToTop from "react-scroll-to-top";
 
-import Layout from "../../shared/Layout.js";
+import Layout from "../../shared/Layout";
 import PetListing from "./PetListing";
 import PetSearchMap from "./PetSearchMap";
 

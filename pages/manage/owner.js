@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import Layout from "../../components/shared/Layout.js";
-import OwnerPetDeck from "../../components/pet/manage/OwnerPetDeck.js";
+import Layout from "../../components/shared/Layout";
+import OwnerPetDeck from "../../components/pet/manage/OwnerPetDeck";
 import OwnerDetail from "../../components/pet/manage/OwnerDetail";
 import AddPetButton from "../../components/pet/manage/AddPetButton";
 //import { useFetchUser } from "../../util/user";

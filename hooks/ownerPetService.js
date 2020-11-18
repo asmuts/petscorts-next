@@ -1,4 +1,4 @@
-import httpAuth from "../services/authHttpService";
+import httpAuth from "../util/authHttpService";
 
 export const archivePet = async (petId) => {
   const PET_SEARCH_URI = process.env.NEXT_PUBLIC_API_SERVER_URI;

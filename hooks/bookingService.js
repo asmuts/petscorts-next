@@ -1,5 +1,5 @@
 import Joi from "joi";
-import httpAuth from "../services/authHttpService";
+import httpAuth from "../util/authHttpService";
 
 // create booking --> booking api:
 // const { startAt, endAt, totalPrice, days, petId, paymentToken }

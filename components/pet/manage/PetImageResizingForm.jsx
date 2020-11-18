@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 // TODO convert everything to R-B
 import { Form, Button, Col, Row, Toast, Container } from "react-bootstrap";
-import http from "../../../services/authHttpService";
+import http from "../../../util/authHttpService";
 
 // I want to be able to add multipe images
 // each should be displayed

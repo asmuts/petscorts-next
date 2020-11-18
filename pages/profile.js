@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import Layout from "../components/shared/Layout.js";
+import Layout from "../components/shared/Layout";
 import { useFetchUser } from "../util/user";
 import { Card, Col, Image, Container, Row } from "react-bootstrap";
 

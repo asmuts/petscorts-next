@@ -1,4 +1,4 @@
-import http from "../services/authHttpService";
+import http from "../util/authHttpService";
 import useSWR, { mutate } from "swr";
 
 export const useOwnerForAuth0Sub = (user) => {

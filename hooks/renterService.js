@@ -1,4 +1,4 @@
-import httpAuth from "../services/authHttpService";
+import httpAuth from "../util/authHttpService";
 
 // This should handle the create renter process
 // Moving this out of the renter.js
