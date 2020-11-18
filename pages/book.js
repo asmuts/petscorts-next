@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import Layout from "../components/shared/Layout";
 //import useUserData from "../hooks/useUserData";
 import { useFetchUser } from "../util/user";
-import { createBooking } from "../hooks/bookingService";
+import { createBooking } from "../services/bookingService";
 import { getPet, updatePet } from "../hooks/petService";
 import { getDatesInRange } from "../util/date-util";
 import {
