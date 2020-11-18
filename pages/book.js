@@ -17,7 +17,7 @@ import {
 } from "../util/routing-util";
 import BookingModal from "../components/book/BookingModal";
 import BookingError from "../components/book/BookingError";
-import { getRenterForEmail, createRenter } from "../hooks/renterService";
+import { getRenterForEmail, createRenter } from "../services/renterService";
 import {
   useRenterForAuth0Sub,
   mutateRenterForAuth0Sub,
@@ -63,7 +63,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
           return handleError(errRenter);
         }
         if (!foundRenter) {
-          await createRenter();
+          await createRenterForUser();
         } else {
           const message =
             "It looks like you logged in using a different service before. Please log out and sign back in.";
@@ -73,7 +73,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
     }
   };
 
-  const createRenter = async () => {
+  const createRenterForUser = async () => {
     console.log("Creating new renter");
     let { renter: renterCreated, err: errRenter } = await createRenter(user);
     if (renterCreated) {
