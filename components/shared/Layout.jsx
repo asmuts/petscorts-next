@@ -1,5 +1,5 @@
 import Head from "./Head";
-import Header from "./Header";
+import NavBar from "./NavBar";
 import { Container } from "react-bootstrap";
 import { UserProvider, useFetchUser } from "../../util/user";
 import { ToastContainer } from "react-toastify";
@@ -13,7 +13,7 @@ function Layout({ children }) {
     <UserProvider value={{ user, loading }}>
       <div>
         <Head></Head>
-        <Header> </Header>
+        <NavBar> </NavBar>
         <ToastContainer />
         <main>
           <Container className="main-container">{children}</Container>
