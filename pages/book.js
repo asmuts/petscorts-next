@@ -123,10 +123,10 @@ const Book = () => {
       setErrorIfMissingData();
       await createRenterIfNeeded();
 
-      // const query = router.query;
-      // let petId = query.petId;
-      // let startAt = query.startAt;
-      // let endAt = query.endAt;
+      const query = router.query;
+      let petId = query.petId;
+      let startAt = query.startAt;
+      let endAt = query.endAt;
 
       if (!pet && petId) {
         //console.log("fetchData");
