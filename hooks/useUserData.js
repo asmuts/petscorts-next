@@ -1,4 +1,4 @@
-import http from "../services/httpService";
+import http from "../util/httpService";
 import useSWR from "swr";
 
 // I'm hoping to replace the current user util useFetchUser with an SWR version.
@@ -7,6 +7,11 @@ import useSWR from "swr";
 // In fact, I really don't like the next-auth0 stuff.
 // I'm going to replace it all with next-oauth and scrap auth0
 // It's not nice to work with and it's very expensive
+
+// undocumented!
+//import { cache } from "swr"
+//cache.clear()
+//
 
 export default function useUserData() {
   const options = {

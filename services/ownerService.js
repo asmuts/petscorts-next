@@ -1,4 +1,4 @@
-import http from "../services/authHttpService";
+import http from "../util/authHttpService";
 
 // This should handle the create owner process
 // Moving this out of the owner.js

@@ -4,11 +4,11 @@ import { Spinner } from "react-bootstrap";
 import { Col, Container, Row, Card, Button, Image } from "react-bootstrap";
 import { toast } from "react-toastify";
 
-import Layout from "../components/shared/Layout.js";
+import Layout from "../components/shared/Layout";
 //import useUserData from "../hooks/useUserData";
 import { useFetchUser } from "../util/user";
-import { createBooking } from "../hooks/bookingService";
-import { getPet, updatePet } from "../hooks/petService";
+import { createBooking } from "../services/bookingService";
+import { getPet } from "../services/petService";
 import { getDatesInRange } from "../util/date-util";
 import {
   routeToRenterLogin,
@@ -17,44 +17,31 @@ import {
 } from "../util/routing-util";
 import BookingModal from "../components/book/BookingModal";
 import BookingError from "../components/book/BookingError";
-import { getRenterForEmail, createRenter } from "../hooks/renterService";
-import { useRenterForAuth0Sub } from "../hooks/useRenterData";
+import { getRenterForEmail, createRenter } from "../services/renterService";
+import {
+  useRenterForAuth0Sub,
+  mutateRenterForAuth0Sub,
+} from "../hooks/useRenterData";
 /*
   If users are not logged in are directed.
   After login or signup they are redirected back here.
 
-  Load the user and pet data.
+  Load the user and pet data on th server side.
   Present the details.
-  All the user to edit dates (TODO)
+  Allow? the user to edit dates (TODO)
 
   Present a model to confirm and enter payment info.
   Store the payment info from Stripe and ask for a final confirmation.
-  Create the booking record (TODO).
+  Create the booking record.
 
   Redirect to profile page which should list the bookings.
 */
-const Book = () => {
+const Book = ({ pet, proposedBooking, startAt, endAt }) => {
   const router = useRouter();
 
-  const query = router.query;
-  let petId = query.petId;
-  let startAt = query.startAt;
-  let endAt = query.endAt;
-
   let [mustReAuthenticate, setMustReAuthenticate] = useState(false);
-  let [pet, setPet] = useState();
   let [error, setError] = useState();
   let [modalOpen, setModalOpen] = useState(false);
-  let [proposedBooking, setProposedBooking] = useState({
-    proposedBooking: {
-      startAt: "",
-      endAt: "",
-      days: "",
-      petId: "",
-      totalPrice: "",
-      paymentToken: "",
-    },
-  });
 
   const { user, loading: isUserLoading } = useFetchUser();
   // const { user, isLoading: isUserLoading, error: userError } = useUserData();
@@ -65,51 +52,33 @@ const Book = () => {
     isError: isErrorRenter,
   } = useRenterForAuth0Sub(user);
 
-  // const routeToRenterLogin = () => {
-  //   const query = { petId, startAt, endAt };
-  //   const url = { pathname: "/api/auth/login-renter-book", query };
-  //   const asUrl = { pathname: "/api/auth/login-renter-book", query };
-  //   router.push(url, asUrl);
-  // };
-
-  // const routeToProfile = () => {
-  //   const query = {};
-  //   const url = { pathname: `/profile`, query };
-  //   const asUrl = { pathname: `/profile`, query };
-  //   router.push(url, asUrl);
-  // };
-
-  // const routeToPetDetail = (petId) => {
-  //   const query = {};
-  //   const url = { pathname: `/pet/${petId}`, query };
-  //   const asUrl = { pathname: `/pet/${petId}`, query };
-  //   router.push(url, asUrl);
-  // };
-
+  // TODO if there is an error this might loop
   const createRenterIfNeeded = async () => {
     if (user) {
-      if (!renter && !isRenterLoading) {
+      if (!renter && !isRenterLoading && !isErrorRenter) {
         let { renter: foundRenter, err: errRenter } = await getRenterForEmail(
           user.email
         );
         if (errRenter) {
-          handleError(errRenter);
+          return handleError(errRenter);
         }
         if (!foundRenter) {
-          await createRenter();
+          await createRenterForUser();
         } else {
           const message =
             "It looks like you logged in using a different service before. Please log out and sign back in.";
-          handleError(message);
+          return handleError(message);
         }
       }
     }
   };
 
-  const createRenter = async () => {
+  const createRenterForUser = async () => {
     console.log("Creating new renter");
     let { renter: renterCreated, err: errRenter } = await createRenter(user);
     if (renterCreated) {
+      await mutateRenterForAuth0Sub();
+      // don't really need to set the value
       renter = renterCreated;
     }
     if (errRenter) {
@@ -117,47 +86,22 @@ const Book = () => {
     }
   };
 
-  // load the pet
   useEffect(() => {
     async function fetchData() {
       setErrorIfMissingData();
       await createRenterIfNeeded();
-
-      const query = router.query;
-      let petId = query.petId;
-      let startAt = query.startAt;
-      let endAt = query.endAt;
-
-      if (!pet && petId) {
-        //console.log("fetchData");
-        let { pet: foundPet, err } = await getPet(petId);
-        if (foundPet) {
-          const days = getDatesInRange(startAt, endAt).length - 1;
-          const total = foundPet ? foundPet.dailyRentalRate * days : null;
-          proposedBooking.startAt = startAt;
-          proposedBooking.endAt = endAt;
-          proposedBooking.days = days;
-          proposedBooking.petId = foundPet._id;
-          proposedBooking.totalPrice = total;
-          setProposedBooking(proposedBooking);
-          setPet(foundPet);
-          setError(false);
-        }
-        if (err) {
-          handleError(err);
-        }
-      }
     }
     fetchData();
   });
 
+  ////////////////////////////////////////////////
+
   const setErrorIfMissingData = () => {
-    // don't run on server without query
-    // if (!isUserLoading && (!petId || !startAt || !endAt)) {
-    //   setError(
-    //     "Something went wrong. We are missing information need to book."
-    //   );
-    // }
+    if (!pet || !proposedBooking || !startAt || !endAt) {
+      setError(
+        "Something went wrong. We are missing information needed to book. Please try again."
+      );
+    }
   };
 
   const handleError = (err) => {
@@ -178,7 +122,7 @@ const Book = () => {
   const setPaymentTokenID = (paymentTokenId) => {
     console.log(paymentTokenId);
     proposedBooking.paymentToken = paymentTokenId;
-    setProposedBooking(proposedBooking);
+    //setProposedBooking(proposedBooking);
   };
 
   // called if the modal is cancelled
@@ -209,7 +153,11 @@ const Book = () => {
 
   //Not authorized. TODO message user
   if ((!user && !isUserLoading) || mustReAuthenticate) {
-    return routeToRenterLogin(router);
+    //debugger;
+    routeToRenterLogin(router, pet ? pet._id : null, startAt, endAt);
+    // If I don't return something, a nothing returned from render error will
+    // splash
+    return "";
   }
 
   return (
@@ -217,21 +165,17 @@ const Book = () => {
       <section id="ownerDetail">
         <Container fluid className="main-container">
           <Row>
-            {/* {!user && !isUserLoading && (
-              <a href="#" onClick={routeToRenterLogin()}>
-                Please login or signup to continue.
-              </a>
-            )} */}
-            {user && !pet && (
-              <div>
-                <Spinner animation="border" /> Loading...
-              </div>
-            )}
+            {!user ||
+              (!renter && (
+                <div>
+                  <Spinner animation="border" /> Loading...
+                </div>
+              ))}
           </Row>
 
-          {error && <BookingError error={error} petId={petId}></BookingError>}
+          {error && <BookingError error={error} petId={pet._id}></BookingError>}
 
-          {user && pet && !error && (
+          {user && pet && proposedBooking && !error && (
             <>
               <div className="page-title">Review Booking Details</div>
               <Row>
@@ -262,6 +206,7 @@ const Book = () => {
                   </Card.Body>
                 </Card>
               </Row>
+
               <Row>
                 <Col sm="6">
                   <Button
@@ -276,7 +221,9 @@ const Book = () => {
                     Reserve now
                   </Button>
                   <Button
-                    onClick={() => routeToPetDetail(router, proposedBooking.petId)}
+                    onClick={() =>
+                      routeToPetDetail(router, proposedBooking.petId)
+                    }
                     variant="danger"
                   >
                     Cancel
@@ -301,3 +248,43 @@ const Book = () => {
 };
 
 export default Book;
+
+////////////////////////////////////////////////////
+
+// Load the pet and create the proposedBooking data
+export async function getServerSideProps(context) {
+  const query = context.query;
+  let petId = query.petId;
+  let startAt = query.startAt;
+  let endAt = query.endAt;
+
+  let pet;
+  let proposedBooking = {
+    startAt: "",
+    endAt: "",
+    days: "",
+    petId: "",
+    totalPrice: "",
+    paymentToken: "",
+  };
+
+  if (petId) {
+    let { pet: foundPet, err } = await getPet(petId);
+    if (foundPet) {
+      const days = getDatesInRange(startAt, endAt).length - 1;
+      const total = foundPet ? foundPet.dailyRentalRate * days : null;
+      proposedBooking.startAt = startAt;
+      proposedBooking.endAt = endAt;
+      proposedBooking.days = days;
+      proposedBooking.petId = foundPet._id;
+      proposedBooking.totalPrice = total;
+      pet = foundPet;
+    }
+    if (err) {
+      handleError(err);
+    }
+  }
+  return {
+    props: { pet, proposedBooking, startAt, endAt }, // will be passed to the page component as props
+  };
+}

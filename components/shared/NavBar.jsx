@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { Navbar, Nav, Dropdown } from "react-bootstrap";
 import SearchRBT from "./SearchRBT";
 import { useFetchUser } from "../../util/user";
-import useUserData from "../../hooks/useUserData";
+//import useUserData from "../../hooks/useUserData";
 
-const Header = (props) => {
+const NavBar = (props) => {
   const router = useRouter();
   const { user, loading } = useFetchUser();
   //const { user, isLoading: loading } = useUserData();
@@ -15,7 +15,7 @@ const Header = (props) => {
     push({}, "/profile");
   };
   const handleListPet = () => {
-    push({}, "/manage/owner");
+    push({}, "/owner");
   };
   const push = (query, path) => {
     const url = { pathname: path, query };
@@ -95,4 +95,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default NavBar;

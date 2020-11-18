@@ -6,18 +6,24 @@ const createErrorMessage = (error) => {
   if (error.includes("422")) {
     return "Sorry. The requested dates are no longer available.";
   }
-};
-
-const routeToPetDetail = (petId) => {
-  const query = {};
-  const url = { pathname: `/pet/${petId}`, query };
-  const asUrl = { pathname: `/pet/${petId}`, query };
-  router.push(url, asUrl);
+  if (error.includes("500")) {
+    return "Sorry. We encounted a problem trying to book. Please try again later.";
+  }
+  // TODO add more
+  return error;
 };
 
 const bgimage = "/images/sad-dog-error.jpg";
 
 const BookingError = ({ error, petId }) => {
+  const router = useRouter();
+  const routeToPetDetail = (petId) => {
+    const query = {};
+    const url = { pathname: `/pet/${petId}`, query };
+    const asUrl = { pathname: `/pet/${petId}`, query };
+    router.push(url, asUrl);
+  };
+
   console.log(error);
   return (
     <>

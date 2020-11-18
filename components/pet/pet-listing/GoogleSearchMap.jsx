@@ -8,7 +8,7 @@ import {
 
 // this is temporary.  I'll do center by geoLoc
 // consider passing a center to the map
-import useCityData from "./../../../hooks/useCityData";
+import useCityData from "../../../hooks/useCityData";
 
 function GoogleSearchMap(props) {
   const { pets, city, state } = props;

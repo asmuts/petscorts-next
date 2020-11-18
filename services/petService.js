@@ -1,5 +1,5 @@
-import httpAuth from "../services/authHttpService";
-import http from "../services/httpService";
+import httpAuth from "../util/authHttpService";
+import http from "../util/httpService";
 
 export const getPet = async (petId) => {
   //console.log(petId);

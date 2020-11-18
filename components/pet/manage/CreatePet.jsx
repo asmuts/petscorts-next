@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import PetDetailForm from "./PetDetailForm";
-import http from "../../../services/authHttpService";
+import http from "../../../util/authHttpService";
 import { toast } from "react-toastify";
 
 export default function CreatePet({ ownerId }) {

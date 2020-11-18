@@ -1,5 +1,5 @@
 import http from "./httpService";
-import { getAccessToken } from "../util/user";
+import { getAccessToken } from "./user";
 
 // Decorates the http facade adding access tokens
 

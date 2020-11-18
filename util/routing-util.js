@@ -1,6 +1,6 @@
 import "next/router";
 
-export function routeToRenterLogin(router) {
+export function routeToRenterLogin(router, petId, startAt, endAt) {
   const query = { petId, startAt, endAt };
   const url = { pathname: "/api/auth/login-renter-book", query };
   const asUrl = { pathname: "/api/auth/login-renter-book", query };

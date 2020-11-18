@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { reActivatePet } from "../../../hooks/ownerPetService";
+import { reActivatePet } from "../../../services/ownerPetService";
 
 const ReActivatePetButton = ({ petId, informOfChange }) => {
   const handleReActivate = async (petId) => {

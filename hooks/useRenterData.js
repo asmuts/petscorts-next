@@ -1,4 +1,4 @@
-import http from "../services/authHttpService";
+import http from "../util/authHttpService";
 import useSWR, { mutate } from "swr";
 
 export const useRenterForAuth0Sub = (user) => {
@@ -20,9 +20,9 @@ export const useRenterForAuth0Sub = (user) => {
   };
 };
 
-export const mutateRenterForAuth0Sub = (auth0_sub) => {
+export const mutateRenterForAuth0Sub = async (auth0_sub) => {
   console.log("calling mutate");
-  mutate(getRenterDataAuth0SubAPIUrl(auth0_sub));
+  await mutate(getRenterDataAuth0SubAPIUrl(auth0_sub));
 };
 
 function getRenterDataAuth0SubAPIUrl(auth0_sub) {

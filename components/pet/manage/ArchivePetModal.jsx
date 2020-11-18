@@ -2,7 +2,7 @@ import { Modal, Button } from "react-bootstrap";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-import { archivePet } from "../../../hooks/ownerPetService";
+import { archivePet } from "../../../services/ownerPetService";
 
 const ArchivePetModal = ({ pet, informOfChange }) => {
   const [show, setShow] = useState(false);

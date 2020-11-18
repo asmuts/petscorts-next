@@ -3,7 +3,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import ScrollToTop from "react-scroll-to-top";
 
-import Layout from "../../components/shared/Layout.js";
+import Layout from "../../components/shared/Layout";
 import CreatePet from "../../components/pet/manage/CreatePet";
 import EditPet from "../../components/pet/manage/EditPet";
 import { useFetchUser } from "../../util/user";

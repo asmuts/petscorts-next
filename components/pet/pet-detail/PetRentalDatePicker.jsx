@@ -20,7 +20,7 @@ const PetRentalDatePicker = ({ pet }) => {
 
   const {
     dates: bookedDates,
-    loading: isDatesLoading,
+    isLoading: isDatesLoading,
     isError,
   } = usePetBookingDates(pet._id);
 

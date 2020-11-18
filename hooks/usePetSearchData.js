@@ -1,4 +1,4 @@
-import http from "../services/httpService";
+import http from "../util/httpService";
 import useSWR from "swr";
 
 // Consider passing this something other than a query string.

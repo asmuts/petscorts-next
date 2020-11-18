@@ -1,10 +1,13 @@
 import React from "react";
-import http from "../services/httpService";
+import http from "../util/httpService";
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
 let userState;
 
 const User = React.createContext({ user: null, loading: false });
+
+// This came from a next-auth0 sample. I hate it.
+// It does 3 things opaquely.
 
 ////////////////////////////////////////////////////
 // Get an access token to use for API call.
@@ -57,7 +60,9 @@ export const fetchUser = async () => {
     userState = res.status === 200 ? res.data : null;
     //console.log("userState = " + userState);
   } catch (error) {
+    //console.log(error.response.status);
     if (error.response.status === 401) {
+      //console.log("UserState is invalid. 401");
       userState = null;
     }
   }
@@ -80,6 +85,7 @@ export const UserProvider = ({ value, children }) => {
 
 export const useUser = () => React.useContext(User);
 
+/////////////////////////////////////////////////////
 // The HOOK
 export const useFetchUser = () => {
   const [data, setUser] = React.useState({
@@ -95,6 +101,8 @@ export const useFetchUser = () => {
     let isMounted = true;
 
     fetchUser().then((user) => {
+      //console.log("isMounted " + isMounted);
+      console.log("user = " + user);
       // Only set the user if the component is still mounted
       if (isMounted) {
         setUser({ user, loading: false });

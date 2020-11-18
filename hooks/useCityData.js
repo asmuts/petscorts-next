@@ -1,4 +1,4 @@
-import http from "../services/httpService";
+import http from "../util/httpService";
 import useSWR from "swr";
 
 // this is temporary for the search results
