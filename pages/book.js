@@ -196,7 +196,7 @@ const Book = () => {
     if (booking) {
       toast("Booking created!");
       console.log(booking);
-      return routeToProfile(router, petId);
+      return routeToProfile(router, proposedBooking.petId);
     }
     if (err) {
       console.log(err);
@@ -276,7 +276,7 @@ const Book = () => {
                     Reserve now
                   </Button>
                   <Button
-                    onClick={() => routeToPetDetail(router, petId)}
+                    onClick={() => routeToPetDetail(router, proposedBooking.petId)}
                     variant="danger"
                   >
                     Cancel
