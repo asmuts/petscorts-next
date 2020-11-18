@@ -26,13 +26,13 @@ import {
   If users are not logged in are directed.
   After login or signup they are redirected back here.
 
-  Load the user and pet data.
+  Load the user and pet data on th server side.
   Present the details.
-  All the user to edit dates (TODO)
+  Allow? the user to edit dates (TODO)
 
   Present a model to confirm and enter payment info.
   Store the payment info from Stripe and ask for a final confirmation.
-  Create the booking record (TODO).
+  Create the booking record.
 
   Redirect to profile page which should list the bookings.
 */
@@ -206,6 +206,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
                   </Card.Body>
                 </Card>
               </Row>
+
               <Row>
                 <Col sm="6">
                   <Button
@@ -277,9 +278,7 @@ export async function getServerSideProps(context) {
       proposedBooking.days = days;
       proposedBooking.petId = foundPet._id;
       proposedBooking.totalPrice = total;
-      //setProposedBooking(proposedBooking);
       pet = foundPet;
-      //setError(false);
     }
     if (err) {
       handleError(err);

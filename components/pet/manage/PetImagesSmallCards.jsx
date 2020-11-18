@@ -1,6 +1,6 @@
 import { Card, CardDeck, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { deleteImage } from "../../../hooks/petService";
+import { deleteImage } from "../../../services/petService";
 
 function PetImageSmallCards({ pet, markDataStale }) {
   const handleDelete = async (imageId) => {

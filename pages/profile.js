@@ -20,7 +20,7 @@ export default function Profile() {
   }
 
   const handleListPet = () => {
-    push({}, "/manage/owner");
+    push({}, "/owner");
   };
   const push = (query, path) => {
     const url = { pathname: path, query };

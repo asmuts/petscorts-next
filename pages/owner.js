@@ -2,14 +2,14 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import Layout from "../../components/shared/Layout";
-import OwnerPetDeck from "../../components/pet/manage/OwnerPetDeck";
-import OwnerDetail from "../../components/pet/manage/OwnerDetail";
-import AddPetButton from "../../components/pet/manage/AddPetButton";
+import Layout from "../components/shared/Layout";
+import OwnerPetDeck from "../components/pet/manage/OwnerPetDeck";
+import OwnerDetail from "../components/pet/manage/OwnerDetail";
+import AddPetButton from "../components/pet/manage/AddPetButton";
 //import { useFetchUser } from "../../util/user";
-import useUserData from "../../hooks/useUserData";
-import { getOwnerForEmail, createOwner } from "../../services/ownerService";
-import { useOwnerForAuth0Sub } from "../../hooks/useOwnerData";
+import useUserData from "../hooks/useUserData";
+import { getOwnerForEmail, createOwner } from "../services/ownerService";
+import { useOwnerForAuth0Sub } from "../hooks/useOwnerData";
 
 export default function Owner() {
   //const { user, loading } = useFetchUser();

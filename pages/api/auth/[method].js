@@ -92,7 +92,7 @@ export default async function handler(req, res) {
   if (method === "login-owner") {
     console.log("Login-owner called");
     await auth0.handleLogin(req, res, {
-      redirectTo: "/manage/owner",
+      redirectTo: "/owner",
     });
   }
 

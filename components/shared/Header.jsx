@@ -15,7 +15,7 @@ const Header = (props) => {
     push({}, "/profile");
   };
   const handleListPet = () => {
-    push({}, "/manage/owner");
+    push({}, "/owner");
   };
   const push = (query, path) => {
     const url = { pathname: path, query };
