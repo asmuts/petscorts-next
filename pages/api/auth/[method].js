@@ -39,6 +39,15 @@ export default async function handler(req, res) {
       return res.json({ access_token: accessToken });
     } catch (error) {
       console.error("access: " + error);
+      //access: error.code invalid_session
+      //access: error.name AccessTokenError
+      //access: error.message The user does not have a valid session.
+      if (
+        error.name.includes("AccessTokenError") ||
+        error.code.includes("invalid_session")
+      ) {
+        return res.status(401).end(error.toString());
+      }
       return res.status(error.status || 500).end(error.message);
     }
   }

@@ -68,15 +68,18 @@ const NearbyButton = () => {
         className="button_1 rounded-pill"
       >
         {isLocationLoading && (
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
+          <>
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            Retieving location
+          </>
         )}
-        Find nearby
+        {!isLocationLoading && <>Find nearby</>}
       </Button>
     );
   }

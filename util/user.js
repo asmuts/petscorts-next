@@ -31,11 +31,26 @@ export const getAccessToken = async () => {
 };
 ////////////////////////////////////////////////////
 
+// TODO might want to make this configurable.
+// Just trying to force an occasional refresh
+// Otherwise it gloms onto the old value forever
+const lessThanOneHourAgo = (date) => {
+  const HOUR = 1000 * 60 * 60;
+  const anHourAgo = Date.now() - HOUR;
+  return date > anHourAgo;
+};
+
 ////////////////////////////////////////////////////
 // Get the user data from the me API
 export const fetchUser = async () => {
   if (userState !== undefined) {
-    return userState;
+    const stale = lessThanOneHourAgo(new Date(userState.updated_at));
+    if (!stale) {
+      console.log("userState is NOT stale " + +userState.updated_at);
+      return userState;
+    } else {
+      console.log("userState is stale " + +userState.updated_at);
+    }
   }
   try {
     let res = await http.get("/api/auth/me");

@@ -7,8 +7,10 @@ import Layout from "../../components/shared/Layout.js";
 import CreatePet from "../../components/pet/manage/CreatePet";
 import EditPet from "../../components/pet/manage/EditPet";
 import { useFetchUser } from "../../util/user";
+//import useUserData from "../hooks/useUserData";
 
 function ManagePet() {
+  //const { user, isLoading: loading } = useUserData();
   const { user, loading } = useFetchUser();
   const router = useRouter();
 
@@ -28,7 +30,7 @@ function ManagePet() {
       <section id="petDetail">
         <Container fluid className="main-container">
           {ownerId && <CreatePet ownerId={ownerId}></CreatePet>}
-          {petId && <EditPet petId={petId} user={user}></EditPet>}
+          {petId && <EditPet petId={petId}></EditPet>}
         </Container>
       </section>
       <ScrollToTop smooth />

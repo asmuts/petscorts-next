@@ -1,6 +1,8 @@
 import http from "./httpService";
 import { getAccessToken } from "../util/user";
 
+// Decorates the http facade adding access tokens
+
 // I'll likely need to make the scope configurable later
 async function addAccessTokenToConfig(config) {
   // NOTE: temp disabling the scoeps until I can get it to work properly
