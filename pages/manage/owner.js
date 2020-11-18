@@ -8,7 +8,7 @@ import OwnerDetail from "../../components/pet/manage/OwnerDetail";
 import AddPetButton from "../../components/pet/manage/AddPetButton";
 //import { useFetchUser } from "../../util/user";
 import useUserData from "../../hooks/useUserData";
-import { getOwnerForEmail, createOwner } from "../../hooks/ownerService";
+import { getOwnerForEmail, createOwner } from "../../services/ownerService";
 import { useOwnerForAuth0Sub } from "../../hooks/useOwnerData";
 
 export default function Owner() {
