@@ -29,7 +29,7 @@ const OwnerPetDeck = () => {
 
   if (isError) {
     // TODO make an error page
-    return <h1>Could load your pets at this time.</h1>;
+    return <h1>Couldn't load your pets at this time.</h1>;
   }
 
   if ((!isLoading && owner.pets === null) || !owner.pets.length > 0) {
@@ -38,7 +38,7 @@ const OwnerPetDeck = () => {
 
   const renderCard = (pet, index) => {
     return (
-      <div className="col-md-4 col-xs-6">
+      <div className="col-md-4 col-xs-6" key={pet._id}>
         <OwnerPetCard
           pet={pet}
           markStale={markStale}

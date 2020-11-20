@@ -3,7 +3,7 @@ import { getBookingsForRenter } from "../services/bookingService";
 import { fetch } from "./util/service-fetcher";
 
 // uses the service-fetcher (fetch) to use the sercice to call the API
-export const useRenterBookingDates = (renterId) => {
+export const useRenterBookingData = (renterId) => {
   const options = { revalidateOnFocus: false, revalidateOnReconnect: false };
 
   const { data, mutate, error } = useSWR(

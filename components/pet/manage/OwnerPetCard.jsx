@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { Card, Button } from "react-bootstrap";
 import ArchivePetModal from "./ArchivePetModal";
 import ReactivatePetButton from "./ReActivatePetButton";
+import { renderPetCardImage } from "../../pet/PetCardImage";
 
 // Card to display a pet on the owner manage page
 // TODO refactor to a common pet card.
@@ -20,21 +21,6 @@ const OwnerPetCard = ({ pet, markStale }) => {
     router.push(url, asUrl);
   };
 
-  // TODO make this common under pet, it's re-used elsewhere
-  function renderImage(pet) {
-    if (!pet.images || !pet.images[0]) {
-      const src = `/images/${pet.species.toLowerCase()}-clipart.png`;
-      return <Card.Img className="card-img-top" src={src}></Card.Img>;
-    }
-    return (
-      <Card.Img
-        className="card-img-top"
-        src={pet.images[0].url}
-        alt={pet.name}
-      ></Card.Img>
-    );
-  }
-
   return (
     <Card key={pet._id}>
       <a
@@ -44,7 +30,7 @@ const OwnerPetCard = ({ pet, markStale }) => {
       >
         {" "}
         <Card.Header className="card-title">{pet.name}</Card.Header>
-        {renderImage(pet)}
+        {renderPetCardImage(pet)}
         <Card.Body>
           <Card.Text className="card-text">{pet.description}</Card.Text>
           <Card.Text>Species: {pet.species}</Card.Text>

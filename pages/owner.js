@@ -9,7 +9,11 @@ import AddPetButton from "../components/pet/manage/AddPetButton";
 //import { useFetchUser } from "../../util/user";
 import useUserData from "../hooks/useUserData";
 import { getOwnerForEmail, createOwner } from "../services/ownerService";
-import { useOwnerForAuth0Sub } from "../hooks/useOwnerData";
+import OwnerBookings from "../components/owner/OwnerBookings";
+import {
+  useOwnerForAuth0Sub,
+  mutateOwnerForAuth0Sub,
+} from "../hooks/useOwnerData";
 
 export default function Owner() {
   //const { user, loading } = useFetchUser();
@@ -35,6 +39,7 @@ export default function Owner() {
             console.log("Creationg new owner");
             let { owner: isNewOwner, err: errCreate } = await createOwner(user);
             setIsNewOwner(true);
+            mutateOwnerForAuth0Sub(user.sub);
             mutate();
           } else {
             console.log("Found user for email.");
@@ -92,6 +97,15 @@ export default function Owner() {
               <p hidden>{JSON.stringify(user)}</p>
             </Col>
           </Row>
+          <hr />
+
+          {owner && (
+            <Row>
+              <Col>
+                <OwnerBookings ownerId={owner._id}></OwnerBookings>
+              </Col>
+            </Row>
+          )}
         </Container>
       </section>
     </Layout>

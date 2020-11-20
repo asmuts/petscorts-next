@@ -1,36 +1,52 @@
 import React, { useState } from "react";
-import { formatDate } from "../../util/date-util";
-import { Form, CardDeck, Card } from "react-bootstrap";
-import { useRenterBookingDates } from "../../hooks/useRenterBookingData";
 import Link from "next/link";
 
+import { formatDate } from "../../util/date-util";
+import { Row, Col, Form, CardDeck, Card } from "react-bootstrap";
+import { useRenterBookingData } from "../../hooks/useRenterBookingData";
+import { renderPetCardImage } from "../pet/PetCardImage";
+
 const RenterBookings = ({ renterId }) => {
-  const { bookings, isLoading, isError } = useRenterBookingDates(renterId);
+  const { bookings, isLoading, isError } = useRenterBookingData(renterId);
   let [showOld, setShowOld] = useState(false);
 
   const isOldBooking = (booking) => {
-    // TODO implement
     // see if it ends before today
     const endDate = new Date(booking.endAt);
     const today = new Date();
     return endDate < today;
   };
 
+  const areThereOldBookings = (bookings) => {
+    return bookings.some((booking) => {
+      isOldBooking(booking);
+    });
+  };
+
   const renderCard = (booking) => {
     return (
-      <div className="col-md-4 col-xs-6">
-        <Link className="pet-detail-link" href={`/pet/${booking.pet._id}`}>
-          <Card>
-            <Card.Header className="card-title">
-              Pet: {booking.pet.name}
-            </Card.Header>
-            <Card.Text>
-              {formatDate(booking.startAt)} to {formatDate(booking.endAt)}
-            </Card.Text>
-            <Card.Text>Status: {booking.status}</Card.Text>
+      <Col className="col-md-4 col-xs-6">
+        <Link
+          className="pet-detail-link"
+          href={`/pet/${booking.pet._id}`}
+          key={booking.pet._id}
+        >
+          <Card className="pet-card">
+            <div className="card-block">
+              <Card.Header className="card-title">
+                Pet: {booking.pet.name}
+              </Card.Header>
+              {renderPetCardImage(booking.pet)}
+              <Card.Text className="card-text">
+                {formatDate(booking.startAt)} to {formatDate(booking.endAt)}
+              </Card.Text>
+              <Card.Text className="card-text">
+                Status: {booking.status}
+              </Card.Text>
+            </div>
           </Card>
         </Link>
-      </div>
+      </Col>
     );
   };
 
@@ -45,21 +61,29 @@ const RenterBookings = ({ renterId }) => {
       )}
       {bookings && (
         <>
-          <p className="page-title">Your bookings.</p>
-          <Form.Check
-            label="Show Old"
-            value={showOld}
-            onClick={() => setShowOld(!showOld)}
-          />
-          <CardDeck>
-            {bookings.map((booking) => {
-              if (!showOld && isOldBooking(booking)) {
-                return;
-              } else {
-                return renderCard(booking);
-              }
-            })}
-          </CardDeck>
+          <Row>
+            <p className="page-title">Your bookings.</p>
+            {areThereOldBookings(bookings) && (
+              <Form.Check
+                label="Show Old"
+                value={showOld}
+                onClick={() => setShowOld(!showOld)}
+              />
+            )}
+          </Row>
+          <Row>
+            <section id="petBookings">
+              <CardDeck>
+                {bookings.map((booking) => {
+                  if (!showOld && isOldBooking(booking)) {
+                    return;
+                  } else {
+                    return renderCard(booking);
+                  }
+                })}
+              </CardDeck>
+            </section>
+          </Row>
         </>
       )}
     </>
