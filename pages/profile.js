@@ -18,6 +18,9 @@ export default function Profile() {
   const { user, loading: isUserLoading } = useFetchUser();
   //const { user, isLoading: isUserLoading } = useUserData();
 
+  // TODO SWR will keep retrying on failue.
+  // Ether configure it differently or just use a service for the data
+  // and do the lookups in useEffect
   const {
     owner,
     isLoading: isOwnerLoading,
@@ -25,7 +28,7 @@ export default function Profile() {
   } = useOwnerForAuth0Sub(user);
 
   if (isOwnerError) {
-    handleError(isOwnerError);
+    handleError(isOwnerError.message);
   }
 
   const {
@@ -33,6 +36,10 @@ export default function Profile() {
     isLoading: isRenterLoading,
     isError: isErrorRenter,
   } = useRenterForAuth0Sub(user);
+
+  if (isOwnerError) {
+    handleError(isOwnerError.message);
+  }
 
   /////////////////////////////
 
@@ -47,6 +54,11 @@ export default function Profile() {
 
   function handleError(err) {
     console.log("Profile. handleError: " + err);
+    console.log(err);
+    if (err.includes("404")) {
+      // ignore, the user hasn't booked or listed any pets
+      return;
+    }
     if (err.includes("AccessTokenError") || err.includes("401")) {
       setMustReAuthenticate(true);
     }
@@ -67,6 +79,7 @@ export default function Profile() {
     return "";
   }
 
+  // The user might not have a renter record or an owner record
   if (isUserLoading || isRenterLoading || isOwnerLoading) {
     return (
       <Layout>
@@ -82,19 +95,43 @@ export default function Profile() {
 
   return (
     <Layout>
-      <section id="userDetail">
+      <section id="profilePage">
         <Container fluid className="main-container">
           <Row>
             <p className="page-title">Welcome {user.name}</p>
           </Row>
           <UserDetails user={user}></UserDetails>
 
+          <hr className="mb-2" />
+
           {/* UPCOMING BOOKINGS click to show older bookings. */}
-          <RenterBookings renterId={renter._id}></RenterBookings>
-          <p />
-          <a onClick={handleListPet} href="#">
-            Manage Your Pets
-          </a>
+          {renter && (
+            <>
+              <RenterBookings renterId={renter._id}></RenterBookings>
+            </>
+          )}
+          {!renter && (
+            <p className="page-title">You haven't booked any pets.</p>
+          )}
+
+          <hr className="mb-2" />
+          <Row>
+            {!owner && (
+              <>
+                <p className="page-title">
+                  You haven't listed any pets for rent.
+                </p>
+                <a onClick={handleListPet} href="#">
+                  List Your Pets
+                </a>
+              </>
+            )}
+            {owner && (
+              <a onClick={handleListPet} href="#">
+                Manage Your Pets
+              </a>
+            )}
+          </Row>
         </Container>
       </section>
     </Layout>

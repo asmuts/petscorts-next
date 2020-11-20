@@ -22,6 +22,7 @@ import {
   useRenterForAuth0Sub,
   mutateRenterForAuth0Sub,
 } from "../hooks/useRenterData";
+
 /*
   If users are not logged in are directed.
   After login or signup they are redirected back here.
@@ -55,15 +56,18 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
   // TODO if there is an error this might loop
   const createRenterIfNeeded = async () => {
     if (user) {
-      if (!renter && !isRenterLoading && !isErrorRenter) {
+      if (!renter && !isRenterLoading) {
         let { renter: foundRenter, err: errRenter } = await getRenterForEmail(
           user.email
         );
         if (errRenter) {
-          return handleError(errRenter);
+          if (!errRenter.includes("404")) {
+            return handleError(errRenter);
+          }
         }
         if (!foundRenter) {
           await createRenterForUser();
+          await mutateRenterForAuth0Sub(user.sub);
         } else {
           const message =
             "It looks like you logged in using a different service before. Please log out and sign back in.";
@@ -92,7 +96,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
       await createRenterIfNeeded();
     }
     fetchData();
-  });
+  }, [user]);
 
   ////////////////////////////////////////////////
 

@@ -68,6 +68,14 @@ export const createBooking = async (booking) => {
   }
 };
 
+export const approveBooking = async (booking) => {
+  return { err: "Not implemented" };
+};
+
+export const rejectBooking = async (booking) => {
+  return { err: "Not implemented" };
+};
+
 const validateBooking = function (booking) {
   const schema = Joi.object({
     startAt: Joi.string().optional().min(8).max(10),

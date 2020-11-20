@@ -3,10 +3,10 @@ import { Card, Col, Image, Container, Row } from "react-bootstrap";
 const UserDetails = ({ user }) => {
   return (
     <Row>
-      <Col md="3">
+      <Col md="4">
         <Image fluid src={user.picture} alt={user.name}></Image>
       </Col>
-      <Col md="6">
+      <Col md="8">
         <Card className="text-center">
           <Card.Header>{user.name}</Card.Header>
           <Card.Body>

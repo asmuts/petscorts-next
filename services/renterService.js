@@ -40,11 +40,11 @@ async function callAPIGetRenterForEmail(email) {
       return { renter: foundRenter };
     }
     // won't happen axios throws
-    if (res.status === 404) {
-      //console.log("RenterService. Got a 404 from get renter for email");
-      return { err: "No renter found for email" };
-    }
-    throw new Error("Error"); // TODO
+    // if (res.status === 404) {
+    //   //console.log("RenterService. Got a 404 from get renter for email");
+    //   return { err: "No renter found for email. 404." };
+    // }
+    //throw new Error("Error"); // TODO
   } catch (e) {
     console.log(`RenterService. Error calling ${URL}`);
     return { err: e.message };
