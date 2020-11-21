@@ -3,6 +3,8 @@ import Layout from "../components/shared/Layout";
 import React, { useState, useEffect } from "react";
 import { useFetchUser } from "../util/user";
 import { Card, Col, Image, Container, Row } from "react-bootstrap";
+import ScrollToTop from "react-scroll-to-top";
+
 //import useUserData from "../hooks/useUserData";
 import { useOwnerForAuth0Sub } from "../hooks/useOwnerData";
 import { useRenterForAuth0Sub } from "../hooks/useRenterData";
@@ -134,6 +136,7 @@ export default function Profile() {
           </Row>
         </Container>
       </section>
+      <ScrollToTop smooth />
     </Layout>
   );
 }

@@ -6,7 +6,7 @@ import useUserData from "../../../hooks/useUserData";
 import { useOwnerForAuth0Sub } from "../../../hooks/useOwnerData";
 
 // Shows the owners pets. By default, archived pets are hidden from view.
-const OwnerPetDeck = () => {
+const OwnerPetDeck = ({ handleError }) => {
   let [showArchived, setShowArchived] = useState(false);
 
   // Don't even to get any props. SWR will dedupe the calls
@@ -29,7 +29,9 @@ const OwnerPetDeck = () => {
 
   if (isError) {
     // TODO make an error page
-    return <h1>Couldn't load your pets at this time.</h1>;
+    handleError(isError);
+    return "";
+    //return <h1>Couldn't load your pets at this time.</h1>;
   }
 
   if ((!isLoading && owner.pets === null) || !owner.pets.length > 0) {
@@ -50,7 +52,7 @@ const OwnerPetDeck = () => {
 
   return (
     <>
-      <p className="page-title">Your pets.</p>
+      <p className="page-title">Your pets</p>
       <Form.Check
         label="Show Archived"
         value={showArchived}

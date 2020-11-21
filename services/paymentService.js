@@ -11,7 +11,7 @@ export const confirmPayment = async (paymentId) => {
   try {
     const res = await httpAuth.post(url, values);
     if (res.status === 200) {
-      payment = res.data.data;
+      const payment = res.data.data;
       console.log("Confirmed payment.");
       return { payment };
     }
@@ -32,7 +32,7 @@ export const rejectPayment = async (paymentId) => {
   try {
     const res = await httpAuth.delete(url, values);
     if (res.status === 200) {
-      payment = res.data.data;
+      const payment = res.data.data;
       console.log("Rejected payment.");
       return { payment };
     }

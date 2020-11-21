@@ -4,8 +4,10 @@ import { Row, Col, Form, CardDeck, Card, Button } from "react-bootstrap";
 
 import { formatDate } from "../../util/date-util";
 import { confirmPayment, rejectPayment } from "../../services/paymentService";
-import { useOwnerBookingData } from "../../hooks/useOwnerBookingData";
-//import { renderPetCardImage } from "../pet/PetCardImage";
+import {
+  useOwnerBookingData,
+  mutateOwnerBookingData,
+} from "../../hooks/useOwnerBookingData";
 import OwnerReviewBookingModal from "./OwnerReviewBookingModal";
 
 /*
@@ -21,9 +23,10 @@ import OwnerReviewBookingModal from "./OwnerReviewBookingModal";
   I should eventually make a dashboard as an exercise.
 */
 
-const OwnerBookings = ({ ownerId }) => {
+const OwnerBookings = ({ ownerId, handleError }) => {
   const { bookings, isLoading, isError } = useOwnerBookingData(ownerId);
   let [showOld, setShowOld] = useState(false);
+  let [selectedBooking, setSelectedBooking] = useState();
   let [modalOpen, setModalOpen] = useState(false);
 
   const isOldBooking = (booking) => {
@@ -34,15 +37,17 @@ const OwnerBookings = ({ ownerId }) => {
   };
 
   const areThereOldBookings = (bookings) => {
-    return bookings.some((booking) => {
-      isOldBooking(booking);
+    if (!bookings || bookings.length === 0) return false;
+    return bookings.some((b) => {
+      isOldBooking(b);
     });
   };
 
   ///////////////////////////////////////////////////////////////////////
   // MODAL
-  const reviewBooking = () => {
+  const reviewBooking = (booking) => {
     console.log("Opening modal");
+    setSelectedBooking(booking);
     setModalOpen(true);
   };
 
@@ -54,21 +59,25 @@ const OwnerBookings = ({ ownerId }) => {
 
   // called if the modal is confirmed
   const approvePendingBooking = async (booking) => {
-    toast("Booking approval is not yet implemented.  Almost there . . .");
-    console.log("approvePendingBooking" + booking);
-    console.log(booking);
+    console.log("Called approvePendingBooking");
+    //console.log(booking);
     setModalOpen(false);
 
     // THIS SHOULD CALL THE PAYMENT SERVICE
-    await confirmPayment(booking.payment._id);
+    const { payment, err } = await confirmPayment(booking.payment._id);
+    if (err) return handleError(err);
+    mutateOwnerBookingData(booking.owner);
+    toast("Booking approved!");
   };
 
   // called if the modal is rejected
   const rejectPendingBooking = async (booking) => {
-    toast("Booking rejection is not yet implemented.  Almost there . . .");
     console.log("rejectPendingBooking" + booking);
     setModalOpen(false);
-    await rejectPayment(booking.payment._id);
+    const { payment, err } = await rejectPayment(booking.payment._id);
+    if (err) return handleError(err);
+    mutateOwnerBookingData(booking.owner);
+    toast("Booking rejected.");
   };
 
   //////////////////////////////////////////////////////////////////////
@@ -76,7 +85,7 @@ const OwnerBookings = ({ ownerId }) => {
   const renderCard = (booking) => {
     return (
       <Col className="col-md-4 col-xs-6" key={booking._id}>
-        <Card className="pet-card">
+        <Card className="booking-card">
           <div className="card-block">
             <Card.Header className="card-title">
               Pet: {booking.pet.name}
@@ -89,25 +98,22 @@ const OwnerBookings = ({ ownerId }) => {
               Total: ${booking.totalPrice}
             </Card.Text>
             <Card.Text className="card-text">
-              Status: {booking.status}
+              Payment: {booking.payment.status}
+            </Card.Text>
+            <Card.Text className="card-text">
+              Booking: {booking.status}
             </Card.Text>
             <Card.Footer>
-              <Button
-                variant="outline-primary"
-                size="sm"
-                onClick={() => reviewBooking(booking)}
-              >
-                Review
-              </Button>
+              {booking.payment.status === "PENDING" && (
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={() => reviewBooking(booking)}
+                >
+                  Review
+                </Button>
+              )}
             </Card.Footer>
-
-            <OwnerReviewBookingModal
-              open={modalOpen}
-              closeModal={cancelConfirmation}
-              confirmModal={approvePendingBooking}
-              booking={booking}
-              rejectModal={rejectPendingBooking}
-            />
           </div>
         </Card>
       </Col>
@@ -125,29 +131,33 @@ const OwnerBookings = ({ ownerId }) => {
       )}
       {bookings && (
         <>
-          <Row>
-            <p className="page-title">Your bookings.</p>
-            {areThereOldBookings(bookings) && (
-              <Form.Check
-                label="Show Old"
-                value={showOld}
-                onClick={() => setShowOld(!showOld)}
-              />
-            )}
-          </Row>
-          <Row>
-            <section id="petBookings">
-              <CardDeck>
-                {bookings.map((booking) => {
-                  if (!showOld && isOldBooking(booking)) {
-                    return;
-                  } else {
-                    return renderCard(booking);
-                  }
-                })}
-              </CardDeck>
-            </section>
-          </Row>
+          <p className="page-title">Manage bookings</p>
+          {areThereOldBookings(bookings) && (
+            <Form.Check
+              label="Show Old"
+              value={showOld}
+              onClick={() => setShowOld(!showOld)}
+            />
+          )}
+
+          <section id="petBookings">
+            <CardDeck>
+              {bookings.map((b) => {
+                if (!showOld && isOldBooking(b)) {
+                  return;
+                } else {
+                  return renderCard(b);
+                }
+              })}
+            </CardDeck>
+            <OwnerReviewBookingModal
+              open={modalOpen}
+              closeModal={cancelConfirmation}
+              confirmModal={approvePendingBooking}
+              booking={selectedBooking}
+              rejectModal={rejectPendingBooking}
+            />
+          </section>
         </>
       )}
     </>

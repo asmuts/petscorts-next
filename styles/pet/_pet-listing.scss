@@ -1,13 +1,4 @@
-/* SINGLE CARD STYLES*/
 #petSearchResults {
-  // .main-container {
-  //   position: relative;
-  //   margin-top: 60px;
-  //   margin-left: 0px;
-  //   width: 100%;
-  //   background-color: white;
-  // }
-
   #petListing {
     .title {
       font-size: 30px;
@@ -15,14 +6,6 @@
       margin-bottom: 20px;
       color: $main-text-gray-color;
     }
-
-    // .petSearchResults {
-    //   position: relative;
-    //   margin-top: 60px;
-    //   margin-left: 30px;
-    //   width: 100%;
-    //   background-color: white;
-    // }
 
     .pet-detail-link {
       &:hover {
@@ -43,20 +26,17 @@
           text-transform: uppercase;
           //color: #16861a;
         }
-
         .card-title {
           font-size: 19px;
           margin: 3px 0;
           color: $main-text-gray-color;
         }
-
         .card-text {
           font-size: 14px;
           font-weight: 300;
           color: #7e7e7e;
           margin-bottom: 0;
         }
-
         .card-img-top {
           height: 300px;
           background: black;

@@ -12,9 +12,9 @@ export const useRenterBookingData = (renterId) => {
     {},
     options
   );
-  console.log(data);
+  //console.log(data);
   return {
-    bookings: data ? data.bookings : {},
+    bookings: data ? data.bookings : [],
     mutate,
     isLoading: !error && !data,
     isError: error,
