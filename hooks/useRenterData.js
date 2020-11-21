@@ -31,7 +31,7 @@ export const useRenterForAuth0Sub = (user) => {
 };
 
 export const mutateRenterForAuth0Sub = async (auth0_sub) => {
-  console.log("calling mutate");
+  //console.log("calling mutate");
   await mutate(getRenterDataAuth0SubAPIUrl(auth0_sub));
 };
 

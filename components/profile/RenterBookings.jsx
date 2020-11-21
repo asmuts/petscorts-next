@@ -18,6 +18,7 @@ const RenterBookings = ({ renterId }) => {
   };
 
   const areThereOldBookings = (bookings) => {
+    if (!bookings) return false;
     return bookings.some((booking) => {
       isOldBooking(booking);
     });
@@ -34,7 +35,7 @@ const RenterBookings = ({ renterId }) => {
           <Card className="pet-card">
             <div className="card-block">
               <Card.Header className="card-title">
-                Pet: {booking.pet.name}
+                {booking.pet.name}
               </Card.Header>
               {renderPetCardImage(booking.pet)}
               <Card.Text className="card-text">

@@ -1,5 +1,6 @@
 import { Card, Col, Image, Row } from "react-bootstrap";
 
+// TODO use common UserDetail
 const OwnerDetail = ({ user }) => {
   return (
     <Row>

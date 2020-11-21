@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import ScrollToTop from "react-scroll-to-top";
+import { toast } from "react-toastify";
 
 import Layout from "../components/shared/Layout";
 import OwnerPetDeck from "../components/pet/manage/OwnerPetDeck";
@@ -17,7 +19,11 @@ import {
 
 export default function Owner() {
   //const { user, loading } = useFetchUser();
-  const { user, isLoading: isUserLoading } = useUserData();
+  const {
+    user,
+    isLoading: isUserLoading,
+    isError: isUserError,
+  } = useUserData();
   const {
     owner,
     mutate,
@@ -26,6 +32,8 @@ export default function Owner() {
   } = useOwnerForAuth0Sub(user);
 
   let [isNewOwner, setIsNewOwner] = useState(false);
+  let [mustReAuthenticate, setMustReAuthenticate] = useState(false);
+  let [error, setError] = useState();
 
   // Create a new owner if we don't have one for the auth0 sub.
   useEffect(() => {
@@ -54,20 +62,37 @@ export default function Owner() {
 
   const router = useRouter();
 
+  function handleError(err) {
+    console.log("Profile. handleError: " + err);
+    console.log(err);
+    if ((err + "").includes("404")) {
+      // ignore, the user hasn't booked or listed any pets
+      return;
+    }
+    if ((err + "").includes("AccessTokenError") || (err + "").includes("401")) {
+      // TODOimplement
+      setMustReAuthenticate(true);
+    }
+    setError(err);
+    toast(err);
+  }
+
   /////////////////////////////////////////////////////////////////////
+  if ((!user && !isUserLoading) || isUserError || mustReAuthenticate) {
+    router.replace("/api/auth/login");
+    // return something, else a nothing returned from render error will splash
+    return "";
+  }
+
   if (isUserLoading || isOwnerLoading) {
     return (
       <Layout>
-        <p>Loading...</p>
+        <p>Loading your data...</p>
       </Layout>
     );
   }
 
-  // Not authorized. TODO message user
-  if (!user && !isUserLoading) {
-    return router.replace("/api/auth/login");
-  }
-
+  ////////////////////////
   return (
     <Layout>
       <section id="ownerDetail">
@@ -91,23 +116,32 @@ export default function Owner() {
               <hr />
             </>
           )}
-          <Row>
-            <Col>
-              <OwnerPetDeck></OwnerPetDeck>
-              <p hidden>{JSON.stringify(user)}</p>
-            </Col>
-          </Row>
+          <section id="ownerPets">
+            <Row>
+              <Col>
+                <OwnerPetDeck handleError={handleError}></OwnerPetDeck>
+                <p hidden>{JSON.stringify(user)}</p>
+              </Col>
+            </Row>
+          </section>
           <hr />
 
           {owner && (
-            <Row>
-              <Col>
-                <OwnerBookings ownerId={owner._id}></OwnerBookings>
-              </Col>
-            </Row>
+            <section id="ownerBookings">
+              {" "}
+              <Row>
+                <Col>
+                  <OwnerBookings
+                    ownerId={owner._id}
+                    handleError={handleError}
+                  ></OwnerBookings>
+                </Col>
+              </Row>
+            </section>
           )}
         </Container>
       </section>
+      <ScrollToTop smooth />
     </Layout>
   );
 }
