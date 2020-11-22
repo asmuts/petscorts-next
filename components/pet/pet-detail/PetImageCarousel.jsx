@@ -18,24 +18,27 @@ export default function PetImageCarousel(props) {
   }
 
   return (
-    <Carousel activeIndex={index} onSelect={handleSelect}>
-      {/* {
+    <>
+      {
         <style>
           {`.custom-tag {
-                    max-height: 500px;
-                    background: black;
+                    height: 400px;
+                    //background: black;
+                    object-fit: contain;
                     }`}
         </style>
-      } */}
-      {pet.images.map((image) => (
-        <Carousel.Item key={image.url}>
-          <img
-            className="bg-white w-100 d-block custom-tag"
-            src={image.url}
-            alt={pet.name}
-          />
-        </Carousel.Item>
-      ))}
-    </Carousel>
+      }
+      <Carousel activeIndex={index} onSelect={handleSelect}>
+        {pet.images.map((image) => (
+          <Carousel.Item key={image.url}>
+            <img
+              className="bg-white w-100 d-block custom-tag"
+              src={image.url}
+              alt={pet.name}
+            />
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </>
   );
 }
