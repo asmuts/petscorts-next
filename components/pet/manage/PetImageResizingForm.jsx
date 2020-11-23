@@ -2,8 +2,9 @@ import React, { useRef, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 // TODO convert everything to R-B
-import { Form, Button, Col, Row, Toast, Container } from "react-bootstrap";
-import http from "../../../util/authHttpService";
+import { Container } from "react-bootstrap";
+import { uploadImage } from "../../../services/imageUploadService";
+import PetImageBaseForm from "./PetImageBaseForm";
 
 // I want to be able to add multipe images
 // each should be displayed
@@ -11,22 +12,24 @@ import http from "../../../util/authHttpService";
 // later, add the ability to hide images
 // and to make one primary for the search results card
 // phase 1: just add and display.
-export default function PetImageResizingForm({ pet, markDataStale }) {
+export default function PetImageResizingForm({
+  pet,
+  markDataStale,
+  handleError,
+}) {
   const [image, setImage] = useState("");
-  //const [message, setMessage] = useState("");
   const [result, setResult] = useState("");
-  //const [showToast, setShowToast] = useState(false);
 
   // TODO make configurable
   var MAX_WIDTH = 800;
   var MAX_HEIGHT = 600;
 
-  const canvasRef = useRef(null);
+  const previewCanvasRef = useRef(null);
   let canvas;
 
   useEffect(() => {
     if (canvas) return;
-    canvas = canvasRef.current;
+    canvas = previewCanvasRef.current;
   });
 
   const clearImage = () => {
@@ -131,26 +134,10 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
     return name;
   };
 
-  // Multer s3 can't handle the dataUrl.  I need a form
-  const makeFormToSubmit = async () => {
-    var canvasBlob = await getCanvasBlob(canvas);
-    let imageFile = new File([canvasBlob], getImageName(), {
-      type: image.type,
-    });
-    console.log("imageFile size " + imageFile.size);
-
-    // make a new form to submit
-    const formData = new FormData();
-    formData.append("image", imageFile);
-    formData.append("petId", pet._id);
-    return formData;
-  };
-
   const doPostSubmitCleanup = () => {
     markDataStale();
     clearImage();
     setImage("");
-    //setMessage(`Image (${image.name}) added.`);
     toast(`Image (${image.name}) added.`);
   };
 
@@ -158,30 +145,26 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
   const submitForm = async (form) => {
     form.preventDefault();
     // that's all we want from the html form
+    var canvasBlob = await getCanvasBlob(canvas);
 
-    const formData = await makeFormToSubmit();
-
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-        enctype: "multipart/form-data",
-      },
-    };
-
-    const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-    const apiURL = `${baseURL}/api/v1/upload`;
-    try {
-      const res = await http.post(apiURL, formData, config);
-      if (res.status === 200) {
-        let imageUrl = res.data;
-        console.log(`Added image ${imageUrl} for pet. ${pet._id}`);
-        doPostSubmitCleanup();
-      }
-    } catch (e) {
-      console.log(e, `Error calling ${apiURL}`);
-      toast("Trouble saving image. Please try again.");
-      setShowToast(true);
+    const { imageUrl, err } = await uploadImage(
+      canvasBlob,
+      getImageName(),
+      pet._id
+    );
+    if (imageUrl) {
+      doPostSubmitCleanup();
     }
+    if (err) {
+      //toast("Trouble saving image. Please try again.");
+      handleError(err);
+      //setShowToast(true);
+    }
+  };
+
+  const onSelectFile = (e) => {
+    setImage(e.target.files[0]);
+    preview(e);
   };
 
   ///////////////////////////////////////////////////////////////////////
@@ -189,49 +172,17 @@ export default function PetImageResizingForm({ pet, markDataStale }) {
     <div className="App">
       <p className="page-title">Add an image</p>
 
-      <div className="row">
-        <div className="col-md-12 col-xs-6">
-          <Form onSubmit={(form) => submitForm(form)}>
-            <Form.Row>
-              <Form.Group as={Col} md="9">
-                <Form.File custom>
-                  <Form.File.Input
-                    key={image}
-                    className="rounded-pill"
-                    isValid
-                    accept="image/*"
-                    onChange={(e) => {
-                      setImage(e.target.files[0]);
-                      preview(e);
-                    }}
-                  />
-                  <Form.File.Label data-browse="Find">
-                    {image ? image.name : "Select an image to upload"}
-                  </Form.File.Label>
-                </Form.File>
-              </Form.Group>
-              <Form.Group as={Col} md="3">
-                {result && (
-                  <Button
-                    className="rounded"
-                    type="submit"
-                    variant="primary"
-                    size="sm"
-                    onClick={() => {}}
-                  >
-                    Sumbit
-                  </Button>
-                )}
-              </Form.Group>
-            </Form.Row>
-          </Form>
-        </div>
-      </div>
+      <PetImageBaseForm
+        image={image}
+        result={result}
+        onSelectFile={onSelectFile}
+        submitForm={submitForm}
+      ></PetImageBaseForm>
 
       <div className="row">
         <div className="col-md-6 col-xs-6">
           <Container className="mx-auto">
-            <canvas ref={canvasRef} height="400"></canvas>
+            <canvas ref={previewCanvasRef} height="400"></canvas>
           </Container>
         </div>
       </div>

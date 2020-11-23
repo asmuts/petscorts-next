@@ -9,6 +9,7 @@ export default function CreatePet({ ownerId }) {
 
   let [initialValues, setInitialValues] = useState({
     ownerId: ownerId,
+    species: "dog",
   });
 
   const router = useRouter();

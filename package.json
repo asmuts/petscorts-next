@@ -35,6 +35,7 @@
     "react-daterange-picker": "^2.0.1",
     "react-dom": "^16.14.0",
     "react-google-maps": "^9.4.5",
+    "react-image-crop": "^8.6.6",
     "react-leaflet": "^3.0.0-rc.0",
     "react-scroll-to-top": "^1.0.5",
     "react-toastify": "^6.1.0",

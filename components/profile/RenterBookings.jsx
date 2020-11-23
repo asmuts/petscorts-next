@@ -26,12 +26,11 @@ const RenterBookings = ({ renterId }) => {
 
   const renderCard = (booking) => {
     return (
-      <Col className="col-md-4 col-xs-6">
-        <Link
-          className="pet-detail-link"
-          href={`/pet/${booking.pet._id}`}
-          key={booking.pet._id}
-        >
+      <Col
+        className="col-md-4 col-xs-6"
+        key={booking.pet._id + "" + booking.startAt}
+      >
+        <Link className="pet-detail-link" href={`/pet/${booking.pet._id}`}>
           <Card className="pet-card">
             <div className="card-block">
               <Card.Header className="card-title">

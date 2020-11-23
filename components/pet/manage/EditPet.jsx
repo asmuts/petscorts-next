@@ -6,7 +6,8 @@ import { Spinner, Row, Col } from "react-bootstrap";
 import PetImageSmallCards from "./PetImagesSmallCards";
 import PetDetailForm from "./PetDetailForm";
 import PetDetailCard from "./PetDetailCard";
-import PetImageResizingForm from "./PetImageResizingForm";
+//import PetImageResizingForm from "./PetImageResizingForm";
+import PetImageCropForm from "./PetImageCropForm";
 import { getPet, updatePet } from "../../../services/petService";
 import useUserData from "../../../hooks/useUserData";
 import { useOwnerForAuth0Sub } from "../../../hooks/useOwnerData";
@@ -20,7 +21,7 @@ const MapWithNoSSR = dynamic(() => import("../map/LeafletSingleCircleMap"), {
 // Load the pet data here and not on the page.
 // I'll need to update it regularly.
 // it's cumbersome to pass a method down more levels
-export default function EditPet({ petId }) {
+export default function EditPet({ petId, handleError }) {
   console.log("EditPetForm. pet " + petId);
 
   // TODO make an HOC or something that will handle this common logic
@@ -33,7 +34,6 @@ export default function EditPet({ petId }) {
   } = useOwnerForAuth0Sub(user);
 
   let [pet, setPet] = useState();
-  // display a details card and have an edit button
   const [isEditing, setIsEditing] = useState(false);
   const [isPetDataFresh, setIsPetDataFresh] = useState(false);
   // probably just do this in the formik component
@@ -55,7 +55,7 @@ export default function EditPet({ petId }) {
       markStale();
       toggleEditing();
     } else {
-      // TODO error messaging
+      handleError(err);
     }
   };
 
@@ -88,6 +88,7 @@ export default function EditPet({ petId }) {
         }
         if (err) {
           console.log(err.message);
+          handleError(err);
           // TODO I need an error component
         }
       }
@@ -151,7 +152,12 @@ export default function EditPet({ petId }) {
         markDataStale={markStale}
       ></PetImageSmallCards>
       <hr className="mb-2" />
-      <PetImageResizingForm pet={pet} markDataStale={markStale} />
+      {/* <PetImageResizingForm */}
+      <PetImageCropForm
+        pet={pet}
+        markDataStale={markStale}
+        handleError={handleError}
+      />
       <hr className="mb-2" />
       Booking blackout edit coming soon.
     </>
