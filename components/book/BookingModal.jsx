@@ -63,43 +63,49 @@ export default function BookingModal(props) {
   };
 
   return (
-    <Modal
-      show={open}
-      onHide={doCloseModal}
-      onClose={doCloseModal}
-      little
-      classNames={{ modal: "booking-modal" }}
-    >
-      <Card>
-        <Card.Header className="page-title">Confirm Booking </Card.Header>
-        <Card.Body>
-          <Card.Text>
-            {booking.startAt} / {booking.endAt}
-          </Card.Text>
-          <Card.Text>
-            <em>{booking.days}</em> days /$ <em>{rentalPrice}</em> per Day
-          </Card.Text>
-          <Card.Text>
-            {" "}
-            Price: $<em>{booking.totalPrice} </em>
-          </Card.Text>
-        </Card.Body>
-      </Card>
+    <section id="bookingModal">
+      <Modal
+        show={open}
+        onHide={doCloseModal}
+        onClose={doCloseModal}
+        little
+        classNames={{ modal: "booking-modal" }}
+      >
+        <Card>
+          <Card.Header className="page-title">Confirm Booking </Card.Header>
+          <Card.Body>
+            <Card.Text>
+              {booking.startAt} / {booking.endAt}
+            </Card.Text>
+            <Card.Text>
+              <em>{booking.days}</em> days /$ <em>{rentalPrice}</em> per Day
+            </Card.Text>
+            <Card.Text>
+              {" "}
+              Price: $<em>{booking.totalPrice} </em>
+            </Card.Text>
+          </Card.Body>
+        </Card>
 
-      {!tokenStored && <Payment storePaymentToken={storePaymentToken} />}
+        {!tokenStored && <Payment storePaymentToken={storePaymentToken} />}
 
-      {tokenStored && renderConfirmMessage()}
+        {tokenStored && renderConfirmMessage()}
 
-      <Modal.Footer>
-        {tokenStored && (
-          <Button disabled={disabled} onClick={confirmModal} variant="success">
-            Confirm
+        <Modal.Footer>
+          {tokenStored && (
+            <Button
+              disabled={disabled}
+              onClick={confirmModal}
+              variant="success"
+            >
+              Confirm
+            </Button>
+          )}
+          <Button type="button" onClick={doCloseModal} variant="danger">
+            Cancel
           </Button>
-        )}
-        <Button type="button" onClick={doCloseModal} variant="danger">
-          Cancel
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        </Modal.Footer>
+      </Modal>
+    </section>
   );
 }

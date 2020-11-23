@@ -2,22 +2,16 @@ import React, { useState } from "react";
 import { Modal, Card, Button, Row, Col } from "react-bootstrap";
 
 import { formatDate } from "../../util/date-util";
-//import { usePetData, mutatePetData } from "../../hooks/usePetData";
 import { renderPetCardImage } from "../pet/PetCardImage";
 
 export default function OwnerReviewBookingModal(props) {
   const { open, closeModal, booking, confirmModal, rejectModal } = props;
-
-  // const { pet, isLoading: isPetLoading, isError: isPetError } = usePetData(
-  //   booking ? booking.pet._id : ""
-  // );
 
   const doCloseModal = () => {
     closeModal();
   };
 
   const doConfirm = (booking) => {
-    if (pet) mutatePetData(pet._id);
     confirmModal(booking);
   };
 
@@ -48,7 +42,7 @@ export default function OwnerReviewBookingModal(props) {
                       {" "}
                       Total Price: $<em>{booking.totalPrice} </em>
                     </Card.Text>
-                    <Card.Text>TODO display renter name</Card.Text>
+                    {/* <Card.Text>TODO display renter name</Card.Text> */}
                   </Card.Body>
                 </Col>
                 <Col> {renderPetCardImage(booking.pet)}</Col>

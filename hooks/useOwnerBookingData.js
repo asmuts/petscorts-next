@@ -13,7 +13,7 @@ export const useOwnerBookingData = (ownerId) => {
     options
   );
   return {
-    bookings: data ? data.bookings : {},
+    bookings: data ? data.bookings : [],
     mutate,
     isLoading: !error && !data,
     isError: error,
@@ -21,7 +21,7 @@ export const useOwnerBookingData = (ownerId) => {
 };
 
 export const mutateOwnerBookingData = (ownerId) => {
-  console.log("calling mutate");
+  //console.log("calling mutate");
   mutate(getCacheKey(ownerId));
 };
 

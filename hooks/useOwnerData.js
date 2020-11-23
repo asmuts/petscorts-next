@@ -20,7 +20,7 @@ export const useOwnerForAuth0Sub = (user) => {
 
   // https://swr.vercel.app/docs/conditional-fetching#dependent
   const { data, mutate, error } = useSWR(
-    () => getOwnerDataAuth0SubAPIUrl(user.sub),
+    () => (user ? getOwnerDataAuth0SubAPIUrl(user.sub) : null),
     fetcher,
     {},
     options
@@ -34,7 +34,7 @@ export const useOwnerForAuth0Sub = (user) => {
 };
 
 export const mutateOwnerForAuth0Sub = (auth0_sub) => {
-  console.log("calling mutate");
+  //console.log("calling mutate");
   mutate(getOwnerDataAuth0SubAPIUrl(auth0_sub));
 };
 

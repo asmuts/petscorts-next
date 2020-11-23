@@ -4,6 +4,7 @@ import { Card } from "react-bootstrap";
 
 import PetImageCarousel from "./PetImageCarousel";
 import PetRentalDatePicker from "./PetRentalDatePicker";
+import EditPetCardFooter from "./EditPetCardFooter";
 
 // Leaflet can't be server side rendered
 import dynamic from "next/dynamic";
@@ -105,6 +106,7 @@ const PetDetailMapBottom = ({ pet }) => {
                   <Card.Text hidden>ID: {pet._id}</Card.Text>
                   {pet.owner && <Card.Text>{pet.owner.fullname}</Card.Text>}
                 </Card.Body>
+                <EditPetCardFooter pet={pet}></EditPetCardFooter>
               </Card>
             </div>
           </div>

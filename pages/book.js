@@ -126,7 +126,6 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
   const setPaymentTokenID = (paymentTokenId) => {
     console.log(paymentTokenId);
     proposedBooking.paymentToken = paymentTokenId;
-    //setProposedBooking(proposedBooking);
   };
 
   // called if the modal is cancelled
@@ -166,7 +165,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
 
   return (
     <Layout>
-      <section id="ownerDetail">
+      <section id="booking">
         <Container fluid className="main-container">
           <Row>
             {!user ||
@@ -183,55 +182,68 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
             <>
               <div className="page-title">Review Booking Details</div>
               <Row>
-                <Card>
-                  <Card.Header className="page-title">{pet.name}</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Description: {pet.description}</Card.Text>
-                    <Card.Text>Species: {pet.species}</Card.Text>
-                    <Card.Text>Breed: {pet.breed}</Card.Text>
-                    <Card.Text>Daily Rate: {pet.dailyRentalRate}</Card.Text>
-                  </Card.Body>
-                </Card>
+                <Col xs={6} md={6}>
+                  <Card>
+                    <Card.Header className="page-title">
+                      Pet Details
+                    </Card.Header>
+                    <Card.Body>
+                      <Card.Subtitle>Name: {pet.name}</Card.Subtitle>
+                      <Card.Text>Description: {pet.description}</Card.Text>
+                      <Card.Text>Species: {pet.species}</Card.Text>
+                      <Card.Text>Breed: {pet.breed}</Card.Text>
+                      <Card.Text>Daily Rate: ${pet.dailyRentalRate}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
                 {pet.images && pet.images[0] && (
-                  <Col xs={6} md={4}>
+                  <Col xs={6} md={6}>
                     <Image src={pet.images[0].url} thumbnail />
                   </Col>
                 )}
               </Row>
               <Row>
-                <Card>
-                  <Card.Header className="page-title">
-                    Booking Details
-                  </Card.Header>
-                  <Card.Body>
-                    <Card.Text>Total: {proposedBooking.totalPrice}</Card.Text>
-                    <Card.Text>startAt: {proposedBooking.startAt}</Card.Text>
-                    <Card.Text>endat: {proposedBooking.endAt}</Card.Text>
-                  </Card.Body>
-                </Card>
+                <Col xs={6} md={6}>
+                  <Card>
+                    <Card.Header className="page-title">
+                      Booking Details
+                    </Card.Header>
+                    <Card.Body>
+                      <Card.Text>
+                        Total: ${proposedBooking.totalPrice}
+                      </Card.Text>
+                      <Card.Text>Start: {proposedBooking.startAt}</Card.Text>
+                      <Card.Text>End: {proposedBooking.endAt}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
               </Row>
 
               <Row>
                 <Col sm="6">
-                  <Button
-                    disabled={
-                      !proposedBooking.startAt ||
-                      !proposedBooking.endAt ||
-                      error
-                    }
-                    onClick={() => confirmProposedData()}
-                    variant="primary"
-                  >
-                    Reserve now
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      routeToPetDetail(router, proposedBooking.petId)
-                    }
-                    variant="danger"
-                  >
-                    Cancel
-                  </Button>
+                  <Card className="buttonCard">
+                    <Card.Footer>
+                      <Button
+                        disabled={
+                          !proposedBooking.startAt ||
+                          !proposedBooking.endAt ||
+                          error
+                        }
+                        onClick={() => confirmProposedData()}
+                        variant="primary"
+                      >
+                        Reserve now
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          routeToPetDetail(router, proposedBooking.petId)
+                        }
+                        variant="danger"
+                      >
+                        Cancel
+                      </Button>
+                    </Card.Footer>
+                  </Card>
                 </Col>
               </Row>
 

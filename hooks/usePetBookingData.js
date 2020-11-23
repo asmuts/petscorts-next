@@ -20,7 +20,7 @@ export const usePetBookingDates = (petId) => {
 };
 
 export const mutatePetBookingDates = (petId) => {
-  console.log("calling mutate");
+  //console.log("calling mutate");
   mutate(getBookingDatesAPIUrl(petId));
 };
 
