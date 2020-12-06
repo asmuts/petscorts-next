@@ -16,7 +16,7 @@ function PetCard({ pet }) {
             </h6>
             <h4 className="card-title">{pet.name}</h4>
             <p className="card-text">{pet.description}</p>
-            <p className="card-text">${pet.dailyRate} per Night &#183;</p>
+            <p className="card-text">${pet.dailyRentalRate} per Day &#183;</p>
           </div>
         </div>
       </Link>

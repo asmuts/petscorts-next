@@ -118,14 +118,14 @@ const PetRentalDatePicker = ({ pet }) => {
       <div className="d-md-block col-lg-3 col-md-6 col-xs-3">
         <div className="booking-form">
           <Container className="inner-container rounded">
-            <h4>
+            <div className="price-text">
               {totalPrice && (
                 <>
                   ${totalPrice} for {days} day{days > 1 && "s"}
                 </>
               )}
-              {!totalPrice && <>$ {pet.dailyRentalRate} per day</>}
-            </h4>
+              {!totalPrice && <>$ {pet.dailyRentalRate} / day</>}
+            </div>
 
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Row>
@@ -133,7 +133,7 @@ const PetRentalDatePicker = ({ pet }) => {
                   <Form.Control
                     readOnly
                     className="rounded-pill"
-                    placeholder="Start Date"
+                    placeholder="Start"
                     value={value ? value.start.format("MM/DD/YY") : ""}
                   />
                 </Col>
@@ -141,7 +141,7 @@ const PetRentalDatePicker = ({ pet }) => {
                   <Form.Control
                     readOnly
                     className="rounded-pill"
-                    placeholder="End Date"
+                    placeholder="End"
                     value={value ? value.end.format("MM/DD/YY") : ""}
                   />
                 </Col>

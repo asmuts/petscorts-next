@@ -30,15 +30,14 @@ export const useRenterForAuth0Sub = (user) => {
   };
 };
 
-export const mutateRenterForAuth0Sub = async (auth0_sub) => {
+export const mutateRenterForAuth0Sub = async (auth0_sub, renter) => {
   //console.log("calling mutate");
-  await mutate(getRenterDataAuth0SubAPIUrl(auth0_sub));
+  await mutate(getRenterDataAuth0SubAPIUrl(auth0_sub), renter, false);
 };
 
 function getRenterDataAuth0SubAPIUrl(auth0_sub) {
   console.log("Looking for renter with auth0_sub [" + auth0_sub + "]");
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
-
   // make sure scopes in the config includes email
   let RenterApiRoute = `/api/v1/renters/auth0_sub/${auth0_sub}`;
   const RenterURL = baseURL + RenterApiRoute;

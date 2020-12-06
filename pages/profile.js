@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import Layout from "../components/shared/Layout";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFetchUser } from "../util/user";
-import { Card, Col, Image, Container, Row } from "react-bootstrap";
+import { Col, Image, Container, Row } from "react-bootstrap";
 import ScrollToTop from "react-scroll-to-top";
 
 //import useUserData from "../hooks/useUserData";
@@ -39,8 +39,8 @@ export default function Profile() {
     isError: isErrorRenter,
   } = useRenterForAuth0Sub(user);
 
-  if (isOwnerError) {
-    handleError(isOwnerError.message);
+  if (isErrorRenter) {
+    handleError(isErrorRenter.message);
   }
 
   /////////////////////////////
@@ -104,35 +104,42 @@ export default function Profile() {
           </Row>
           <UserDetails user={user}></UserDetails>
 
-          <hr className="mb-2" />
-
           {/* UPCOMING BOOKINGS click to show older bookings. */}
-          {renter && (
-            <>
-              <RenterBookings renterId={renter._id}></RenterBookings>
-            </>
-          )}
-          {!renter && (
-            <p className="page-title">You haven't booked any pets.</p>
-          )}
-
           <hr className="mb-2" />
           <Row>
-            {!owner && (
-              <>
-                <p className="page-title">
-                  You haven't listed any pets for rent.
-                </p>
+            <Col>
+              {" "}
+              {renter && (
+                <>
+                  <RenterBookings renterId={renter._id}></RenterBookings>
+                </>
+              )}
+              {!renter && (
+                <p className="page-title">You haven't booked any pets.</p>
+              )}
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <hr className="mb-2" />{" "}
+              {!owner && (
+                <>
+                  <p className="page-title">
+                    You haven't listed any pets for rent.
+                  </p>
+                  <hr className="mb-2" />
+                  <a onClick={handleListPet} href="#">
+                    List Your Pets
+                  </a>
+                </>
+              )}
+              {owner && (
                 <a onClick={handleListPet} href="#">
-                  List Your Pets
+                  Manage Your Pets
                 </a>
-              </>
-            )}
-            {owner && (
-              <a onClick={handleListPet} href="#">
-                Manage Your Pets
-              </a>
-            )}
+              )}
+            </Col>
           </Row>
         </Container>
       </section>

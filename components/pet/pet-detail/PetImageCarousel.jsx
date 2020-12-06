@@ -24,7 +24,7 @@ export default function PetImageCarousel(props) {
           {`.custom-tag {
                     height: 400px;
                     //background: black;
-                    object-fit: cover;
+                    object-fit: contain;
                     }`}
         </style>
       }

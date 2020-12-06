@@ -24,7 +24,7 @@ export const createRenter = async (user) => {
 
 async function callAPIGetRenterForEmail(email) {
   let foundRenter;
-  console.log("RenterService. callAPIGetRenterForEmail [" + email + "]");
+  //console.log("RenterService. callAPIGetRenterForEmail [" + email + "]");
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
 
   // make sure scopes in the config includes email

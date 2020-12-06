@@ -104,7 +104,9 @@ const PetDetailMapBottom = ({ pet }) => {
                   <Card.Text>Species: {pet.species}</Card.Text>
                   <Card.Text>Breed: {pet.breed}</Card.Text>
                   <Card.Text hidden>ID: {pet._id}</Card.Text>
-                  {pet.owner && <Card.Text>{pet.owner.fullname}</Card.Text>}
+                  {pet && pet.owner && (
+                    <Card.Text>{pet.owner.fullname}</Card.Text>
+                  )}
                 </Card.Body>
                 <EditPetCardFooter pet={pet}></EditPetCardFooter>
               </Card>

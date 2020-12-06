@@ -34,6 +34,10 @@ const EditPetCardFooter = ({ pet }) => {
     router.push(url, asUrl);
   };
 
+  if (!pet || !owner) {
+    return "";
+  }
+
   return (
     <>
       {owner && pet.owner === owner._id && (

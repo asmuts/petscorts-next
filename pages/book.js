@@ -67,7 +67,6 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
         }
         if (!foundRenter) {
           await createRenterForUser();
-          await mutateRenterForAuth0Sub(user.sub);
         } else {
           const message =
             "It looks like you logged in using a different service before. Please log out and sign back in.";
@@ -81,7 +80,7 @@ const Book = ({ pet, proposedBooking, startAt, endAt }) => {
     console.log("Creating new renter");
     let { renter: renterCreated, err: errRenter } = await createRenter(user);
     if (renterCreated) {
-      await mutateRenterForAuth0Sub();
+      await mutateRenterForAuth0Sub(user.sub, renter);
       // don't really need to set the value
       renter = renterCreated;
     }

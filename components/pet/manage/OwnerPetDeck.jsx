@@ -34,7 +34,11 @@ const OwnerPetDeck = ({ handleError }) => {
     //return <h1>Couldn't load your pets at this time.</h1>;
   }
 
-  if ((!isLoading && owner.pets === null) || !owner.pets.length > 0) {
+  if (
+    (!isLoading && !owner.pets) ||
+    owner.pets === null ||
+    !owner.pets.length > 0
+  ) {
     return <p className="page-title">You don't have any pets listed.</p>;
   }
 
