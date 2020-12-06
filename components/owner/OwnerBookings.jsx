@@ -126,10 +126,11 @@ const OwnerBookings = ({ ownerId, handleError }) => {
 
   return (
     <>
-      {!bookings && !isLoading && (
-        <p className="page-title">You haven't booked any pets.</p>
-      )}
-      {bookings && (
+      {(!bookings && !isLoading) ||
+        (bookings.length === 0 && (
+          <p className="page-title">Three are no bookings for your pets.</p>
+        ))}
+      {bookings && bookings.length > 0 && (
         <>
           <p className="page-title">Manage bookings</p>
           {areThereOldBookings(bookings) && (

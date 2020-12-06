@@ -10,7 +10,7 @@ export const getPet = async (petId) => {
     const res = await http.get(url);
     if (res.status === 200) {
       let pet = res.data.data;
-      //console.log(pet);
+      console.log(pet);
       return { pet };
     } else {
       //console.log("impossible");

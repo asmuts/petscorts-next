@@ -4,10 +4,20 @@ import { fetch } from "./util/service-fetcher";
 
 // uses the service-fetcher (fetch) to use the sercice to call the API
 export const useOwnerBookingData = (ownerId) => {
-  const options = { revalidateOnFocus: true, revalidateOnReconnect: false };
-
+  //const options = { revalidateOnFocus: true, revalidateOnReconnect: false };
+  const options = {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    onErrorRetry: (error, key, option, revalidate, { retryCount }) => {
+      if (retryCount >= 5) return;
+      if (error.status === 404) return;
+      // retry after 1 seconds
+      setTimeout(() => revalidate({ retryCount: retryCount + 1 }), 1000);
+    },
+  };
+  //
   const { data, mutate, error } = useSWR(
-    getCacheKey(ownerId),
+    () => (ownerId ? getCacheKey(ownerId) : null),
     () => fetch(getBookingsForOwner, ownerId),
     {},
     options
@@ -15,7 +25,7 @@ export const useOwnerBookingData = (ownerId) => {
   return {
     bookings: data ? data.bookings : [],
     mutate,
-    isLoading: !error && !data,
+    isLoading: !error && ownerId && !data,
     isError: error,
   };
 };

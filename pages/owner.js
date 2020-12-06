@@ -8,8 +8,8 @@ import Layout from "../components/shared/Layout";
 import OwnerPetDeck from "../components/pet/manage/OwnerPetDeck";
 import OwnerDetail from "../components/pet/manage/OwnerDetail";
 import AddPetButton from "../components/pet/manage/AddPetButton";
-//import { useFetchUser } from "../../util/user";
-import useUserData from "../hooks/useUserData";
+import { useFetchUser } from "../util/user";
+//import useUserData from "../hooks/useUserData";
 import { getOwnerForEmail, createOwner } from "../services/ownerService";
 import OwnerBookings from "../components/owner/OwnerBookings";
 import {
@@ -18,18 +18,18 @@ import {
 } from "../hooks/useOwnerData";
 
 export default function Owner() {
-  //const { user, loading } = useFetchUser();
-  const {
-    user,
-    isLoading: isUserLoading,
-    isError: isUserError,
-  } = useUserData();
+  const { user, loading: isUserLoading, isError: isUserError } = useFetchUser();
+  //const { user, isLoading: isUserLoading, isError: isUserError, } = useUserData();
+  //
   const {
     owner,
-    mutate,
     isLoading: isOwnerLoading,
-    isError: isErrorOwner,
+    isError: isOwnerError,
   } = useOwnerForAuth0Sub(user);
+
+  if (isOwnerError) {
+    handleError(isOwnerError.message);
+  }
 
   let [isNewOwner, setIsNewOwner] = useState(false);
   let [mustReAuthenticate, setMustReAuthenticate] = useState(false);
@@ -37,40 +37,48 @@ export default function Owner() {
 
   // Create a new owner if we don't have one for the auth0 sub.
   useEffect(() => {
+    console.log("useEffect");
     async function fetchData() {
       if (user) {
-        if (!owner && !isOwnerLoading) {
+        // TODO handle owner load error
+        if (!owner && !isOwnerLoading && !error) {
           let { owner: foundOwner, err: errOwner } = await getOwnerForEmail(
             user.email
           );
           if (!foundOwner) {
-            console.log("Creationg new owner");
-            let { owner: isNewOwner, err: errCreate } = await createOwner(user);
+            console.log("Creating new owner");
+            let { owner: newOwner, err: errCreate } = await createOwner(user);
+            // TODO handle error
+            //owner = newOwner;
             setIsNewOwner(true);
-            mutateOwnerForAuth0Sub(user.sub);
-            mutate();
+            mutateOwnerForAuth0Sub(user.sub, newOwner);
           } else {
-            console.log("Found user for email.");
-            // TODO message the user that they probably authenticated
-            // through a different sub.
+            console.log("Found owner for email.");
+            setError(
+              "It looks like you've already registered using a different source. Please logout and try again."
+            );
+            // This is ugly. One more reason not to use Auth0.
           }
         }
+        console.log("Owner. isOwnerLoading " + isOwnerLoading);
+        console.log(owner);
+        console.log("Owner. isOwnerError [" + isOwnerError + "]");
       }
     }
     fetchData();
-  }, [user]);
+  });
 
   const router = useRouter();
 
+  // TODO make this common funcationality re-usable
   function handleError(err) {
     console.log("Profile. handleError: " + err);
-    console.log(err);
     if ((err + "").includes("404")) {
       // ignore, the user hasn't booked or listed any pets
       return;
     }
+    console.log(err);
     if ((err + "").includes("AccessTokenError") || (err + "").includes("401")) {
-      // TODOimplement
       setMustReAuthenticate(true);
     }
     setError(err);
@@ -102,12 +110,14 @@ export default function Owner() {
           </Row>
           <Row>{isNewOwner && <h2>Thanks for signing up!</h2>}</Row>
           <OwnerDetail user={user}></OwnerDetail>
-          {owner && !isOwnerLoading && (
+
+          <Row>
+            <p hidden>{owner._id}</p>
+          </Row>
+
+          <hr />
+          {owner && owner._id && (
             <>
-              <Row>
-                <p hidden>{owner._id}</p>
-              </Row>
-              <hr />
               <Row>
                 <Col md="3">
                   <AddPetButton ownerId={owner._id}></AddPetButton>
@@ -116,14 +126,17 @@ export default function Owner() {
               <hr />
             </>
           )}
-          <section id="ownerPets">
-            <Row>
-              <Col>
-                <OwnerPetDeck handleError={handleError}></OwnerPetDeck>
-                <p hidden>{JSON.stringify(user)}</p>
-              </Col>
-            </Row>
-          </section>
+
+          {owner && (
+            <section id="ownerPets">
+              <Row>
+                <Col>
+                  <OwnerPetDeck handleError={handleError}></OwnerPetDeck>
+                  <p hidden>{JSON.stringify(user)}</p>
+                </Col>
+              </Row>
+            </section>
+          )}
           <hr />
 
           {owner && (

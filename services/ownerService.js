@@ -20,9 +20,18 @@ export const createOwner = async (user) => {
   return await callAPIcreateOwner(user);
 };
 
+// Get the owner by the sub
+export const getOwnerForAuth0Sub = async (sub) => {
+  return await callAPIgetOwnerForAuth0Sub(sub);
+};
+
 //////////////////////////////////
 
 async function callAPIGetOwnerForEmail(email) {
+  if (!email) {
+    return { err: "No email provided." };
+  }
+
   let foundOwner;
   console.log("OwnerService. callAPIGetOwnerForEmail [" + email + "]");
   const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
@@ -34,9 +43,8 @@ async function callAPIGetOwnerForEmail(email) {
     const res = await http.get(ownerURL);
     //console.log("Status: " + res.status);
     if (res.status === 200) {
-      //console.log("OwnerService. Found owner data: " + res.data);
-      foundOwner = res.data;
-      //setOwner(foundOwner);
+      console.log("OwnerService. Found owner data: " + res.data);
+      foundOwner = res.data.data.owner;
       return { owner: foundOwner };
     }
     // won't happen axios throws
@@ -64,14 +72,44 @@ async function callAPIcreateOwner(user) {
   try {
     const resOwner = await http.post(ownerURL, ownerNew);
     //console.log("Owner data: " + resOwner.data);
-    // I might just get the id back
     if (resOwner.data) {
-      ownerNew._id = resOwner.data.ownerId;
-      //setOwner(ownerNew);
+      const newOwner = resOwner.data.owner;
+      return { owner: newOwner };
     }
-    return { owner: ownerNew };
   } catch (e) {
-    //console.log(e, `Error creating owner ${ownerURL}`);
+    console.log(e, `Error creating owner ${ownerURL}`);
+    return { err: e.message };
+  }
+}
+
+async function callAPIgetOwnerForAuth0Sub(auth0_sub) {
+  if (!auth0_sub) {
+    return { err: "No auth0_sub provided." };
+  }
+
+  let foundOwner;
+  //console.log("OwnerService. callAPIgetOwnerForAuth0Sub [" + auth0_sub + "]");
+  const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URI;
+
+  let ownerApiRoute = `/api/v1/owners/auth0_sub/${auth0_sub}`;
+  const ownerURL = baseURL + ownerApiRoute;
+  try {
+    const res = await http.get(ownerURL);
+    //console.log("Status: " + res.status);
+    if (res.status === 200) {
+      //console.log("OwnerService. Found owner for auth0 sub " + auth0_sub);
+      //console.log(res.data);
+      //console.log(res.data.data);
+      foundOwner = res.data.data;
+      return { owner: foundOwner };
+    }
+    // won't happen axios throws
+    if (res.status === 404) {
+      //console.log("OwnerService. Got a 404 from get owner for sub");
+      return { err: "No owner found for sub" };
+    }
+  } catch (e) {
+    console.log(`OwnerService. Error calling ${ownerURL}`);
     return { err: e.message };
   }
 }
